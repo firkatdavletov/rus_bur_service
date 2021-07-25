@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: FlutterLogo(size: 20),
         title: Text(_appBarTitle),
         centerTitle: true,
       ),
