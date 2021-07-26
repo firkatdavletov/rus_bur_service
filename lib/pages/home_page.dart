@@ -70,7 +70,7 @@ class HomePage extends StatelessWidget {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  openDB();
+
                 },
                 child: Text('Кнопка'),
             )

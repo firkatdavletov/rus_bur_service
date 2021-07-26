@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/db.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+export 'package:rus_bur_service/main.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Database db = initDB() as Database;
   runApp(MyApp());
 }
 
