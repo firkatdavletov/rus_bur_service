@@ -6,8 +6,6 @@ import 'package:path/path.dart';
 export 'package:rus_bur_service/main.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  Database db = initDB() as Database;
   runApp(MyApp());
 }
 
