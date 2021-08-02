@@ -3,8 +3,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rus_bur_service/widgets/vertical_text.dart';
 import 'package:rus_bur_service/widgets/logo.dart';
 
+
 import 'home_page.dart';
 import 'package:rus_bur_service/user.dart';
+
+export 'package:rus_bur_service/pages/login_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -53,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: _loginInput,
                       keyboardType: TextInputType.name,
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline6,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.person, color: Colors.white70,),
                         labelText: 'Введите имя пользователя',
@@ -88,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordInput,
                       obscureText: _showPassword,
                       keyboardType: TextInputType.number,
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline6,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.password, color: Colors.white70),
                         suffixIcon: IconButton(
@@ -125,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 200),
+                  padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                   child: ElevatedButton(
                     style: _buttonStyle,
                     onPressed: () async {
@@ -141,7 +144,12 @@ class _LoginPageState extends State<LoginPage> {
                       }
 
                       if (_temp == user.password) {
-                        _authUser(user);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage(user: user.login)
+                          ),
+                        );
                       } else if (_temp == null) {
                         _showSnack('Имя пользователя неверно');
                       } else {
@@ -164,30 +172,6 @@ class _LoginPageState extends State<LoginPage> {
       )
     );
   }
-
-  Future _authUser(User user) async {
-    final _storage = new FlutterSecureStorage();
-
-    String? _temp = await _storage.read(key: user.login);
-    String? _myKey1 = await _storage.read(key: 'myKey1');
-
-    if (_myKey1 == null) {
-      await _storage.write(key: 'myKey1', value: 'myKey1');
-      await _storage.write(key: 'admin', value: '123');
-    }
-
-    if (_temp == user.password) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else if (_temp == null) {
-      _showSnack('Имя пользователя неверно');
-    } else {
-      _showSnack('Пароль неверный');
-    }
-  }
-
   _showSnack (String text) => ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(text),

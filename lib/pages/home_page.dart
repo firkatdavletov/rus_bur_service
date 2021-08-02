@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+
+import '../user.dart';
 import 'login_page.dart';
 import 'package:rus_bur_service/db.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.user}) : super(key: key);
+  final String user;
 
   @override
   Widget build(BuildContext context) {
-    String _homePageTitle = 'Домашняя страница';
+    String _homePageTitle = 'home';
 
     final drawerHeader = UserAccountsDrawerHeader(
-      accountName: Text('accountName'),
+      accountName: Text(user),
       accountEmail: Text('accountEmail'),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.white,
