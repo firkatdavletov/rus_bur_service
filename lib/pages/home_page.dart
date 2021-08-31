@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import '../report.dart';
+import '../model.dart';
+import 'create_report.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);
@@ -17,11 +18,14 @@ _getListOfDogs() async {
   return dogs;
 }
 
-Dog _dog1 = Dog(id:1, name:'Kosmos', age:2);
-Dog _dog2 = Dog(id:2, name:'Grut', age:4);
-Dog _dog3 = Dog(id:3, name:'Hash', age:3);
+_getListOfReports() async {
+  List<Report> reports = await db.reports();
+  return reports;
+}
 
 class _HomePageState extends State<HomePage> {
+  String get user => this.user;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Отчёты'),
       ),
       body: FutureBuilder(
-        future: _getListOfDogs(),
+        future: _getListOfReports(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -49,12 +53,14 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            db.insertDog(_dog1);
-            db.insertDog(_dog2);
-            db.insertDog(_dog3);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateReport()
+              )
+            );
           },
-          child: Icon(Icons.add),
-      )
+          child: Icon(Icons.add))
     );
   }
 }

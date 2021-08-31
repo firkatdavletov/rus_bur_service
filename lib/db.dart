@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
-import 'report.dart';
+import 'model.dart';
 
 class DbProvider {
   Future<Database> database;
@@ -16,14 +16,36 @@ class DbProvider {
     );
   }
 
+  Future<void> insertCustomer(Customer customer) async {
+    final db = await database;
+    await db.insert(
+      'customers',
+      customer.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> insertMachine(Machine machine) async {
+    final db = await database;
+    await db.insert(
+      'machines',
+      machine.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> insertEngine(Engine engine) async {
+    final db = await database;
+    await db.insert(
+      'engines',
+      engine.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   Future<void> insertDog(Dog dog) async {
-    // Get a reference to the database.
     final db = await database;
 
-    // Insert the Dog into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same dog is inserted twice.
-    //
-    // In this case, replace any previous data.
     await db.insert(
       'dogs',
       dog.toMap(),

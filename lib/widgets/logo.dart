@@ -9,7 +9,7 @@ class _LogoState extends State<Logo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //padding: const EdgeInsets.only(top: 30.0, left: 10.0),
+      padding: const EdgeInsets.only(top: 40.0),
       child: Image(
         image: AssetImage('assets/images/logo.png'),
         width: MediaQuery.of(context).size.width/1.25,

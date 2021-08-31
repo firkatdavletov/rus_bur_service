@@ -7,6 +7,7 @@ import 'migration_scripts.dart';
 
 late DbProvider db;
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = openDatabase(
