@@ -4,11 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:rus_bur_service/widgets/text_field.dart';
 import 'package:rus_bur_service/widgets/logo.dart';
 import 'package:rus_bur_service/widgets/button.dart';
-
-import 'package:rus_bur_service/auth.dart';
 import 'package:rus_bur_service/widgets/vertical_text.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -32,15 +28,24 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height - mediaQuery.viewInsets.bottom;
+    final screenWidth = mediaQuery.size.width;
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    double vertTextSize = screenWidth/20;
+    double textFieldPadding = screenWidth/20;
+    double textFieldFontSize = limit(screenWidth/20, 30);
+    double textFieldIconSize = limit(screenWidth/20, 30);
+    double buttonVertPadding = limit(screenWidth/50, 30);
+    double buttonHorPadding = limit(screenWidth/7.5, 200);
+    double buttonFontSize = limit(screenWidth/20, 30);
+    double buttonBottomPadding = screenHeight/35;
 
     return Scaffold(
-        body: Container(
-            padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: Container(
+            height: screenHeight,
+            //padding: EdgeInsets.only(top: screenHeight/150, bottom: screenHeight/100),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topRight,
@@ -49,58 +54,71 @@ class _LoginPageState extends State<LoginPage> {
                 )
             ),
             child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        VertText(size: mediaQuery.size.height/27),
-                        Logo()
-                      ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Visibility(
+                    child: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              VertText(size: vertTextSize),
+                              Container(
+                                child: Logo(),
+                              )
+                            ],
+                          ),
+                        )
                     ),
-                  ),
-                  Container(
-                    width: mediaQuery.size.width/1.25,
+                  visible: mediaQuery.viewInsets.bottom == 0,
+                ),
+                Container(
+                    padding: EdgeInsets.symmetric(horizontal: textFieldPadding),
                     child: Column(
                       children: <Widget>[
                         TextFieldWidget(
-                          errorText: 'error',
                           textController: _loginInput,
                           icon: Icons.person,
-                          hint: 'Имя пользователя',
+                          hint: loginLabelText,
                           isObscure: false,
+                          fontSize: textFieldFontSize,
+                          iconSize: textFieldIconSize,
                         ),
                         TextFieldWidget(
-                          errorText: 'error',
                           icon: Icons.password,
                           textController: _passwordInput,
-                          hint: 'Пароль',
+                          hint: passwordLabelText,
                           isObscure: true,
+                          fontSize: textFieldFontSize,
+                          iconSize: textFieldIconSize,
                         ),
                       ],
                     )
+                ),
+                Container(
+                  padding: EdgeInsets.only(bottom: buttonBottomPadding),
+                  child: RoundedButton(
+                    buttonColor: Colors.blueAccent,
+                    horPadding: buttonHorPadding,
+                    buttonText: loginButtonText,
+                    vertPadding: buttonVertPadding,
+                    onPressed: () {  },
+                    fontSize: buttonFontSize,
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: RoundedButton(
-                      buttonColor: Colors.blue,
-                      buttonText: loginButtonText,
-                      onPressed: () {
-                        final appAuth = new AppAuth(
-                            login: _loginInput.text,
-                            password: _passwordInput.text,
-                            context: context
-                        );
-                        appAuth.auth();
-                      },
-                    )
-                  )
-                ]
-            )
+                )
+              ],
+            ),
+          )
         )
     );
+  }
+}
+
+double limit(double value, double limit) {
+  if (value <= limit) {
+    return value;
+  } else {
+    return limit;
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:rus_bur_service/user.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 
 class AppAuth {

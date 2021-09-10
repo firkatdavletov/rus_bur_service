@@ -31,6 +31,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Отчёты'),
+        actions: [
+
+        ],
+        leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: (){
+
+            },
+        ),
       ),
       body: FutureBuilder(
         future: _getListOfReports(),
