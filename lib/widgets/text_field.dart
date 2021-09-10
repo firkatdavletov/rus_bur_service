@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class Input {
+
+}
+
 class TextFieldWidget extends StatelessWidget {
   final IconData icon;
   final String? hint;
@@ -18,6 +22,7 @@ class TextFieldWidget extends StatelessWidget {
     return Padding(
       padding: padding,
       child: TextField(
+        controller: textController,
         style: TextStyle(
           fontSize: fontSize,
         ),

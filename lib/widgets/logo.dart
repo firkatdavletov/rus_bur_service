@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-class Logo extends StatefulWidget {
-  @override
-  _LogoState createState() => _LogoState();
-}
+class Logo extends StatelessWidget {
+  final double logoSize;
 
-class _LogoState extends State<Logo> {
+  const Logo({Key? key, required this.logoSize}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 40.0),
       child: Image(
         image: AssetImage('assets/images/logo.png'),
-        width: MediaQuery.of(context).size.width/1.25,
+        width: logoSize,
       ),
     );
   }

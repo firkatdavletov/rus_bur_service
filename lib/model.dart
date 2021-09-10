@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/material.dart';
+
 class Report {
   final int id;
   final int userId;
@@ -175,39 +177,5 @@ class Engine {
         'model: $model\n'
         'sn: $serNumb\n'
         'operating time: $operatingTime';
-  }
-}
-
-class User {
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String middleName;
-  final String login;
-
-  User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.middleName,
-    required this.login,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'user_id': id,
-      'user_first_name': firstName,
-      'user_last_name': lastName,
-      'user_middle_name': middleName,
-      'user_login': login,
-    };
-  }
-
-  @override
-  String toString() {
-    return 'User:\n'
-        'id: $id\n'
-        'name: $lastName $firstName $middleName\n'
-        'login: $login';
   }
 }

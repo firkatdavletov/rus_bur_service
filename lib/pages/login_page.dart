@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rus_bur_service/auth.dart';
+import 'package:rus_bur_service/controller/user_notifier.dart';
+import 'package:rus_bur_service/model.dart';
 import 'package:rus_bur_service/widgets/text_field.dart';
 import 'package:rus_bur_service/widgets/logo.dart';
 import 'package:rus_bur_service/widgets/button.dart';
 import 'package:rus_bur_service/widgets/vertical_text.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,11 +31,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height - mediaQuery.viewInsets.bottom;
     final screenWidth = mediaQuery.size.width;
 
     double vertTextSize = screenWidth/20;
+    double logoSize = screenWidth/1.25;
+    double logoSizeMini = screenHeight/1.49;
     double textFieldPadding = screenWidth/20;
     double textFieldFontSize = limit(screenWidth/20, 30);
     double textFieldIconSize = limit(screenWidth/20, 30);
@@ -43,20 +50,20 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
-          child: Container(
-            height: screenHeight,
-            //padding: EdgeInsets.only(top: screenHeight/150, bottom: screenHeight/100),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [Colors.blueGrey, Colors.lightBlueAccent]
-                )
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Visibility(
+            child: Container(
+              height: screenHeight,
+              //padding: EdgeInsets.only(top: screenHeight/150, bottom: screenHeight/100),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.blueGrey, Colors.lightBlueAccent]
+                  )
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Visibility(
                     child: Padding(
                         padding: EdgeInsets.all(0.0),
                         child: Container(
@@ -65,51 +72,70 @@ class _LoginPageState extends State<LoginPage> {
                             children: <Widget>[
                               VertText(size: vertTextSize),
                               Container(
-                                child: Logo(),
+                                child: Logo(logoSize: logoSize,),
                               )
                             ],
                           ),
                         )
                     ),
-                  visible: mediaQuery.viewInsets.bottom == 0,
-                ),
-                Container(
-                    padding: EdgeInsets.symmetric(horizontal: textFieldPadding),
-                    child: Column(
-                      children: <Widget>[
-                        TextFieldWidget(
-                          textController: _loginInput,
-                          icon: Icons.person,
-                          hint: loginLabelText,
-                          isObscure: false,
-                          fontSize: textFieldFontSize,
-                          iconSize: textFieldIconSize,
-                        ),
-                        TextFieldWidget(
-                          icon: Icons.password,
-                          textController: _passwordInput,
-                          hint: passwordLabelText,
-                          isObscure: true,
-                          fontSize: textFieldFontSize,
-                          iconSize: textFieldIconSize,
-                        ),
-                      ],
-                    )
-                ),
-                Container(
-                  padding: EdgeInsets.only(bottom: buttonBottomPadding),
-                  child: RoundedButton(
-                    buttonColor: Colors.blueAccent,
-                    horPadding: buttonHorPadding,
-                    buttonText: loginButtonText,
-                    vertPadding: buttonVertPadding,
-                    onPressed: () {  },
-                    fontSize: buttonFontSize,
+                    visible: mediaQuery.viewInsets.bottom == 0,
                   ),
-                )
-              ],
-            ),
-          )
+                  Visibility(
+                    child: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Container(
+                            child: Logo(logoSize: logoSizeMini)
+                        )
+                    ),
+                    visible: mediaQuery.viewInsets.bottom > 0,
+                  ),
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: textFieldPadding),
+                      child: Column(
+                        children: <Widget>[
+                          TextFieldWidget(
+                            textController: _loginInput,
+                            icon: Icons.person,
+                            hint: loginLabelText,
+                            isObscure: false,
+                            fontSize: textFieldFontSize,
+                            iconSize: textFieldIconSize,
+                          ),
+                          TextFieldWidget(
+                            icon: Icons.password,
+                            textController: _passwordInput,
+                            hint: passwordLabelText,
+                            isObscure: true,
+                            fontSize: textFieldFontSize,
+                            iconSize: textFieldIconSize,
+                          ),
+                        ],
+                      )
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: buttonBottomPadding),
+                    child: RoundedButton(
+                      buttonColor: Colors.blueAccent,
+                      horPadding: buttonHorPadding,
+                      buttonText: loginButtonText,
+                      vertPadding: buttonVertPadding,
+                      onPressed: () {
+                        String loginText = _loginInput.text;
+                        String passText = _passwordInput.text;
+                        context.read<UserNotifier>().change(loginText);
+                        AppAuth appAuth = AppAuth(
+                          login: loginText,
+                          password: passText,
+                          context: context,
+                        );
+                        appAuth.auth();
+                      },
+                      fontSize: buttonFontSize,
+                    ),
+                  )
+                ],
+              ),
+            )
         )
     );
   }

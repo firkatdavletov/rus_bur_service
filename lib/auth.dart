@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 
 class AppAuth {
@@ -17,18 +18,16 @@ class AppAuth {
     final _storage = new FlutterSecureStorage();
 
     String? _temp = await _storage.read(key: login);
-    String? _myKey1 = await _storage.read(key: 'myKey1');
-    print(login);
-    if (_myKey1 != null) {
-      await _storage.write(key: 'myKey1', value: 'myKey1');
-      await _storage.write(key: 'admin', value: '123');
-    }
 
+    //await _storage.write(key: 'admin', value: '123');
+
+    print(password);
+    print(_temp);
     if (_temp == password) {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => HomePage(user: login)
+            builder: (context) => HomePage()
         ),
       );
     } else if (_temp == null) {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:sqflite/sqflite.dart';
 import 'db.dart';
 import 'package:path/path.dart';
 import 'migration_scripts.dart';
+import 'package:provider/provider.dart';
 
 late DbProvider db;
 
@@ -26,7 +28,15 @@ void main() async {
 
   );
   db = DbProvider(database);
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => UserNotifier()),
+          Provider(create: (_) => ScreenSize())
+        ],
+      child: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {

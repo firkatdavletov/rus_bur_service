@@ -68,7 +68,7 @@ class _CreateReportState extends State<CreateReport> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => HomePage(user: 'admin')
+                            builder: (context) => HomePage()
                         )
                     );
                   },
