@@ -10,14 +10,3 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 }
-
-class ScreenSize with ChangeNotifier {
-  late MediaQueryData _mediaQueryData;
-
-  MediaQueryData get mediaQueryData => _mediaQueryData;
-
-  void change(MediaQueryData mediaQueryData) {
-    _mediaQueryData = mediaQueryData;
-    notifyListeners();
-  }
-}

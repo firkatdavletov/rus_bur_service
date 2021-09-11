@@ -19,6 +19,7 @@ void main() async {
       for (int i = 1; i <= numbScripts; i++) {
         await db.execute(migrationScripts[i-1]);
       }
+
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       for (int i = oldVersion + 1; i <= newVersion; i++) {
@@ -32,7 +33,6 @@ void main() async {
     MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UserNotifier()),
-          Provider(create: (_) => ScreenSize())
         ],
       child: MyApp(),
     )
