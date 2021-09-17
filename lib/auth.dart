@@ -19,10 +19,8 @@ class AppAuth {
 
     String? _temp = await _storage.read(key: login);
 
-    //await _storage.write(key: 'admin', value: '123');
+    await _storage.write(key: 'admin', value: '123');
 
-    print(password);
-    print(_temp);
     if (_temp == password) {
       Navigator.push(
         context,

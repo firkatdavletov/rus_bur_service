@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'model.dart';
+import 'models/user.dart';
 
 class DbProvider {
   Future<Database> database;
@@ -43,47 +44,6 @@ class DbProvider {
     );
   }
 
-  Future<void> insertDog(Dog dog) async {
-    final db = await database;
-
-    await db.insert(
-      'dogs',
-      dog.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  Future<void> deleteDog(int id) async {
-    // Get a reference to the database.
-    final db = await database;
-
-    // Remove the Dog from the database.
-    await db.delete(
-      'dogs',
-      // Use a `where` clause to delete a specific dog.
-      where: 'id = ?',
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
-      whereArgs: [id],
-    );
-  }
-
-  Future<List<Dog>> dogs() async {
-    // Get a reference to the database.
-    final db = await database;
-
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('dogs');
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    return List.generate(maps.length, (i) {
-      return Dog(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        age: maps[i]['age'],
-      );
-    });
-  }
-
   Future<List<Report>> reports() async {
     // Get a reference to the database.
     final db = await database;
@@ -105,5 +65,56 @@ class DbProvider {
         note: maps[i]['note']
       );
     });
+  }
+  Future<List<User>> users() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('users');
+
+    return List.generate(maps.length, (i) {
+      return User(
+        userId: maps[i]['user_id'],
+        firstName: maps[i]['user_firstname'],
+        lastName: maps[i]['user_lastname'],
+        middleName: maps[i]['user_middlename'],
+        login: maps[i]['user_login'],
+      );
+    });
+  }
+
+  Future<void> insertUser(User user) async {
+    final db = await database;
+    await db.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
+  }
+  
+  Future<void> deleteUser(int userId) async {
+    final db = await database;
+    await db.rawDelete('DELETE FROM users WHERE user_id = ?', ['$userId']);
+  }
+
+  Future<User> readUser(int userId) async {
+    final db = await database;
+    print('db.isOpen: ${db.isOpen}');
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db.query(
+        'users',
+        where: 'user_id = ?',
+        whereArgs: [userId]
+    );
+
+    Map<String, dynamic> map = maps.first;
+
+    return User(
+      userId: map['user_id'],
+      firstName: map['user_firstname'],
+      lastName: map['user_lastname'],
+      middleName: map['user_middlename'],
+      login: map['user_login'],
+    );
   }
 }

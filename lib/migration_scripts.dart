@@ -1,10 +1,10 @@
 const migrationScripts = [
   '''CREATE TABLE reports(
     report_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER FOREIGN KEY,
-    customer_id INTEGER FOREIGN KEY,
-    machine_id INTEGER FOREIGN KEY,
-    engine_id INTEGER FOREIGN KEY,
+    user_id INTEGER,
+    customer_id INTEGER,
+    machine_id INTEGER,
+    engine_id INTEGER,
     report_name TEXT,
     report_date TEXT,
     report_place TEXT,
@@ -37,17 +37,6 @@ const migrationScripts = [
     user_firstname TEXT NOT NULL,
     user_lastname TEXT NOT NULL,
     user_middlename TEXT
-  )''',
-  '''INSERT INTO users(
-    user_login,
-    user_firstname,
-    user_lastname,
-    user_middlename 
-  ) VALUES (
-    'admin',
-    'firstname',
-    'lastname',
-    'middlename'
   )'''
 ];
 
