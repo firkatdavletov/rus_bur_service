@@ -1,11 +1,28 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:rus_bur_service/controller/customer_notifier.dart';
+import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
+import 'package:rus_bur_service/controller/machine_notifier.dart';
+import 'package:rus_bur_service/helpers/save_file.dart';
+import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
+import 'package:rus_bur_service/pages/registration_page.dart';
+// import 'package:rus_bur_service/pages/settings_page.dart';
+import 'package:rus_bur_service/pages/waiting_page.dart';
+// import 'package:rus_bur_service/helpers/password_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'db.dart';
+import 'controller/diagnostic_cards_notifier.dart';
+import 'helpers/db.dart';
 import 'package:path/path.dart';
-import 'migration_scripts.dart';
+import 'helpers/migration_scripts.dart';
 import 'package:provider/provider.dart';
+
+import 'dart:io';
+
+import 'models/user.dart';
 
 late DbProvider db;
 
@@ -26,13 +43,17 @@ void main() async {
         await db.execute(migrationScripts[i-1]);
       }
     },
-
   );
   db = DbProvider(database);
+
   runApp(
     MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UserNotifier()),
+          ChangeNotifierProvider(create: (_) => CustomerNotifier()),
+          ChangeNotifierProvider(create: (_) => ReportNotifier()),
+          ChangeNotifierProvider(create: (_) => MachineNotifier()),
+          ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
         ],
       child: MyApp(),
     )
@@ -40,16 +61,52 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // _getKey(String key) async {
+  //   Future<String?> _temp = PasswordProvider().getPassword(key);
+  //   return _temp;
+  // }
+
+  _getUser() async {
+    List<User> _maps = await db.users();
+    return _maps;
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'РусБурСервис',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginPage(),
+    return FutureBuilder(
+        future: _getUser(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'РусБурСервис',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: snapshot.data.length == 0? RegistrationPage(): LoginPage(),
+            );
+          } else if (snapshot.hasError) {
+            print('snapshot error: ${snapshot.error}');
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'РусБурСервис',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: ErrorPage(),
+            );
+          } else {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'РусБурСервис',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: WaitingPage(),
+            );
+          }
+        }
     );
   }
 }

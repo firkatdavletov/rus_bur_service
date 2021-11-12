@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/styles/image_style.dart';
 
 class Logo extends StatelessWidget {
-  final double logoSize;
 
-  const Logo({Key? key, required this.logoSize}) : super(key: key);
+  const Logo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Image(
         image: AssetImage('assets/images/logo.png'),
-        width: logoSize,
+        width: AppImageStyle().getLogoSize(),
       ),
     );
   }

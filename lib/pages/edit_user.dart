@@ -4,8 +4,12 @@ import 'package:rus_bur_service/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
+import 'package:rus_bur_service/widgets/forms/password_field.dart';
+import 'package:rus_bur_service/widgets/forms/text_form_field_edit_user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../main.dart';
+import '../helpers/password_provider.dart';
 
 class EditUser extends StatefulWidget {
 
@@ -17,14 +21,27 @@ class EditUser extends StatefulWidget {
 
 class _EditUserState extends State<EditUser> {
 
+  final TextEditingController _inputUserLogin = TextEditingController();
+  final TextEditingController _inputUserPassword = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
-    int _id = context.watch<UserNotifier>().id;
+    int _id = context.watch<UserNotifier>().user.userId;
 
     _getUser() async {
-      Future<User> _user = db.readUser(_id);
+      Future<User> _user = db.readUser('user_id', '_id');
       return _user;
+    }
+
+    _upgradeUser(User user) async {
+      db.upgradeUser(user);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => UsersPage()
+        ),
+      );
     }
 
     return Scaffold(
@@ -35,20 +52,47 @@ class _EditUserState extends State<EditUser> {
         future: _getUser(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
          if(snapshot.hasData) {
+           PasswordProvider passwordProvider = PasswordProvider();
+           final TextEditingController _inputUserFirstName = TextEditingController(text: snapshot.data.firstName);
+           final TextEditingController _inputUserLastName = TextEditingController(text: snapshot.data.lastName);
+           final TextEditingController _inputUserMiddleName = TextEditingController(text: snapshot.data.middleName);
+           final TextEditingController _inputPassword = TextEditingController();
            return Container(
              padding: EdgeInsets.all(20.0),
              child: Column(
                children: [
                  Text('Редактирование пользователя'),
-                 Text('User Id: ${snapshot.data.userId}'),
-                 Text('User name : ${snapshot.data.firstName}'),
-                 Text('User lastname: ${snapshot.data.lastName}'),
-                 Text('User middlename: ${snapshot.data.middleName}'),
+                 EditUserTextField(
+                   textEditingController: _inputUserFirstName,
+                   // initialValue: snapshot.data.firstName,
+                   labelText: 'Name',
+                 ),
+                 EditUserTextField(
+                   textEditingController: _inputUserLastName,
+                   // initialValue: snapshot.data.lastName,
+                   labelText: 'Last name',
+                 ),
+                 EditUserTextField(
+                   textEditingController: _inputUserMiddleName,
+                   // initialValue: snapshot.data.middleName,
+                   labelText: 'Middle name',
+                 ),
+                 Text('${snapshot.data.userId}'),
+                 EditUserTextField(
+                     textEditingController: _inputUserLogin,
+                     // initialValue: snapshot.data.login,
+                     labelText: 'Login'
+                 ),
+                 // PasswordTextField(
+                 //     textController: _inputUserPassword,
+                 //     labelText: 'Password'
+                 // ),
                  Row(
                    children: [
                      ElevatedButton(
                          onPressed: () {
                            db.deleteUser(_id);
+                           passwordProvider.deletePassword(snapshot.data.login);
                            Navigator.push(
                              context,
                              MaterialPageRoute(
@@ -57,6 +101,27 @@ class _EditUserState extends State<EditUser> {
                            );
                          },
                          child: Text('Delete')),
+                     ElevatedButton(
+                         onPressed: () async {
+                           User user = await snapshot.data;
+                           int id = user.userId;
+                           String firstName = _inputUserFirstName.text;
+                           String lastName = _inputUserLastName.text;
+                           String middleName = _inputUserMiddleName.text;
+                           String login = user.login;
+
+                           user = User(
+                               firstName: firstName,
+                               lastName: lastName,
+                               middleName: middleName,
+                               login: login,
+                               userId: id,
+                               isAdmin: false
+                           );
+                           print('result: ${_upgradeUser(user)}');
+                         },
+                         child: Text('Upgrade')
+                     )
                    ],
                  )
                ],

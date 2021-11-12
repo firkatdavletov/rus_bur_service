@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/models/user.dart';
 
 class UserNotifier with ChangeNotifier {
-  String _login = '';
-  int _id = 0;
+  User _user = User(
+    login: '',
+    lastName: '',
+    middleName: '',
+    isAdmin: false,
+    firstName: '',
+    userId: 0,
+  );
 
-  String get login => _login;
-  int get id => _id;
+  User get user => _user;
 
-  void change(String textController) {
-    _login = textController;
-    notifyListeners();
-  }
-
-  void changeId(int cid) {
-    _id = cid;
+  void changeUser(User userController) {
+    _user = userController;
     notifyListeners();
   }
 }
