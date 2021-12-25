@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/models/user.dart';
+import 'package:rus_bur_service/pages/mailer_page.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
@@ -36,6 +37,17 @@ class AppDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HomePage()
+                  )
+              );
+            },
+          ),
+          ListTile(
+            title: Text('ЗАЙДИ СЮДА'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MailerPage()
                   )
               );
             },

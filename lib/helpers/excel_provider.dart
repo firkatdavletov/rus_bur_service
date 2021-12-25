@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:rus_bur_service/helpers/mail_sendler.dart';
 import 'package:rus_bur_service/helpers/save_file.dart';
+import 'package:rus_bur_service/main.dart';
+import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
@@ -9,6 +11,7 @@ import '../models/report.dart';
 
 class ExcelProvider {
   bool success = false;
+  bool _imageIsLoaded = false;
   Future<void> generateExcel(Report report, User user) async {
     //Create a Excel document.
 
@@ -165,15 +168,38 @@ class ExcelProvider {
     sheet.getRangeByIndex(30, 1, 43, 3).cellStyle.backColor = '#DBDBDB';
     sheet.getRangeByIndex(30, 1, 43, 3).cellStyle.vAlign = VAlignType.top;
 
+    // Add images
+    var _images = await db.getPicture(report.id, 0);
+    print('images: ${_images.length}');
+    int x = 6;
+    int y = 1;
+    int i = 0;
+    for (var image in _images) {
+      if (i % 3 == 0) {
+        y = 1;
+        x += 40;
+      } else {
+        y += 4;
+      }
+      Picture image1 = sheet.pictures.addStream(x, y, image.picture);
+      image1.width = 300;
+      image1.height = 500;
+      i++;
+    }
+
+
 
     //Save and launch the excel.
+
     final List<int> bytes = workbook.saveAsStream();
 
     FileSaver().saveAndLaunchFile(bytes, 'reportnew.xlsx');
-    MailSender().sendMail('reportnew.xlsx');
+    MailSender().sendMail('reportnew.xlsx', report.id);
     //Dispose the document.
     workbook.dispose();
   }
+
+
 }
 
 

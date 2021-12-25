@@ -34,7 +34,9 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             context.read<ReportNotifier>().changeReportState(true);
             DateTime now = DateTime.now();
-            context.read<ReportNotifier>().changeDate('${now.day}/${now.month}/${now.year}');
+            context.read<ReportNotifier>().changeDate(
+                '${now.day}/${now.month}/${now.year}'
+            );
             Navigator.push(
                 context,
                 MaterialPageRoute(

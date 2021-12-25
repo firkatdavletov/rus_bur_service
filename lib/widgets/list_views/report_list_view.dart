@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
+import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
  import '../../helpers/excel_provider.dart';
 import '../../main.dart';
@@ -66,6 +70,7 @@ class _ReportListViewState extends State<ReportListView> {
                                               // _decrementUserReportsCount(
                                               //     Provider.of<UserNotifier>(context, listen: false).user.userId
                                               // );
+                                              db.deletePictures(snapshot.data[i].id);
                                               Navigator.of(context).pop();
                                             });
                                           },

@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
-import 'package:rus_bur_service/models/card.dart';
-import 'package:rus_bur_service/models/report_item_builder.dart';
+import 'package:rus_bur_service/models/picture.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/operation.dart';
 import '../models/part.dart';
@@ -135,7 +134,7 @@ class DbProvider {
         user.toMap(),
         conflictAlgorithm: ConflictAlgorithm.abort,
       );
-    } catch (e, s) {
+    } catch (e) {
       print('Значение уже существует');
     }
   }
@@ -327,5 +326,47 @@ class DbProvider {
   deleteOperation(int id) async {
     final db = await database;
     await db.rawDelete('DELETE FROM operations WHERE operation_id = ?', ['$id']);
+  }
+
+  //..................PICTURE.......................
+  insertPicture(AppPicture picture) async {
+    final db = await database;
+    await db.insert(
+      'pictures',
+      picture.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort
+    );
+  }
+  Future<List<AppPicture>> getPicture(int reportId, int cardId) async {
+    final db = await database;
+    List<Map<String, dynamic>> pictures = await db.query(
+        'pictures',
+        where: 'report_id = ? and card_id = ?',
+        whereArgs: ['$reportId', '$cardId']
+    );
+    return List.generate(pictures.length, (i) {
+      return AppPicture(
+          id: pictures[i]['picture_id'],
+          name: pictures[i]['picture_name'],
+          reportId: pictures[i]['report_id'],
+          cardId: pictures[i]['card_id'],
+          picture: pictures[i]['picture'],
+          description: pictures[i]['picture_description']
+      );
+    });
+  }
+  Future<void> deletePictures(int reportId) async {
+    final db = await database;
+    await db.rawDelete(
+        'DELETE FROM pictures WHERE report_id = ?',
+        ['$reportId']
+    );
+  }
+  Future<void> deletePicture(int pictureId) async {
+    final db = await database;
+    await db.rawDelete(
+        'DELETE FROM pictures WHERE picture_id = ?',
+        ['$pictureId']
+    );
   }
 }

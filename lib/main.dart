@@ -1,26 +1,20 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rus_bur_service/controller/customer_notifier.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/controller/machine_notifier.dart';
-import 'package:rus_bur_service/helpers/save_file.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:rus_bur_service/pages/registration_page.dart';
-// import 'package:rus_bur_service/pages/settings_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
-// import 'package:rus_bur_service/helpers/password_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'controller/diagnostic_cards_notifier.dart';
+import 'controller/picture_notifier.dart';
 import 'helpers/db.dart';
 import 'package:path/path.dart';
 import 'helpers/migration_scripts.dart';
 import 'package:provider/provider.dart';
-
-import 'dart:io';
 
 import 'models/user.dart';
 
@@ -54,6 +48,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => ReportNotifier()),
           ChangeNotifierProvider(create: (_) => MachineNotifier()),
           ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
+          ChangeNotifierProvider(create: (_) => PictureNotifier())
         ],
       child: MyApp(),
     )

@@ -38,6 +38,8 @@ dependencies:
   syncfusion_flutter_datagrid: ^19.3.43
   shared_preferences: ^2.0.8
   image_picker: ^0.8.4+4
+  mailer: ^5.0.2
+  google_sign_in: ^5.0.4
 
 dev_dependencies:
   flutter_test:
