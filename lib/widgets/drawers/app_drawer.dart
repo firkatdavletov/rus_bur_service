@@ -41,17 +41,6 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            title: Text('ЗАЙДИ СЮДА'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MailerPage()
-                  )
-              );
-            },
-          ),
           Visibility(
             visible: user.isAdmin,
             child: ListTile(

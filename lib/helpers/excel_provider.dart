@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:rus_bur_service/helpers/mail_sendler.dart';
 import 'package:rus_bur_service/helpers/save_file.dart';
 import 'package:rus_bur_service/main.dart';
-import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
@@ -10,6 +10,12 @@ import '../models/report.dart';
 
 
 class ExcelProvider {
+  final BuildContext context;
+
+  ExcelProvider({
+    required this.context
+  });
+
   bool success = false;
   bool _imageIsLoaded = false;
   Future<void> generateExcel(Report report, User user) async {
@@ -109,7 +115,11 @@ class ExcelProvider {
     sheet.getRangeByIndex(39, 1).setText('Серийный номер двигателя');
     sheet.getRangeByIndex(39, 4).setText(report.engineNumb);
     sheet.getRangeByIndex(40, 1).setText('Наработка');
-    sheet.getRangeByIndex(40, 4).setText(report.opTime);
+    sheet.getRangeByIndex(40, 4).setText('${report.opTime_1} м/ч');
+    sheet.getRangeByIndex(41, 1).setText('Наработка');
+    sheet.getRangeByIndex(41, 4).setText('${report.opTime_2} уд/ч');
+    sheet.getRangeByIndex(42, 1).setText('Наработка');
+    sheet.getRangeByIndex(42, 4).setText('${report.opTime_3} пог/м');
     sheet.getRangeByIndex(43, 1).setText('Примечания');
     sheet.getRangeByIndex(43, 4).setText(report.note);
 
@@ -194,7 +204,7 @@ class ExcelProvider {
     final List<int> bytes = workbook.saveAsStream();
 
     FileSaver().saveAndLaunchFile(bytes, 'reportnew.xlsx');
-    MailSender().sendMail('reportnew.xlsx', report.id);
+    MailSender(context: context).sendMail('reportnew.xlsx', report.id);
     //Dispose the document.
     workbook.dispose();
   }

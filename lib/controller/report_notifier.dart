@@ -15,7 +15,9 @@ class ReportNotifier with ChangeNotifier{
   String _machineYear = '';
   String _engineModel = '';
   String _engineNumb = '';
-  String _opTime = '';
+  String _opTime_1 = '';
+  String _opTime_2 = '';
+  String _opTime_3 = '';
   String _note = '';
 
   bool _isNewReport = false;
@@ -34,7 +36,9 @@ class ReportNotifier with ChangeNotifier{
   String get machineYear => _machineYear;
   String get engineModel => _engineModel;
   String get engineNumb => _engineNumb;
-  String get opTime => _opTime;
+  String get opTime_1 => _opTime_1;
+  String get opTime_2 => _opTime_2;
+  String get opTime_3 => _opTime_3;
   String get note => _note;
 
   bool get isNewReport => _isNewReport;
@@ -95,8 +99,16 @@ class ReportNotifier with ChangeNotifier{
     _engineNumb = textController;
     notifyListeners();
   }
-  void changeOpTime(textController) {
-    _opTime = textController;
+  void changeOpTime_1(textController) {
+    _opTime_1 = textController;
+    notifyListeners();
+  }
+  void changeOpTime_2(textController) {
+    _opTime_2 = textController;
+    notifyListeners();
+  }
+  void changeOpTime_3(textController) {
+    _opTime_3 = textController;
     notifyListeners();
   }
   void changeNote(textController) {
@@ -126,7 +138,9 @@ class ReportNotifier with ChangeNotifier{
       'report_note' : note,
       'engine_model' : engineModel,
       'engine_sn' : engineNumb,
-      'engine_optime' : opTime
+      'engine_optime_1' : opTime_1,
+      'engine_optime_2' : opTime_2,
+      'engine_optime_3' : opTime_1
     };
   }
 }

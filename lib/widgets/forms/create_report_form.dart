@@ -58,12 +58,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
             Provider.of<UserNotifier>(context, listen: false).user.userId);
         db.insertReport_2(context);
         _enable = false;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomePage()
-            )
-        );
       });
     }
     return Column(
@@ -178,13 +172,13 @@ class _CreateReportFormState extends State<CreateReportForm> {
                               } else {
                                 db.upgradeReport_2(context);
                                 _enable = false;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()
-                                    )
-                                );
                               }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()
+                                  )
+                              );
 
                             }
                           },
@@ -202,14 +196,13 @@ class _CreateReportFormState extends State<CreateReportForm> {
                               } else {
                                 db.upgradeReport_2(context);
                                 _enable = false;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MachineInfoPage()
-                                    )
-                                );
                               }
-
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MachineInfoPage()
+                                  )
+                              );
                             }
                           },
                           child: Text('Далее')
@@ -226,7 +219,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                       context.read<ReportNotifier>().changeDate('');
                       context.read<ReportNotifier>().changeCustomerPhone('');
                       context.read<ReportNotifier>().changeCustomerName('');
-                      context.read<ReportNotifier>().changeOpTime('');
+                      context.read<ReportNotifier>().changeOpTime_1('');
                       context.read<ReportNotifier>().changeNote('');
                       context.read<ReportNotifier>().changePlace('');
                       context.read<ReportNotifier>().changeCustomerEmail('');

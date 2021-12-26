@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
-import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 
- import '../../helpers/excel_provider.dart';
+import '../../helpers/excel_provider.dart';
 import '../../main.dart';
 
 class ReportListView extends StatefulWidget {
@@ -49,7 +45,7 @@ class _ReportListViewState extends State<ReportListView> {
                     IconButton(
                       onPressed: () {
                         User _user = context.read<UserNotifier>().user;
-                        ExcelProvider().generateExcel(snapshot.data[i], _user);
+                        ExcelProvider(context: context).generateExcel(snapshot.data[i], _user);
                       },
                       icon: Icon(Icons.send),
                     ),
@@ -99,6 +95,15 @@ class _ReportListViewState extends State<ReportListView> {
                   context.read<ReportNotifier>().changeCustomerName(snapshot.data[i].customerName);
                   context.read<ReportNotifier>().changeCustomerPhone(snapshot.data[i].customerPhone);
                   context.read<ReportNotifier>().changeCustomerEmail(snapshot.data[i].customerEmail);
+                  context.read<ReportNotifier>().changeMachineModel(snapshot.data[i].machineModel);
+                  context.read<ReportNotifier>().changeMachineNumb(snapshot.data[i].machineNumb);
+                  context.read<ReportNotifier>().changeMachineYear(snapshot.data[i].machineYear);
+                  context.read<ReportNotifier>().changeEngineModel(snapshot.data[i].engineModel);
+                  context.read<ReportNotifier>().changeEngineNumb(snapshot.data[i].engineNumb);
+                  context.read<ReportNotifier>().changeOpTime_1(snapshot.data[i].opTime_1);
+                  context.read<ReportNotifier>().changeOpTime_2(snapshot.data[i].opTime_2);
+                  context.read<ReportNotifier>().changeOpTime_3(snapshot.data[i].opTime_3);
+                  context.read<ReportNotifier>().changeNote(snapshot.data[i].note);
                   Navigator.push(
                       context,
                       MaterialPageRoute(

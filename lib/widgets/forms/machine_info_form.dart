@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
-import 'package:rus_bur_service/controller/user_notifier.dart';
-
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/pictures_page.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import 'app_text_form_field.dart';
@@ -20,7 +17,6 @@ class MachineInfoForm extends StatefulWidget {
 
 class _MachineInfoFormState extends State<MachineInfoForm> {
   final _formKey_1 = GlobalKey<FormState>();
-  final _formKey_2 = GlobalKey<FormState>();
 
   _validate(String value) {
     if (value.isEmpty) {
@@ -28,45 +24,8 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
     }
   }
 
-  _getReportsCount(int userId) async {
-    print('user id in _getReportsCount function: $userId');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    int? mainCounter = (prefs.getInt('main_counter') ?? 0) + 1;
-    print('main counter: $mainCounter');
-    await prefs.setInt('main_counter', mainCounter);
-
-    int? separateCounter = (prefs.getInt('counter_$userId') ?? 0) + 1;
-    await prefs.setInt('counter_$userId', separateCounter);
-
-    return {
-      'mainCount': mainCounter,
-      'userCount' : separateCounter
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
-    bool _enable = true;
-
-    _writeReportIdAndName() async {
-      var _map = _getReportsCount(Provider.of<UserNotifier>(context, listen: false).user.userId);
-      _map.then((map) {
-        context.read<ReportNotifier>().changeReportId(map['mainCount']);
-        String _name = '${Provider.of<UserNotifier>(context, listen: false).user.userId}-${map['userCount']}';
-        context.read<ReportNotifier>().changeName(_name);
-        context.read<ReportNotifier>().changeUserId(
-            Provider.of<UserNotifier>(context, listen: false).user.userId);
-        db.insertReport_2(context);
-        _enable = false;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomePage()
-            )
-        );
-      });
-    }
     return Column(
       children: [
         Form(
@@ -142,12 +101,12 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: AppTextFormFieldWithInitSuffix(
                     onSaved: (value) {
-                      context.read<ReportNotifier>().changeOpTime(value);
+                      context.read<ReportNotifier>().changeOpTime_1(value);
                     },
                     validator: _validate,
                     icon: Icon(Icons.arrow_right),
                     label: 'Наработка (м/ч)',
-                    initialValue: context.watch<ReportNotifier>().opTime,
+                    initialValue: context.watch<ReportNotifier>().opTime_1,
                     helperText: '',
                     suffixText: 'м/ч',
                   ),
@@ -156,12 +115,12 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: AppTextFormFieldWithInitSuffix(
                     onSaved: (value) {
-                      context.read<ReportNotifier>().changeOpTime(value);
+                      context.read<ReportNotifier>().changeOpTime_2(value);
                     },
                     validator: _validate,
                     icon: Icon(Icons.arrow_right),
                     label: 'Наработка (уд/ч)',
-                    initialValue: context.watch<ReportNotifier>().opTime,
+                    initialValue: context.watch<ReportNotifier>().opTime_2,
                     helperText: '',
                     suffixText: 'уд/ч',
                   ),
@@ -170,12 +129,12 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: AppTextFormFieldWithInitSuffix(
                     onSaved: (value) {
-                      context.read<ReportNotifier>().changeOpTime(value);
+                      context.read<ReportNotifier>().changeOpTime_3(value);
                     },
                     validator: _validate,
                     icon: Icon(Icons.arrow_right),
                     label: 'Наработка (пог/м)',
-                    initialValue: context.watch<ReportNotifier>().opTime,
+                    initialValue: context.watch<ReportNotifier>().opTime_3,
                     helperText: '',
                     suffixText: 'пог/м',
                   ),
@@ -215,38 +174,15 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                       child: OutlinedButton (
                           onPressed: () {
-                            if (_formKey_1.currentState!.validate() && _enable) {
+                            if (_formKey_1.currentState!.validate()) {
                               _formKey_1.currentState!.save();
-                              // Report report = Report(
-                              //   id: Provider.of<ReportNotifier>(context, listen: false).id,
-                              //   userId: Provider.of<ReportNotifier>(context, listen: false).userId,
-                              //   name: Provider.of<ReportNotifier>(context, listen: false).name,
-                              //   date: Provider.of<ReportNotifier>(context, listen: false).date,
-                              //   company: Provider.of<ReportNotifier>(context, listen: false).company,
-                              //   place: Provider.of<ReportNotifier>(context, listen: false).place,
-                              //   customerName: Provider.of<ReportNotifier>(context, listen: false).customerName,
-                              //   customerPhone: Provider.of<ReportNotifier>(context, listen: false).customerPhone,
-                              //   customerEmail: Provider.of<ReportNotifier>(context, listen: false).customerEmail,
-                              //   machineModel: 'model',//Provider.of<ReportNotifier>(context, listen: false).machineModel,
-                              //   machineNumb: 'sn',//Provider.of<ReportNotifier>(context, listen: false).machineNumb,
-                              //   machineYear: 'year',//,Provider.of<ReportNotifier>(context, listen: false).machineYear,
-                              //   engineModel: 'model',//Provider.of<ReportNotifier>(context, listen: false).engineModel,
-                              //   engineNumb: 'numb',//Provider.of<ReportNotifier>(context, listen: false).engineNumb,
-                              //   opTime: 'time',//Provider.of<ReportNotifier>(context, listen: false).opTime,
-                              //   note: 'note',//Provider.of<ReportNotifier>(context, listen: false).note,
-                              // );
-                              if (Provider.of<ReportNotifier>(context, listen: false).isNewReport) {
-                                _writeReportIdAndName();
-                              } else {
-                                db.upgradeReport_2(context);
-                                _enable = false;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()
-                                    )
-                                );
-                              }
+                              db.upgradeReport_2(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()
+                                  )
+                              );
                             }
                           },
                           child: Text('Сохранить')
@@ -256,12 +192,16 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                       child: OutlinedButton (
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PicturesPage()
-                                )
-                            );
+                            if (_formKey_1.currentState!.validate()) {
+                              _formKey_1.currentState!.save();
+                              db.upgradeReport_2(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PicturesPage()
+                                  )
+                              );
+                            }
                           },
                           child: Text('Далее')
                       ),
@@ -277,7 +217,9 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                       context.read<ReportNotifier>().changeDate('');
                       context.read<ReportNotifier>().changeCustomerPhone('');
                       context.read<ReportNotifier>().changeCustomerName('');
-                      context.read<ReportNotifier>().changeOpTime('');
+                      context.read<ReportNotifier>().changeOpTime_1('');
+                      context.read<ReportNotifier>().changeOpTime_2('');
+                      context.read<ReportNotifier>().changeOpTime_3('');
                       context.read<ReportNotifier>().changeNote('');
                       context.read<ReportNotifier>().changePlace('');
                       context.read<ReportNotifier>().changeCustomerEmail('');

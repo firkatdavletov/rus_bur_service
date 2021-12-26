@@ -1,13 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/settings_page.dart';
-import 'package:rus_bur_service/widgets/drawers/app_drawer.dart';
 import 'package:rus_bur_service/widgets/alert_dialog/user_add_alert_dialog.dart';
 import 'package:rus_bur_service/widgets/list_views/users_list_view.dart';
-
-import '../main.dart';
-import 'create_user.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);

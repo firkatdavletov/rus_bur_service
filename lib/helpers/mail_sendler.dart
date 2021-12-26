@@ -1,14 +1,24 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:rus_bur_service/models/report.dart';
-
-import '../main.dart';
+import 'package:provider/src/provider.dart';
+import 'package:rus_bur_service/api/google_sign_in_api.dart';
+import 'package:rus_bur_service/controller/email_message_notifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MailSender {
+  final BuildContext context;
+
+  MailSender({
+    required this.context
+  });
+
   Future<void> sendMail(String fileName, int reportId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? path;
     if (Platform.isAndroid ||
@@ -29,17 +39,43 @@ class MailSender {
     // File _photo = File('$path/photo.jpg');
     // _photo.writeAsBytes(_images[0].picture);
 
-    final Email email = Email(
-      body: 'Сервисный отчёт',
-      subject: 'Тестовый вариант',
-      recipients: ['dr.firkat@yandex.ru'],
-      cc: [],
-      //bcc: ['bcc@example.com'],
-      attachmentPaths: ['$path/$fileName'], //'$path/photo.jpg'],
-      isHTML: false,
+    final user = await GoogleAuthApi.signIn();
+
+    if (user == null) return;
+
+    final mailAddress = 'serviceavailable.test@gmail.com';
+    final auth = await user.authentication;
+    final token = auth.accessToken!;
+
+    print('Authenticated: $mailAddress');
+
+    final smtpServer = gmailSaslXoauth2(mailAddress, token);
+
+    final message = Message()
+      ..from = Address(mailAddress, 'Firkat')
+      ..recipients = [prefs.getString('recipients')]
+      ..subject = prefs.getString('subject')
+      ..text = prefs.getString('text')
+      ..attachments = [FileAttachment(File('$path/$fileName'))];
+
+    try {
+      await send(message, smtpServer);
+      showSnackBar('Sent email successfully!');
+    } on MailerException catch (e) {
+      print(e);
+    }
+  }
+  void showSnackBar (String text) {
+    final snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 20),
+      ),
+      backgroundColor: Colors.green,
     );
-
-    await FlutterEmailSender.send(email);
-
+    print(text);
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 }

@@ -27,7 +27,6 @@ class DbProvider {
   Future<void> insertReport_2(BuildContext context) async {
     final db = await database;
     Map<String, Object?> map = Provider.of<ReportNotifier>(context, listen: false).toMap();
-    print('map in insertReport_2 function:');
     print(map);
     await db.insert(
       'reports',
@@ -64,7 +63,9 @@ class DbProvider {
           machineModel: maps[i]['machine_model'],
           machineNumb: maps[i]['machine_sn'],
           machineYear: maps[i]['machine_year'],
-          opTime: maps[i]['engine_optime'],
+          opTime_1: maps[i]['engine_optime_1'],
+          opTime_2: maps[i]['engine_optime_2'],
+          opTime_3: maps[i]['engine_optime_3'],
           note: maps[i]['report_note']
       );
       return report;
@@ -90,7 +91,7 @@ class DbProvider {
           'machine_model' : '${report.machineModel}',
           'machine_sn' : '${report.machineNumb}',
           'machine_year' : '${report.machineYear}',
-          'engine_optime' : '${report.opTime}',
+          'engine_optime' : '${report.opTime_1}',
           'report_note' : '${report.note}'
         },
         where: 'report_id = ?',

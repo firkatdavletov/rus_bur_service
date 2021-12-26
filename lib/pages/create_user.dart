@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
-import 'package:rus_bur_service/widgets/forms/password_field.dart';
 import 'package:rus_bur_service/widgets/forms/text_form_field_edit_user.dart';
 
 import '../main.dart';

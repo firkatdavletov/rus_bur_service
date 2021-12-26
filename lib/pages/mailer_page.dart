@@ -38,15 +38,17 @@ class _MailerPageState extends State<MailerPage> {
     final token = auth.accessToken!;
 
     print('Authenticated: $mailAddress');
-    GoogleAuthApi.signOut();
 
     final smtpServer = gmailSaslXoauth2(mailAddress, token);
+
     final message = Message()
         ..from = Address(mailAddress, 'Firkat')
         ..recipients = ['dr.firkat@ya.ru']
         ..subject = 'Hello Firkat'
         ..text = 'This is a test email!';
+
     try {
+      print('Trying to send message...');
       await send(message, smtpServer);
       showSnackBar('Sent email successfully!');
     } on MailerException catch (e) {

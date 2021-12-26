@@ -20,6 +20,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        reverse: true,
         child: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(

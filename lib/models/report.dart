@@ -13,7 +13,9 @@ class Report {
   final String machineYear;
   final String engineModel;
   final String engineNumb;
-  final String opTime;
+  final String opTime_1;
+  final String opTime_2;
+  final String opTime_3;
   final String note;
 
   Report({
@@ -31,7 +33,9 @@ class Report {
     required this.machineYear,
     required this.engineModel,
     required this.engineNumb,
-    required this.opTime,
+    required this.opTime_1,
+    required this.opTime_2,
+    required this.opTime_3,
     required this.note
   });
 
@@ -52,7 +56,9 @@ class Report {
       'report_note' : note,
       'engine_model' : engineModel,
       'engine_sn' : engineNumb,
-      'engine_optime' : opTime
+      'engine_optime_1' : opTime_1,
+      'engine_optime_2' : opTime_2,
+      'engine_optime_3' : opTime_3
     };
   }
 

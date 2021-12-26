@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/helpers/app_shared_preferance.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
@@ -65,7 +66,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
         db.insertUser(_user);
         PasswordProvider().writePassword('rbs_key', 'rbs_key');
         PasswordProvider().writePassword(_login, _password);
-        print('_login: $_login, _password $_password');
+
+        var _prefs = AppSharedPref();
+        _prefs.initPrefs();
+
         Navigator.push(
             context,
             MaterialPageRoute(

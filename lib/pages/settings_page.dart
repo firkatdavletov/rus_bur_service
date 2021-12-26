@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/pages/email_message_settings.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
 import 'package:rus_bur_service/widgets/drawers/app_drawer.dart';
@@ -58,6 +59,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PartsPage()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('Email'),
+            subtitle: Text('Параметры сообщения'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EmailMessageSettings()
                 ),
               );
             },

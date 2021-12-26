@@ -15,7 +15,9 @@ const migrationScripts = [
     report_note TEXT,
     engine_model TEXT,
     engine_sn TEXT,
-    engine_optime TEXT
+    engine_optime_1 TEXT,
+    engine_optime_2 TEXT,
+    engine_optime_3 TEXT
   )''',
   '''CREATE TABLE users(
     user_id INTEGER PRIMARY KEY,

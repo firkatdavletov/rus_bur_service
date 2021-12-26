@@ -10,6 +10,7 @@ import 'package:rus_bur_service/pages/registration_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 import 'package:sqflite/sqflite.dart';
 import 'controller/diagnostic_cards_notifier.dart';
+import 'controller/email_message_notifier.dart';
 import 'controller/picture_notifier.dart';
 import 'helpers/db.dart';
 import 'package:path/path.dart';
@@ -48,7 +49,8 @@ void main() async {
           ChangeNotifierProvider(create: (_) => ReportNotifier()),
           ChangeNotifierProvider(create: (_) => MachineNotifier()),
           ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
-          ChangeNotifierProvider(create: (_) => PictureNotifier())
+          ChangeNotifierProvider(create: (_) => PictureNotifier()),
+          ChangeNotifierProvider(create: (_) => EmailMessageNotifier())
         ],
       child: MyApp(),
     )

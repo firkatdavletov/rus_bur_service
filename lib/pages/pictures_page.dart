@@ -13,6 +13,9 @@ import 'package:rus_bur_service/pages/waiting_page.dart';
 import 'package:rus_bur_service/widgets/alert_dialog/take_picture_alert_dialog.dart';
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 
+import 'home_page.dart';
+import 'machine_info_page.dart';
+
 typedef void OnPickImageCallback (String name);
 
 class PicturesPage extends StatefulWidget {
@@ -144,64 +147,111 @@ class _PicturesGridListState extends State<PicturesGridList> {
         future: _getPictures(Provider.of<ReportNotifier>(context, listen: false).id, 0),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.length == 0) {
-              return Center(
-                child: Text('List is empty'),
-              );
-            }
-            return ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int i) {
-                  return Column(
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                      child: Hero(
-                                          tag: snapshot.data[i].name,
-                                          child: Container(
-                                            height: 50,
-                                            width: 50,
-                                            child: Image.memory(snapshot.data[i].picture),
-                                          )
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => FullScreenPage(
-                                                  title: snapshot.data[i].name,
-                                                  bytes: snapshot.data[i].picture,
+            return Column(
+              children: [
+                snapshot.data.length == 0
+                  ? Center(
+                    child: Text('List is empty'),
+                  )
+                  : Expanded(
+                    child: ListView.builder(
+                    padding: EdgeInsets.all(8.0),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Column(
+                        children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                          child: Hero(
+                                              tag: snapshot.data[i].name,
+                                              child: Container(
+                                                height: 50,
+                                                width: 50,
+                                                child: Image.memory(snapshot.data[i].picture),
+                                              )
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => FullScreenPage(
+                                                      title: snapshot.data[i].name,
+                                                      bytes: snapshot.data[i].picture,
+                                                    )
                                                 )
-                                            )
-                                        );
-                                      }
+                                            );
+                                          }
+                                      ),
+                                      Text(snapshot.data[i].name)
+                                    ],
                                   ),
-                                  Text(snapshot.data[i].name)
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.deepOrange,),
-                              onPressed: () {
-                                setState(() {
-                                  db.deletePicture(snapshot.data[i].id);
-                                });
-                              },
-                            )
-                          ]
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.deepOrange,),
+                                  onPressed: () {
+                                    setState(() {
+                                      db.deletePicture(snapshot.data[i].id);
+                                    });
+                                  },
+                                )
+                              ]
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 5.0),
+                          )
+                        ],
+                      );
+                    }
+                )
+                    ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                      child: OutlinedButton (
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MachineInfoPage()
+                                )
+                            );
+                          },
+                          child: Text('Назад')
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0),
-                      )
-                    ],
-                  );
-                }
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                      child: OutlinedButton (
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()
+                                )
+                            );
+                          },
+                          child: Text('Сохранить')
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                      child: OutlinedButton (
+                          onPressed: () {
+
+                          },
+                          child: Text('Далее')
+                      ),
+                    )
+                  ],
+                ),
+              ],
             );
           } else if (snapshot.hasError) {
             return ErrorPage();
