@@ -576,7 +576,8 @@ class DbProvider {
           cardId: spares[i]['card_id'],
           number: spares[i]['spare_number'],
           quantity: spares[i]['spares_quantity'],
-          measure: spares[i]['spare_measure']
+          measure: spares[i]['spare_measure'],
+          priority: spares[i]['spare_priority']
       );
     });
   }

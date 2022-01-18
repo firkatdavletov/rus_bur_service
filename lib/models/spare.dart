@@ -6,6 +6,7 @@ class Spare {
   final String measure;
   final String issue;
   final String cardId;
+  final int priority;
 
   Spare({
     required this.id,
@@ -14,7 +15,8 @@ class Spare {
     required this.name,
     required this.measure,
     required this.issue,
-    required this.cardId
+    required this.cardId,
+    required this.priority
   });
 
   Map<String, dynamic> toMap() {
@@ -25,7 +27,8 @@ class Spare {
       'spare_name' : name,
       'spare_measure' : measure,
       'spare_issue' : issue,
-      'card_id' : cardId
+      'card_id' : cardId,
+      'spare_priority' : priority
     };
   }
 }

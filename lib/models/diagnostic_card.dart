@@ -3,11 +3,11 @@ class DiagnosticCard {
   final String name;
   final int operationId;
   final int reportId;
-  final String conclusion;
+  final int conclusion;
   final String description;
   final String area;
   final String damage;
-  final String priority;
+  final int priority;
   final String recommend;
   final String time;
   final String effect;
@@ -54,11 +54,11 @@ class DiagnosticCard {
         name: '',
         operationId: 0,
         reportId: 0,
-        conclusion: 'УСПЕШНО',
+        conclusion: 1,
         description: '',
         area: '',
         damage: '',
-        priority: 'РЕКОМЕНДУЕТСЯ',
+        priority: 1,
         recommend: '',
         time: '',
         effect: '',

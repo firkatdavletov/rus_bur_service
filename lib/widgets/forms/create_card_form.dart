@@ -3,7 +3,6 @@ import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
 import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/diagnostic_card.dart';
-import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_cards_page.dart';
 import 'package:rus_bur_service/pages/card_pictures_page.dart';
 import 'package:rus_bur_service/pages/spares_page.dart';
@@ -27,8 +26,45 @@ class _CreateCardFormState extends State<CreateCardForm> {
     }
   }
 
+
+
+  late String _dropdownConclusionValue;
+  List<String> _conclusion = ['НЕ ВЫБРАНО', 'УСПЕШНО', 'ВНИМАНИЕ', 'НЕУДАЧА'];
+  late String _dropdownPriorityValue;
+  List<String> _priority = ['НЕ ВЫБРАНО','РЕКОМЕНДУЕТСЯ','ПЛАНОВО','СРОЧНО'];
+
   @override
   Widget build(BuildContext context) {
+    int _conclusionState = Provider.of<DiagnosticCardsNotifier>(context, listen: false).conclusion;
+    int _priorityState = Provider.of<DiagnosticCardsNotifier>(context, listen: false).priority;
+
+    switch (_conclusionState) {
+      case 0:
+        _dropdownConclusionValue = 'НЕ ВЫБРАНО';
+        break;
+      case 1:
+        _dropdownConclusionValue = 'УСПЕШНО';
+        break;
+      case 2:
+        _dropdownConclusionValue = 'ВНИМАНИЕ';
+        break;
+      case 3:
+        _dropdownConclusionValue = 'НЕУДАЧА';
+    }
+
+    switch (_priorityState) {
+      case 0:
+        _dropdownPriorityValue = 'НЕ ВЫБРАНО';
+        break;
+      case 1:
+        _dropdownPriorityValue = 'РЕКОМЕНДУЕТСЯ';
+        break;
+      case 2:
+        _dropdownPriorityValue = 'ПЛАНОВО';
+        break;
+      case 3:
+        _dropdownPriorityValue = 'СРОЧНО';
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,31 +75,69 @@ class _CreateCardFormState extends State<CreateCardForm> {
               child: ListView(
                 children: [
                   SizedBox(height: 20,),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).conclusion,
-                      onSaved: (value) {
-                        context.read<DiagnosticCardsNotifier>().changeConclusion(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.circle, color: Colors.green,),
-                      label: 'Заключение',
-                      helperText: '',
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text('ЗАКЛЮЧЕНИЕ :'),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          child: DropdownButton<String>(
+                            value: _dropdownConclusionValue,
+                            items: _conclusion.map((String value) {
+                              return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                context.read<DiagnosticCardsNotifier>().changeConclusion(
+                                    newValue == 'УСПЕШНО'
+                                        ? 1
+                                        : newValue == 'ВНИМАНИЕ'
+                                        ? 2
+                                        : newValue == 'НЕУДАЧА'
+                                        ? 3
+                                        : 0
+                                );
+                              });
+                            },
+                          ),
+                        ),
+                        Icon(
+                            Icons.check_circle,
+                            color: _conclusionState == 1
+                                ? Colors.lightGreen
+                                : _conclusionState == 2
+                                ? Colors.orangeAccent
+                                : _conclusionState == 3
+                                ? Colors.redAccent
+                                : _conclusionState == 0
+                                ? Colors.grey
+                                : null
+                        )
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).description,
-                      onSaved: (value) {
-                        context.read<DiagnosticCardsNotifier>().changeDescription(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.format_quote_sharp),
-                      label: 'Решение проблемы',
-                      helperText: '',
-                    ),
+                  Visibility(
+                      visible: _conclusionState != 1,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInit(
+                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).description,
+                          onSaved: (value) {
+                            context.read<DiagnosticCardsNotifier>().changeDescription(value);
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.format_quote_sharp),
+                          label: 'Решение проблемы',
+                          helperText: '',
+                        ),
+                      )
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -78,17 +152,52 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       helperText: '',
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).priority,
-                      onSaved: (value) {
-                        context.read<DiagnosticCardsNotifier>().changePriority(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.warning_amber_outlined),
-                      label: 'Приоритет',
-                      helperText: '',
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text('ПРИОРИТЕТ :'),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          child: DropdownButton<String>(
+                            value: _dropdownPriorityValue,
+                            items: _priority.map((String value) {
+                              return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                context.read<DiagnosticCardsNotifier>().changePriority(
+                                    newValue == 'РЕКОМЕНДУЕТСЯ'
+                                        ? 1
+                                        : newValue == 'ПЛАНОВО'
+                                        ? 2
+                                        : newValue == 'СРОЧНО'
+                                        ? 3
+                                        : 0
+                                );
+                              });
+                            },
+                          ),
+                        ),
+                        Icon(
+                            Icons.check_circle,
+                            color: _priorityState == 1
+                                ? Colors.lightGreen
+                                : _priorityState == 2
+                                ? Colors.orangeAccent
+                                : _priorityState == 3
+                                ? Colors.redAccent
+                                : _priorityState == 0
+                                ? Colors.grey
+                                : null
+                        )
+                      ],
                     ),
                   ),
                   Padding(

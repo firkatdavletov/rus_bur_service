@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
+import 'package:rus_bur_service/controller/spare_notifier.dart';
 import 'package:rus_bur_service/pages/add_spare_page.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
@@ -36,11 +37,30 @@ class _SparesListState extends State<SparesList> {
                       });
                     },
                   ),
+                  leading: Icon(
+                      Icons.check_circle,
+                      color: snapshot.data[i].priority == 1
+                          ? Colors.lightGreen
+                          : snapshot.data[i].priority == 2
+                          ? Colors.orangeAccent
+                          : snapshot.data[i].priority == 3
+                          ? Colors.redAccent
+                          : snapshot.data[i].priority == 0
+                          ? Colors.grey
+                          : null
+                  ),
                   onTap: () {
+                    context.read<SpareNotifier>().changeIssue(snapshot.data[i].issue);
+                    context.read<SpareNotifier>().changeNumber(snapshot.data[i].number);
+                    context.read<SpareNotifier>().changeName(snapshot.data[i].name);
+                    context.read<SpareNotifier>().changeQuantity(snapshot.data[i].quantity);
+                    context.read<SpareNotifier>().changeMeasure(snapshot.data[i].measure);
+                    context.read<SpareNotifier>().changePriority(snapshot.data[i].priority);
+                    context.read<SpareNotifier>().changeId(snapshot.data[i].id);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddSparePage(spare: snapshot.data[i], isNewSpare: false,)
+                            builder: (context) => AddSparePage(isNewSpare: false,)
                         )
                     );
                   },

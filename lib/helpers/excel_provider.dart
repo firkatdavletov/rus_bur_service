@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rus_bur_service/helpers/mail_sendler.dart';
 import 'package:rus_bur_service/helpers/save_file.dart';
+import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
@@ -231,6 +232,14 @@ class ExcelProvider {
       sheet.pictures.addStream(row, column, image.picture);
       row += 70;
     }
+
+    row++;
+
+    List<DiagnosticCard> _cards = await db.getCards(report.id);
+
+    sheet.getRangeByIndex(row, 1).setText('Рекомендуемые мероприятия по результатам проверки');
+
+
 
 
 

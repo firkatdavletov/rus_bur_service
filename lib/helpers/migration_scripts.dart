@@ -44,6 +44,7 @@ const migrationScripts = [
     spare_name TEXT NOT NULL,
     spare_measure TEXT NOT NULL,
     spare_issue TEXT NOT NULL,
+    spare_priority INTEGER NOT NULL,
     card_id TEXT NOT NULL
   )''',
   '''CREATE TABLE cards(
@@ -51,11 +52,11 @@ const migrationScripts = [
     card_name TEXT NOT NULL,
     operation_id INTEGER NOT NULL,
     report_id INTEGER NOT NULL,
-    conclusion TEXT NOT NULL,
+    conclusion INTEGER NOT NULL,
     description TEXT,
     area TEXT,
     damage TEXT,
-    priority TEXT,
+    priority INTEGER NOT NULL,
     recommend TEXT,
     time TEXT,
     effect TEXT,

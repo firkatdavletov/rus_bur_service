@@ -29,6 +29,18 @@ class _CardsListState extends State<CardsList> {
                   return ListTile(
                     title: Text(snapshot.data[i].name),
                     subtitle: Text(snapshot.data[i].area),
+                    leading: Icon(
+                        Icons.check_circle,
+                        color: snapshot.data[i].priority == 1
+                            ? Colors.lightGreen
+                            : snapshot.data[i].priority == 2
+                            ? Colors.orangeAccent
+                            : snapshot.data[i].priority == 3
+                            ? Colors.redAccent
+                            : snapshot.data[i].priority == 0
+                            ? Colors.grey
+                            : null
+                    ),
                     trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
@@ -62,6 +74,7 @@ class _CardsListState extends State<CardsList> {
                 }
             );
           } else if (snapshot.hasError) {
+            print('snapshot error: ${snapshot.error}');
             return ErrorPage();
           } else {
             return WaitingPage();

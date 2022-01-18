@@ -4,10 +4,8 @@ import 'package:rus_bur_service/widgets/forms/add_spare_form.dart';
 
 class AddSparePage extends StatelessWidget {
   final bool isNewSpare;
-  final Spare spare;
   const AddSparePage({
     Key? key,
-    required this.spare,
     required this.isNewSpare
   }) : super(key: key);
 
@@ -20,7 +18,7 @@ class AddSparePage extends StatelessWidget {
                       : 'Редактрование детали'),
       ),
       body: SingleChildScrollView(
-        child: AddSpareForm(spare: spare, isNewSpare: isNewSpare),
+        child: AddSpareForm(isNewSpare: isNewSpare),
       ),
     );
     // return ;

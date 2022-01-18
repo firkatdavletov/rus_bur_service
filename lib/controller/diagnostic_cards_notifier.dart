@@ -5,11 +5,11 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   String _name = '';
   int _operationId = 0;
   int _reportId = 0;
-  String _conclusion = '';
+  int _conclusion = 1;
   String _description = '';
   String _area = '';
   String _damage = '';
-  String _priority = '';
+  int _priority = 1;
   String _recommend = '';
   String _time = '';
   String _effect = '';
@@ -19,11 +19,11 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   String get name => _name;
   int get operationId => _operationId;
   int get reportId => _reportId;
-  String get conclusion => _conclusion;
+  int get conclusion => _conclusion;
   String get description => _description;
   String get area => _area;
   String get damage => _damage;
-  String get priority => _priority;
+  int get priority => _priority;
   String get recommend => _recommend;
   String get time => _time;
   String get effect => _effect;
@@ -45,7 +45,7 @@ class DiagnosticCardsNotifier with ChangeNotifier {
     _reportId = textController;
     notifyListeners();
   }
-  changeConclusion(String textController) {
+  changeConclusion(int textController) {
     _conclusion = textController;
     notifyListeners();
   }
@@ -61,7 +61,7 @@ class DiagnosticCardsNotifier with ChangeNotifier {
     _damage = textController;
     notifyListeners();
   }
-  changePriority(String textController) {
+  changePriority(int textController) {
     _priority = textController;
     notifyListeners();
   }
