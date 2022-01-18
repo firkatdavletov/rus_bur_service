@@ -1,6 +1,7 @@
 class Part {
   final int id;
   final String name;
+  bool isChecked = false;
 
   Part({
     required this.id,

@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rus_bur_service/helpers/mail_sendler.dart';
 import 'package:rus_bur_service/helpers/save_file.dart';
-import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
+import '../main.dart';
 import '../models/report.dart';
 
 
@@ -17,7 +17,6 @@ class ExcelProvider {
   });
 
   bool success = false;
-  bool _imageIsLoaded = false;
   Future<void> generateExcel(Report report, User user) async {
     //Create a Excel document.
 
@@ -61,93 +60,139 @@ class ExcelProvider {
     ByteData data = await rootBundle.load('assets/images/logo.png');
     final buffer = data.buffer;
 
+    int row = 1;
+
     Picture logo_1 = sheet.pictures.addStream(
-        1, 10, buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+        row, 10, buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
     logo_1.height = 150;
     logo_1.width = 300;
 
-    sheet.getRangeByIndex(8, 14).setText('ООО "РусБурСервис"          ');
-    sheet.getRangeByIndex(9, 14).setText('ИНН 6670196984, КПП 667001001          ');
+    row += 7; //8
+    sheet.getRangeByIndex(row, 14).setText('ООО "РусБурСервис"          ');
+    sheet.getRangeByIndex(row, 14, row+1, 14).cellStyle = style_1;
 
-    sheet.getRangeByIndex(8, 14, 9, 14).cellStyle = style_1;
+    row++; //9
+    sheet.getRangeByIndex(row, 14).setText('ИНН 6670196984, КПП 667001001          ');
 
-    sheet.getRangeByIndex(12, 1).setText('ОТЧЁТ ПО РЕЗУЛЬТАТАМ');
-    sheet.getRangeByIndex(13, 1).setText('ДИАГНОСТИКИ БУРОВОГО СТАНКА');
-    sheet.getRangeByIndex(14, 1).setText('№${report.name}');
 
-    sheet.getRangeByIndex(12, 1, 12, 14).merge();
-    sheet.getRangeByIndex(13, 1, 13, 14).merge();
-    sheet.getRangeByIndex(14, 1, 14, 14).merge();
 
-    final Range range_1 = sheet.getRangeByIndex(12, 1, 14, 14);
+    row += 3; //12
+    sheet.getRangeByIndex(row, 1).setText('ОТЧЁТ ПО РЕЗУЛЬТАТАМ');
+    sheet.getRangeByIndex(row, 1, row, 14).merge();
+    final Range range_1 = sheet.getRangeByIndex(row, 1, row+2, 14);
     range_1.cellStyle = style_2;
 
-    sheet.getRangeByIndex(19, 1).setText('Заказчик: ${report.company}');
-    sheet.getRangeByIndex(20, 1).setText('Дата осмотра: ${report.date}');
-    sheet.getRangeByIndex(21, 1).setText('Исполнитель: ООО "РусБурСервис"');
+    row++; //13
+    sheet.getRangeByIndex(row, 1).setText('ДИАГНОСТИКИ БУРОВОГО СТАНКА');
+    sheet.getRangeByIndex(row, 1, row, 14).merge();
 
-    sheet.getRangeByIndex(19, 1, 21, 1).cellStyle = style_3;
+    row++; //14
+    sheet.getRangeByIndex(row, 1).setText('№${report.name}');
+    sheet.getRangeByIndex(row, 1, row, 14).merge();
 
-    sheet.getRangeByIndex(23, 1).setText('Сервисный инженер: ${user.firstName} ${user.lastName} ${user.middleName}');
-    sheet.getRangeByIndex(23, 1).cellStyle = style_4;
 
+
+    row += 5; //19
+    sheet.getRangeByIndex(row, 1).setText('Заказчик: ${report.company}');
+    sheet.getRangeByIndex(row, 1, row+2, 1).cellStyle = style_3;
+
+    row++; //20
+    sheet.getRangeByIndex(row, 1).setText('Дата осмотра: ${report.date}');
+
+    row++; //21
+    sheet.getRangeByIndex(row, 1).setText('Исполнитель: ООО "РусБурСервис"');
+
+
+    row += 2; //23
+    sheet.getRangeByIndex(row, 1).setText('Сервисный инженер: ${user.firstName} ${user.lastName} ${user.middleName}');
+    sheet.getRangeByIndex(row, 1).cellStyle = style_4;
+
+    row += 4; //27
     Picture logo_2 = sheet.pictures.addStream(
-        27, 12, buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+        row, 12, buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
     logo_2.height = 70;
     logo_2.width = 140;
 
-    sheet.getRangeByIndex(30, 1).setText('Заказчик');
-    sheet.getRangeByIndex(30, 4).setText(report.company);
-    sheet.getRangeByIndex(31, 1).setText('Место проведения работ');
-    sheet.getRangeByIndex(31, 4).setText(report.place);
-    sheet.getRangeByIndex(32, 1).setText('Контактное лицо заказчика');
-    sheet.getRangeByIndex(32, 4).setText(report.customerName);
-    sheet.getRangeByIndex(33, 4).setText('Телефон: ${report.customerPhone}');
-    sheet.getRangeByIndex(34, 4).setText('E-mail: ${report.customerEmail}');
-    sheet.getRangeByIndex(35, 1).setText('Модель машины');
-    sheet.getRangeByIndex(35, 4).setText(report.machineModel);
-    sheet.getRangeByIndex(36, 1).setText('Серийный номер машины');
-    sheet.getRangeByIndex(36, 4).setText(report.machineNumb);
-    sheet.getRangeByIndex(37, 1).setText('Год выпуска');
-    sheet.getRangeByIndex(37, 4).setText(report.machineYear);
-    sheet.getRangeByIndex(38, 1).setText('Модель двигателя');
-    sheet.getRangeByIndex(38, 4).setText(report.engineModel);
-    sheet.getRangeByIndex(39, 1).setText('Серийный номер двигателя');
-    sheet.getRangeByIndex(39, 4).setText(report.engineNumb);
-    sheet.getRangeByIndex(40, 1).setText('Наработка');
-    sheet.getRangeByIndex(40, 4).setText('${report.opTime_1} м/ч');
-    sheet.getRangeByIndex(41, 1).setText('Наработка');
-    sheet.getRangeByIndex(41, 4).setText('${report.opTime_2} уд/ч');
-    sheet.getRangeByIndex(42, 1).setText('Наработка');
-    sheet.getRangeByIndex(42, 4).setText('${report.opTime_3} пог/м');
-    sheet.getRangeByIndex(43, 1).setText('Примечания');
-    sheet.getRangeByIndex(43, 4).setText(report.note);
+    row += 3; // 30
+    sheet.getRangeByIndex(row, 1).setText('Заказчик');
+    sheet.getRangeByIndex(row, 4).setText(report.company);
+    final Range range_2 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_12 = sheet.getRangeByIndex(row, 4, row, 14);
+    sheet.getRangeByIndex(row, 1, row+13, 14).cellStyle = style_5;
+    sheet.getRangeByIndex(row, 1, row+13, 3).cellStyle.backColor = '#DBDBDB';
+    sheet.getRangeByIndex(row, 1, row+13, 3).cellStyle.vAlign = VAlignType.top;
 
-    final Range range_2 = sheet.getRangeByIndex(30, 1, 30, 3);
-    final Range range_3 = sheet.getRangeByIndex(31, 1, 31, 3);
-    final Range range_4 = sheet.getRangeByIndex(32, 1, 34, 3);
-    final Range range_5 = sheet.getRangeByIndex(35, 1, 35, 3);
-    final Range range_6 = sheet.getRangeByIndex(36, 1, 36, 3);
-    final Range range_7 = sheet.getRangeByIndex(37, 1, 37, 3);
-    final Range range_8 = sheet.getRangeByIndex(38, 1, 38, 3);
-    final Range range_9 = sheet.getRangeByIndex(39, 1, 39, 3);
-    final Range range_10 = sheet.getRangeByIndex(40, 1, 42, 3);
-    final Range range_11 = sheet.getRangeByIndex(43, 1, 43, 3);
-    //
-    final Range range_12 = sheet.getRangeByIndex(30, 4, 30, 14);
-    final Range range_13 = sheet.getRangeByIndex(31, 4, 31, 14);
-    final Range range_14 = sheet.getRangeByIndex(32, 4, 32, 14);
-    final Range range_15 = sheet.getRangeByIndex(33, 4, 33, 14);
-    final Range range_16 = sheet.getRangeByIndex(34, 4, 34, 14);
-    final Range range_17 = sheet.getRangeByIndex(35, 4, 35, 14);
-    final Range range_18 = sheet.getRangeByIndex(36, 4, 36, 14);
-    final Range range_19 = sheet.getRangeByIndex(37, 4, 37, 14);
-    final Range range_20 = sheet.getRangeByIndex(38, 4, 38, 14);
-    final Range range_21 = sheet.getRangeByIndex(39, 4, 39, 14);
-    final Range range_22 = sheet.getRangeByIndex(40, 4, 40, 14);
-    final Range range_23 = sheet.getRangeByIndex(41, 4, 41, 14);
-    final Range range_24 = sheet.getRangeByIndex(42, 4, 42, 14);
-    final Range range_25 = sheet.getRangeByIndex(43, 4, 43, 14);
+    row++; //31
+    sheet.getRangeByIndex(row, 1).setText('Место проведения работ');
+    sheet.getRangeByIndex(row, 4).setText(report.place);
+    final Range range_3 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_13 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //32
+    sheet.getRangeByIndex(row, 1).setText('Контактное лицо заказчика');
+    sheet.getRangeByIndex(row, 4).setText(report.customerName);
+    final Range range_4 = sheet.getRangeByIndex(row, 1, row+2, 3);
+    final Range range_14 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //33
+    sheet.getRangeByIndex(row, 4).setText('Телефон: ${report.customerPhone}');
+    final Range range_15 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //34
+    sheet.getRangeByIndex(row, 4).setText('E-mail: ${report.customerEmail}');
+    final Range range_16 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++;//35
+    sheet.getRangeByIndex(row, 1).setText('Модель машины');
+    sheet.getRangeByIndex(row, 4).setText(report.machineModel);
+    final Range range_5 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_17 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //36
+    sheet.getRangeByIndex(row, 1).setText('Серийный номер машины');
+    sheet.getRangeByIndex(row, 4).setText(report.machineNumb);
+    final Range range_6 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_18 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //37
+    sheet.getRangeByIndex(row, 1).setText('Год выпуска');
+    sheet.getRangeByIndex(row, 4).setText(report.machineYear);
+    final Range range_7 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_19 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //38
+    sheet.getRangeByIndex(row, 1).setText('Модель двигателя');
+    sheet.getRangeByIndex(row, 4).setText(report.engineModel);
+    final Range range_8 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_20 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //39
+    sheet.getRangeByIndex(row, 1).setText('Серийный номер двигателя');
+    sheet.getRangeByIndex(row, 4).setText(report.engineNumb);
+    final Range range_9 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_21 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //40
+    sheet.getRangeByIndex(row, 1).setText('Наработка');
+    sheet.getRangeByIndex(row, 4).setText('${report.opTime_1} м/ч');
+    final Range range_10 = sheet.getRangeByIndex(row, 1, row+2, 3);
+    final Range range_22 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //41
+    sheet.getRangeByIndex(row, 1).setText('Наработка');
+    sheet.getRangeByIndex(row, 4).setText('${report.opTime_2} уд/ч');
+    final Range range_23 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //42
+    sheet.getRangeByIndex(row, 1).setText('Наработка');
+    sheet.getRangeByIndex(row, 4).setText('${report.opTime_3} пог/м');
+    final Range range_24 = sheet.getRangeByIndex(row, 4, row, 14);
+
+    row++; //43
+    sheet.getRangeByIndex(row, 1).setText('Примечания');
+    sheet.getRangeByIndex(row, 4).setText(report.note);
+    final Range range_11 = sheet.getRangeByIndex(row, 1, row, 3);
+    final Range range_25 = sheet.getRangeByIndex(row, 4, row, 14);
 
     range_2.merge();
     range_3.merge();
@@ -174,27 +219,17 @@ class ExcelProvider {
     range_24.merge();
     range_25.merge();
 
-    sheet.getRangeByIndex(30, 1, 43, 14).cellStyle = style_5;
-    sheet.getRangeByIndex(30, 1, 43, 3).cellStyle.backColor = '#DBDBDB';
-    sheet.getRangeByIndex(30, 1, 43, 3).cellStyle.vAlign = VAlignType.top;
-
     // Add images
-    var _images = await db.getPicture(report.id, 0);
-    print('images: ${_images.length}');
-    int x = 6;
-    int y = 1;
-    int i = 0;
+    row += 3; //46
+    var _images = await db.getPicture(report.id, '');
+    int column = 1;
     for (var image in _images) {
-      if (i % 3 == 0) {
-        y = 1;
-        x += 40;
-      } else {
-        y += 4;
-      }
-      Picture image1 = sheet.pictures.addStream(x, y, image.picture);
-      image1.width = 300;
-      image1.height = 500;
-      i++;
+      sheet.getRangeByIndex(row, 1).setText('${image.name}');
+      row++;
+      sheet.getRangeByIndex(row, 1).setText('${image.description}');
+      row++;
+      sheet.pictures.addStream(row, column, image.picture);
+      row += 70;
     }
 
 
@@ -204,6 +239,7 @@ class ExcelProvider {
     final List<int> bytes = workbook.saveAsStream();
 
     FileSaver().saveAndLaunchFile(bytes, 'reportnew.xlsx');
+    print('ExcelProvider: created file');
     MailSender(context: context).sendMail('reportnew.xlsx', report.id);
     //Dispose the document.
     workbook.dispose();

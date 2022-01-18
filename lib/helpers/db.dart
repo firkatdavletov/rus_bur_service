@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
+import 'package:rus_bur_service/models/agreed_part.dart';
+import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/models/picture.dart';
+import 'package:rus_bur_service/models/spare.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/operation.dart';
 import '../models/part.dart';
@@ -222,6 +225,27 @@ class DbProvider {
     });
   }
 
+  Future<List<Part>> getCheckedParts(int reportId) async {
+    final db = await database;
+    List<Map<String, dynamic>> parts = await db.query('parts');
+    var agreedParts = await db.rawQuery(
+        'SELECT part_id FROM agreed_parts WHERE report_id = ?',
+      ['$reportId']
+    );
+    return List.generate(parts.length, (i) {
+      Part _checkedPart = Part(
+        id: parts[i]['part_id'],
+        name: parts[i]['part_name'],
+      );
+      for (Object e in agreedParts) {
+        if (e.toString() == '{part_id: ${_checkedPart.id}}') {
+          _checkedPart.isChecked = true;
+        }
+      }
+      return _checkedPart;
+    });
+  }
+
   Future<String> getPartName (int id) async {
     final db = await database;
     List<Map<String, dynamic>> parts = await db.query(
@@ -230,6 +254,16 @@ class DbProvider {
         whereArgs: ['$id']
     );
     return parts.first['part_name'];
+  }
+
+  Future<bool> partIsExists (String name) async {
+    final db = await database;
+    List<Map<String, dynamic>> parts = await db.query(
+        'parts',
+        where: 'part_name = ?',
+        whereArgs: ['$name']
+    );
+    return parts.isNotEmpty? true : false;
   }
 
   insertPart(Part newPart) async {
@@ -244,43 +278,61 @@ class DbProvider {
   deletePart(int id) async {
     final db = await database;
     await db.rawDelete('DELETE FROM parts WHERE part_id = ?', ['$id']);
-    await db.rawDelete('DELETE FROM cards WHERE part_id = ?', ['$id']);
+    //await db.rawDelete('DELETE FROM cards WHERE part_id = ?', ['$id']);
   }
 
-  Future<int> upgradeUnitSelect(bool value, int id) async {
+  //------------------------AgreedParts-----------------------------------------
+
+  insertAgreedPart(AgreedPart agreedPart) async {
     final db = await database;
-    return await db.update(
-        'units',
-        <String, Object>{
-          'is_selected': value? 1 : 0,
-        },
-        where: 'unit_id = ?',
-        whereArgs: [id]
+
+    await db.insert(
+        'agreed_parts',
+        agreedPart.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.abort
     );
   }
 
-  Future<int> upgradeCardSelectByUnit(bool value, int id) async {
+  deleteAgreedPart(AgreedPart agreedPart) async {
     final db = await database;
-    return await db.update(
-      'cards',
-        <String, Object>{
-          'is_selected': value? 1 : 0,
-        },
-        where: 'unit_id = ?',
-        whereArgs: [id]
+
+    await db.rawDelete(
+        'DELETE FROM agreed_parts WHERE report_id = ? AND part_id =?',
+      ['${agreedPart.reportId}', '${agreedPart.partId}']
     );
   }
 
-  Future<int> upgradeCardSelect(bool value, int id) async {
+  deleteAllAgreedParts(int reportId) async {
     final db = await database;
-    return await db.update(
-        'cards',
-        <String, Object>{
-          'is_selected': value? 1 : 0,
-        },
-        where: 'card_id = ?',
-        whereArgs: [id]
+
+    await db.rawDelete(
+        'DELETE FROM agreed_parts WHERE report_id = ?',
+        [reportId]
     );
+  }
+
+  //-----------------------Operations-------------------------------------------
+
+  getAgreedOperations(List<String> partsId) async {
+    final db = await database;
+    String sql = 'part_id = ?';
+    for (int i = 0; i < partsId.length-1; i++) {
+      sql += ' OR part_id = ?';
+    }
+    List<Map<String, dynamic>> operations = await db.query(
+        'operations',
+        where: sql,
+        whereArgs: partsId
+    );
+
+    return List.generate(operations.length, (i) {
+      return Operation(
+          id: operations[i]['operation_id'],
+          name: operations[i]['operation_name'],
+          partId: operations[i]['part_id'],
+          isRequired: operations[i]['is_required'] == 1? true : false
+      );
+    });
   }
 
   Future<List<Operation>> getOperations(String column, dynamic value) async {
@@ -329,7 +381,94 @@ class DbProvider {
     await db.rawDelete('DELETE FROM operations WHERE operation_id = ?', ['$id']);
   }
 
-  //..................PICTURE.......................
+  //-----------------Cards------------------------------------------------------
+  Future<List<DiagnosticCard>> getCards(int reportId) async {
+    final db = await database;
+    List<Map<String, dynamic>> cards = await db.query(
+        'cards',
+        where: 'report_id = ?',
+        whereArgs: ['$reportId']
+    );
+    return List.generate(cards.length, (i) {
+      return DiagnosticCard(
+          id: cards[i]['card_id'],
+          name: cards[i]['card_name'],
+          operationId: cards[i]['operation_id'],
+          reportId: cards[i]['report_id'],
+          conclusion: cards[i]['conclusion'],
+          description: cards[i]['description'],
+          area: cards[i]['area'],
+          damage: cards[i]['damage'],
+          priority: cards[i]['priority'],
+          recommend: cards[i]['recommend'],
+          time: cards[i]['time'],
+          effect: cards[i]['effect'],
+          manHours: cards[i]['man_hours']
+      );
+    });
+  }
+  Future<int> upgradeCardSelectByUnit(bool value, int id) async {
+    final db = await database;
+    return await db.update(
+        'cards',
+        <String, Object>{
+          'is_selected': value? 1 : 0,
+        },
+        where: 'unit_id = ?',
+        whereArgs: [id]
+    );
+  }
+
+  Future<int> upgradeCardSelect(bool value, int id) async {
+    final db = await database;
+    return await db.update(
+        'cards',
+        <String, Object>{
+          'is_selected': value? 1 : 0,
+        },
+        where: 'card_id = ?',
+        whereArgs: [id]
+    );
+  }
+
+  insertCard(DiagnosticCard card) async {
+    final db = await database;
+    await db.insert(
+        'cards',
+        card.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore
+    );
+  }
+
+  deleteCard(String cardId) async {
+    final db = await database;
+    await db.delete(
+        'cards',
+        where: 'card_id = ?',
+        whereArgs: [cardId]
+    );
+  }
+
+  upgradeCard(DiagnosticCard newCard) async {
+    final db = await database;
+    await db.update(
+        'cards',
+      <String, Object>{
+        'conclusion': newCard.conclusion,
+        'description' : newCard.description,
+        'damage' : newCard.damage,
+        'priority' : newCard.priority,
+        'recommend' : newCard.recommend,
+        'time' : newCard.time,
+        'effect' : newCard.effect,
+        'man_hours' : newCard.manHours
+      },
+      where: 'card_id = ?',
+      whereArgs: [newCard.id]
+    );
+  }
+
+  //------------------------PICTURE---------------------------------------------
   insertPicture(AppPicture picture) async {
     final db = await database;
     await db.insert(
@@ -338,7 +477,8 @@ class DbProvider {
       conflictAlgorithm: ConflictAlgorithm.abort
     );
   }
-  Future<List<AppPicture>> getPicture(int reportId, int cardId) async {
+
+  Future<List<AppPicture>> getPicture(int reportId, String cardId) async {
     final db = await database;
     List<Map<String, dynamic>> pictures = await db.query(
         'pictures',
@@ -356,6 +496,20 @@ class DbProvider {
       );
     });
   }
+
+  Future<List<List<int>>> getImageFiles(int reportId, String cardId) async {
+    final db = await database;
+    List<Map<String,  dynamic>> images = await db.query(
+      'pictures',
+      where: 'report_id = ? and card_id = ?',
+      whereArgs: ['$reportId', '$cardId']
+    );
+
+    return List.generate(images.length, (i) {
+      return images[i]['picture'];
+    });
+  }
+
   Future<void> deletePictures(int reportId) async {
     final db = await database;
     await db.rawDelete(
@@ -370,4 +524,61 @@ class DbProvider {
         ['$pictureId']
     );
   }
+
+
+//-----------------------SPARES-------------------------------------------------
+  insertSpare(Spare spare) async {
+    final db = await database;
+    await db.insert(
+        'spares',
+        spare.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.fail
+    );
+  }
+
+  Future<void> deleteSpares(int operationId) async {
+    final db = await database;
+    await db.rawDelete(
+        'DELETE FROM spares WHERE operation_id = ?',
+        ['$operationId']
+    );
+  }
+  Future<void> deleteSpare(int spareId) async {
+    final db = await database;
+    await db.rawDelete(
+        'DELETE FROM spares WHERE spare_id = ?',
+        ['$spareId']
+    );
+  }
+
+  Future<int> upgradeSpare(Spare spare) async {
+    final db = await database;
+    return await db.update(
+        'spares',
+        spare.toMap(),
+        where: 'spare_id = ?',
+        whereArgs: ['${spare.id}']
+    );
+  }
+
+  Future<List<Spare>> getSpare(String cardId) async {
+    final db = await database;
+    List<Map<String, dynamic>> spares = await db.query(
+        'spares',
+        where: 'card_id = ?',
+        whereArgs: [cardId]
+    );
+    return List.generate(spares.length, (i) {
+      return Spare(
+          id: spares[i]['spare_id'],
+          name: spares[i]['spare_name'],
+          issue: spares[i]['spare_issue'],
+          cardId: spares[i]['card_id'],
+          number: spares[i]['spare_number'],
+          quantity: spares[i]['spares_quantity'],
+          measure: spares[i]['spare_measure']
+      );
+    });
+  }
 }
+

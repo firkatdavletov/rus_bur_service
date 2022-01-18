@@ -38,13 +38,16 @@ const migrationScripts = [
     part_name TEXT NOT NULL
   )''',
   '''CREATE TABLE spares(
-    spare_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    spare_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     spare_number TEXT NOT NULL,
+    spares_quantity INTEGER NOT NULL,
     spare_name TEXT NOT NULL,
-    spare_measure TEXT NOT NULL
+    spare_measure TEXT NOT NULL,
+    spare_issue TEXT NOT NULL,
+    card_id TEXT NOT NULL
   )''',
   '''CREATE TABLE cards(
-    card_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id TEXT PRIMARY KEY,
     card_name TEXT NOT NULL,
     operation_id INTEGER NOT NULL,
     report_id INTEGER NOT NULL,
@@ -58,18 +61,17 @@ const migrationScripts = [
     effect TEXT,
     man_hours INTEGER
   )''',
-  '''CREATE TABLE used_parts(
-    used_part_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    part_id INTEGER NOT NULL,
-    card_id INTEGER NOT NULL
-  )''',
   '''CREATE TABLE pictures(
     picture_id INTEGER PRIMARY KEY AUTOINCREMENT,
     report_id INTEGER NOT NULL,
-    card_id INTEGER,
+    card_id TEXT,
     picture_name TEXT,
     picture BLOB NOT NULL,
     picture_description TEXT
+  )''',
+  '''CREATE TABLE agreed_parts(
+    report_id INTEGER NOT NULL,
+    part_id INTEGER NOT NULL
   )'''
 ];
 

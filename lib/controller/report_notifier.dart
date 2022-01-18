@@ -140,7 +140,7 @@ class ReportNotifier with ChangeNotifier{
       'engine_sn' : engineNumb,
       'engine_optime_1' : opTime_1,
       'engine_optime_2' : opTime_2,
-      'engine_optime_3' : opTime_1
+      'engine_optime_3' : opTime_3
     };
   }
 }

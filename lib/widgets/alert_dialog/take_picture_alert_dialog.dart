@@ -3,8 +3,6 @@ import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/picture_notifier.dart';
 import 'package:rus_bur_service/widgets/forms/app_text_form_field.dart';
 
-
-
 class TakingPictureAlert extends StatefulWidget {
   const TakingPictureAlert({Key? key}) : super(key: key);
 

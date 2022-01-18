@@ -1,55 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:rus_bur_service/models/card.dart';
-import 'package:rus_bur_service/models/operation.dart';
-import 'package:rus_bur_service/models/part.dart';
 
 class DiagnosticCardsNotifier with ChangeNotifier {
-  List<Part> _listOfParts = [];
-  List<List<DiagnosticCard>> _listsOfCards = [];
-  List<List<Operation>> _listsOfOperations = [];
+  String _id = '';
+  String _name = '';
+  int _operationId = 0;
+  int _reportId = 0;
+  String _conclusion = '';
+  String _description = '';
+  String _area = '';
+  String _damage = '';
+  String _priority = '';
+  String _recommend = '';
+  String _time = '';
+  String _effect = '';
+  int _manHours = 0;
 
+  String get id => _id;
+  String get name => _name;
+  int get operationId => _operationId;
+  int get reportId => _reportId;
+  String get conclusion => _conclusion;
+  String get description => _description;
+  String get area => _area;
+  String get damage => _damage;
+  String get priority => _priority;
+  String get recommend => _recommend;
+  String get time => _time;
+  String get effect => _effect;
+  int get manHours => _manHours;
 
-  List<Part> get listOfParts => _listOfParts;
-  List<List<DiagnosticCard>> get listOfCards => _listsOfCards;
-  List<List<Operation>> get listsOfOperations => _listsOfOperations;
-
-
-  changePartsList(List<Part> newPartList) {
-    _listOfParts = newPartList;
+  changeId(String textController) {
+    _id = textController;
     notifyListeners();
   }
-
-  changeOperationsList(List<List<Operation>> newOperationsList) {
-    _listsOfOperations = newOperationsList;
+  changeName(String textController) {
+    _name = textController;
     notifyListeners();
   }
-  changeCardsLists(List<List<DiagnosticCard>> newCardsList) {
-    _listsOfCards = newCardsList;
+  changeOperationId(int textController) {
+    _operationId = textController;
     notifyListeners();
   }
-
-  changeCard(int partIndex, int cardIndex, DiagnosticCard newCard) {
-    _listsOfCards[partIndex][cardIndex] = newCard;
+  changeReportId(int textController) {
+    _reportId = textController;
     notifyListeners();
   }
-
-  addCardList() {
-    _listsOfCards.add(<DiagnosticCard>[]);
+  changeConclusion(String textController) {
+    _conclusion = textController;
     notifyListeners();
   }
-
-  deleteCardList(int partIndex) {
-    _listsOfCards.removeAt(partIndex);
+  changeDescription(String textController) {
+    _description = textController;
     notifyListeners();
   }
-
-  addCard(DiagnosticCard card) {
-    _listsOfCards.last.add(card);
+  changeArea(String textController) {
+    _area = textController;
     notifyListeners();
   }
-
-  deleteCard(int partIndex, int cardIndex) {
-    _listsOfCards[partIndex].removeAt(cardIndex);
+  changeDamage(String textController) {
+    _damage = textController;
+    notifyListeners();
+  }
+  changePriority(String textController) {
+    _priority = textController;
+    notifyListeners();
+  }
+  changeRecommend(String textController) {
+    _recommend = textController;
+    notifyListeners();
+  }
+  changeTime(String textController) {
+    _time = textController;
+    notifyListeners();
+  }
+  changeEffect(String textController) {
+    _effect = textController;
+    notifyListeners();
+  }
+  changeManHours(int textController) {
+    _manHours = textController;
     notifyListeners();
   }
 }

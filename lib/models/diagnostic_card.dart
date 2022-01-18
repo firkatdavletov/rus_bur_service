@@ -1,5 +1,5 @@
 class DiagnosticCard {
-  final int id;
+  final String id;
   final String name;
   final int operationId;
   final int reportId;
@@ -31,8 +31,10 @@ class DiagnosticCard {
 
   Map<String, dynamic> toMap() {
     return {
+      'card_id' : id,
       'card_name' : name,
       'operation_id' : operationId,
+      'report_id' : reportId,
       'conclusion' : conclusion,
       'description' : description,
       'area' : area,
@@ -48,7 +50,7 @@ class DiagnosticCard {
   @override
   init() {
     return DiagnosticCard(
-        id: 0,
+        id: '',
         name: '',
         operationId: 0,
         reportId: 0,

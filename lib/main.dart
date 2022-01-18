@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/controller/customer_notifier.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
+import 'package:rus_bur_service/controller/spare_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/controller/machine_notifier.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
@@ -50,7 +50,9 @@ void main() async {
           ChangeNotifierProvider(create: (_) => MachineNotifier()),
           ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
           ChangeNotifierProvider(create: (_) => PictureNotifier()),
-          ChangeNotifierProvider(create: (_) => EmailMessageNotifier())
+          ChangeNotifierProvider(create: (_) => EmailMessageNotifier()),
+          ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
+          ChangeNotifierProvider(create: (_) => SpareNotifier())
         ],
       child: MyApp(),
     )

@@ -61,185 +61,153 @@ class _CreateReportFormState extends State<CreateReportForm> {
       });
     }
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Form(
-            key: _formKey_1,
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: AppTextFormFieldWithInit(
-                    initialValue: context.watch<ReportNotifier>().company,
-                    onSaved: (value) {
-                      context.read<ReportNotifier>().changeCompany(value);
-                    },
-                    validator: _validate,
-                    icon: Icon(Icons.circle, color: Colors.green,),
-                    label: 'Заказчик',
-                    helperText: 'Наименование юридического лица',
+        Expanded(
+          child: Form(
+              key: _formKey_1,
+              child: ListView(
+                children: [
+                  Container(
+                    height: 20,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: AppTextFormFieldWithInit(
-                    initialValue: context.watch<ReportNotifier>().date,
-                    onSaved: (value) {
-                      context.read<ReportNotifier>().changeDate(value);
-                    },
-                    validator: _validate,
-                    icon: Icon(Icons.calendar_today),
-                    label: 'Дата осмотра',
-                    helperText: 'ДД/ММ/ГГГГ',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: AppTextFormFieldWithInit(
-                    initialValue: context.watch<ReportNotifier>().place,
-                    onSaved: (value) {
-                      context.read<ReportNotifier>().changePlace(value);
-                    },
-                    validator: _validate,
-                    icon: Icon(Icons.map),
-                    label: 'Место проведения',
-                    helperText: 'Населенный пункт',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: AppTextFormFieldWithInit(
-                    initialValue: context.watch<ReportNotifier>().customerName,
-                    onSaved: (value) {
-                      context.read<ReportNotifier>().changeCustomerName(value);
-                    },
-                    validator: _validate,
-                    icon: Icon(Icons.person),
-                    label: 'Контактное лицо заказчика',
-                    helperText: 'ФИО',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: AppTextFormFieldWithInit(
-                    onSaved: (value) {
-                      context.read<ReportNotifier>().changeCustomerPhone(value);
-                    },
-                    validator: _validate,
-                    icon: Icon(Icons.phone),
-                    label: 'Контактный телефон',
-                    initialValue: context.watch<ReportNotifier>().customerPhone,
-                    helperText: '',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: AppTextFormFieldWithInit(
-                    onSaved: (value) {
-                      context.read<ReportNotifier>().changeCustomerEmail(value);
-                    },
-                    validator: _validate,
-                    icon: Icon(Icons.email),
-                    label: 'Email',
-                    initialValue: context.watch<ReportNotifier>().customerEmail,
-                    helperText: '',
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: OutlinedButton (
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()
-                                )
-                            );
-                          },
-                          child: Text('Отмена')
-                      ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      initialValue: context.watch<ReportNotifier>().company,
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changeCompany(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.circle, color: Colors.green,),
+                      label: 'Заказчик',
+                      helperText: 'Наименование юридического лица',
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: OutlinedButton (
-                          onPressed: () {
-                            if (_formKey_1.currentState!.validate() && _enable) {
-                              _formKey_1.currentState!.save();
-                              if (Provider.of<ReportNotifier>(context, listen: false).isNewReport) {
-                                _writeReportIdAndName();
-                              } else {
-                                db.upgradeReport_2(context);
-                                _enable = false;
-                              }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()
-                                  )
-                              );
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      initialValue: context.watch<ReportNotifier>().date,
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changeDate(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.calendar_today),
+                      label: 'Дата осмотра',
+                      helperText: 'ДД/ММ/ГГГГ',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      initialValue: context.watch<ReportNotifier>().place,
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changePlace(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.map),
+                      label: 'Место проведения',
+                      helperText: 'Населенный пункт',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      initialValue: context.watch<ReportNotifier>().customerName,
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changeCustomerName(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.person),
+                      label: 'Контактное лицо заказчика',
+                      helperText: 'ФИО',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changeCustomerPhone(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.phone),
+                      label: 'Контактный телефон',
+                      initialValue: context.watch<ReportNotifier>().customerPhone,
+                      helperText: '',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changeCustomerEmail(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.email),
+                      label: 'Email',
+                      initialValue: context.watch<ReportNotifier>().customerEmail,
+                      helperText: '',
+                    ),
+                  ),
 
-                            }
-                          },
-                          child: Text('Сохранить')
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: OutlinedButton (
-                          onPressed: () {
-                            if (_formKey_1.currentState!.validate() && _enable) {
-                              _formKey_1.currentState!.save();
-                              if (Provider.of<ReportNotifier>(context, listen: false).isNewReport) {
-                                _writeReportIdAndName();
-                              } else {
-                                db.upgradeReport_2(context);
-                                _enable = false;
-                              }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MachineInfoPage()
-                                  )
-                              );
-                            }
-                          },
-                          child: Text('Далее')
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                  child: TextButton(
-                    child: Text('Очистить форму'),
-                    onPressed: () {
-                      context.read<ReportNotifier>().changeCompany('');
-                      context.read<ReportNotifier>().changeDate('');
-                      context.read<ReportNotifier>().changeCustomerPhone('');
-                      context.read<ReportNotifier>().changeCustomerName('');
-                      context.read<ReportNotifier>().changeOpTime_1('');
-                      context.read<ReportNotifier>().changeNote('');
-                      context.read<ReportNotifier>().changePlace('');
-                      context.read<ReportNotifier>().changeCustomerEmail('');
-                      context.read<ReportNotifier>().changeEngineModel('');
-                      context.read<ReportNotifier>().changeEngineNumb('');
-                      context.read<ReportNotifier>().changeMachineNumb('');
-                      context.read<ReportNotifier>().changeMachineModel('');
-                      context.read<ReportNotifier>().changeMachineYear('');
+                ],
+              )
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              child: OutlinedButton (
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePage()
+                        )
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.home),
+                      Container(width: 5,),
+                      Text('Главная страница')
+                    ],
+                  )
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              child: OutlinedButton (
+                  onPressed: () {
+                    if (_formKey_1.currentState!.validate() && _enable) {
+                      _formKey_1.currentState!.save();
+                      if (Provider.of<ReportNotifier>(context, listen: false).isNewReport) {
+                        _writeReportIdAndName();
+                      } else {
+                        db.upgradeReport_2(context);
+                        _enable = false;
+                      }
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ReportMainPage()
+                              builder: (context) => MachineInfoPage()
                           )
                       );
-                    },
-                  ),
-                )
-              ],
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Text('Данные машины'),
+                      Container(width: 5,),
+                      Icon(Icons.arrow_forward_ios)
+                    ],
+                  )
+              ),
             )
-        ),
+          ],
+        )
       ],
     );
   }

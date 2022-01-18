@@ -112,7 +112,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 helperText: '',
                 onChanged: _saveMiddleName,
                 validator: (value) {},
-                label: 'Отчество',
+                label: 'Отчество (не обязательно)',
                 icon: Icon(Icons.person, color: Colors.black54),
               ),
             ),

@@ -15,7 +15,7 @@ class Operation {
     return {
       'operation_name' : name,
       'part_id' : partId,
-      'is_required' : isRequired
+      'is_required' : isRequired? 1 : 0
     };
   }
 }

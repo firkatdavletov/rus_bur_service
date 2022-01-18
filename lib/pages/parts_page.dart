@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/main.dart';
-import 'package:rus_bur_service/models/card.dart';
+import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/models/operation.dart';
 import 'package:rus_bur_service/models/part.dart';
 import 'package:rus_bur_service/widgets/buttons/button.dart';

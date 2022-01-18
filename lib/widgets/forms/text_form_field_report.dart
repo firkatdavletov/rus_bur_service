@@ -52,56 +52,56 @@ class InputReportCtrl extends StatelessWidget {
   }
 }
 
-class InputReportWithDropMenu extends StatelessWidget {
-  final TextEditingController controller;
-  final String hintText;
-  final String labelText;
-
-  static const menuItems = <String>[
-    'м/ч',
-    'уд/ч',
-    'пог.м'
-  ];
-
-  const InputReportWithDropMenu({
-    Key? key,
-    required this.controller,
-    required this.hintText,
-    required this.labelText
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    String _btnSelectedVal = 'м/ч';
-    List<DropdownMenuItem<String>> _dropDownMenuItems = menuItems
-        .map(
-            (String value) => DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-            ),
-    ).toList();
-
-    return Padding(
-        padding: EdgeInsets.only(right: _right, left: _left, top: _top, bottom: _bottom),
-        child: TextFormField(
-          style: _inputTextStyle,
-          controller: controller,
-          decoration: InputDecoration(
-              labelStyle: _labelTextStyle,
-              labelText: labelText,
-              hintText: hintText,
-              suffix: DropdownButton<String>(
-                value: _btnSelectedVal,
-                items: _dropDownMenuItems,
-              ),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(2.0))
-              )
-          ),
-        )
-    );
-  }
-}
+// class InputReportWithDropMenu extends StatelessWidget {
+//   final TextEditingController controller;
+//   final String hintText;
+//   final String labelText;
+//
+//   static const menuItems = <String>[
+//     'м/ч',
+//     'уд/ч',
+//     'пог.м'
+//   ];
+//
+//   const InputReportWithDropMenu({
+//     Key? key,
+//     required this.controller,
+//     required this.hintText,
+//     required this.labelText
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     String _btnSelectedVal = 'м/ч';
+//     List<DropdownMenuItem<String>> _dropDownMenuItems = menuItems
+//         .map(
+//             (String value) => DropdownMenuItem<String>(
+//                 value: value,
+//                 child: Text(value),
+//             ),
+//     ).toList();
+//
+//     return Padding(
+//         padding: EdgeInsets.only(right: _right, left: _left, top: _top, bottom: _bottom),
+//         child: TextFormField(
+//           style: _inputTextStyle,
+//           controller: controller,
+//           decoration: InputDecoration(
+//               labelStyle: _labelTextStyle,
+//               labelText: labelText,
+//               hintText: hintText,
+//               suffix: DropdownButton<String>(
+//                 value: _btnSelectedVal,
+//                 items: _dropDownMenuItems,
+//               ),
+//               border: OutlineInputBorder(
+//                   borderRadius: BorderRadius.all(Radius.circular(2.0))
+//               )
+//           ),
+//         )
+//     );
+//   }
+// }
 
 class InputReportIntl extends StatelessWidget {
   final String initialValue;

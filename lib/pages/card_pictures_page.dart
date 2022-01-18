@@ -2,26 +2,27 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
 import 'package:rus_bur_service/controller/picture_notifier.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
-import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
-import 'package:rus_bur_service/pages/machine_info_page.dart';
-import 'package:rus_bur_service/widgets/alert_dialog/take_picture_alert_dialog.dart';
+import 'package:rus_bur_service/pages/create_card_page.dart';
+import 'package:rus_bur_service/widgets/alert_dialog/take_card_picture_dialog.dart';
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
-import 'package:rus_bur_service/widgets/list_views/report_pictures_list.dart';
+import 'package:rus_bur_service/widgets/list_views/card_pictures_list.dart';
+
 
 typedef void OnPickImageCallback (String name);
 
-class PicturesPage extends StatefulWidget {
-  const PicturesPage({Key? key}) : super(key: key);
+class CardPicturesPage extends StatefulWidget {
+  const CardPicturesPage({Key? key}) : super(key: key);
 
   @override
-  _PicturesPageState createState() => _PicturesPageState();
+  _CardPicturesPageState createState() => _CardPicturesPageState();
 }
 
-class _PicturesPageState extends State<PicturesPage> {
+class _CardPicturesPageState extends State<CardPicturesPage> {
   ImagePicker _picker = ImagePicker();
 
   _onImageButtonPressed (ImageSource source, {BuildContext? context}) async {
@@ -33,7 +34,7 @@ class _PicturesPageState extends State<PicturesPage> {
         AppPicture _picture = AppPicture(
             id: 0,
             reportId: Provider.of<ReportNotifier>(context, listen: false).id,
-            cardId: '',
+            cardId: Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
             name: name,
             picture: bytes,
             description: ''
@@ -49,37 +50,21 @@ class _PicturesPageState extends State<PicturesPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Выберите название фото'),
-            content: Container(
-              height: 400,
-              width: 350,
-              child: ListView(
-                children: [
-                  TakingPictureAlert(),
-                  ElevatedButton(
-                      onPressed: () {
-                        switch (Provider.of<PictureNotifier>(context, listen: false).photoName) {
-                          case PhotoName.generalView:
-                            context.read<PictureNotifier>().changeAddPhotoName('Главный вид');
-                            break;
-                          case PhotoName.stateRegNumb:
-                            context.read<PictureNotifier>().changeAddPhotoName('Гос. регистрационный номер');
-                            break;
-                          case PhotoName.generalSerialNumb:
-                            context.read<PictureNotifier>().changeAddPhotoName('Серийный номер установки');
-                            break;
-                          case PhotoName.engineSerialNumb:
-                            context.read<PictureNotifier>().changeAddPhotoName('Серийный номер двигателя');
-                            break;
-                          case PhotoName.additional:
-                            // TODO: Handle this case.
-                        }
-                        onPick(Provider.of<PictureNotifier>(context, listen: false).addPhotoName);
-                      },
-                      child: Text('Сделать фото'))
-                ],
-              ),
-            )
+              title: Text('Выберите название фото'),
+              content: Container(
+                height: 400,
+                width: 350,
+                child: ListView(
+                  children: [
+                    TakingCardPictureAlert(),
+                    ElevatedButton(
+                        onPressed: () {
+                          onPick(Provider.of<PictureNotifier>(context, listen: false).addPhotoName);
+                        },
+                        child: Text('Сделать фото'))
+                  ],
+                ),
+              )
           );
         }
     );
@@ -87,6 +72,8 @@ class _PicturesPageState extends State<PicturesPage> {
 
   @override
   Widget build(BuildContext context) {
+    String _id = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).id}';
+    String _name = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).name}';
     return Scaffold(
       appBar: AppBar(
         title: Text('Фотографии'),
@@ -95,7 +82,7 @@ class _PicturesPageState extends State<PicturesPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ReportPicturesList(),
+          CardPicturesList(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -106,7 +93,7 @@ class _PicturesPageState extends State<PicturesPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MachineInfoPage()
+                              builder: (context) => CreateCardPage()
                           )
                       );
                     },
@@ -114,31 +101,11 @@ class _PicturesPageState extends State<PicturesPage> {
                       children: [
                         Icon(Icons.arrow_back_ios),
                         Container(width: 5,),
-                        Text('Данные машины'),
+                        Text('$_name #$_id'),
                       ],
                     )
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: OutlinedButton (
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AgreedDiagnosticAreas()
-                          )
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text('Выбрать области'),
-                        Container(width: 5,),
-                        Icon(Icons.arrow_forward_ios)
-                      ],
-                    )
-                ),
-              )
             ],
           )
         ],
@@ -176,8 +143,3 @@ class _PicturesPageState extends State<PicturesPage> {
     );
   }
 }
-
-
-
-
-

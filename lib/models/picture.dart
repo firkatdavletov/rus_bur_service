@@ -1,7 +1,7 @@
 class AppPicture {
   final int id;
   final int reportId;
-  final int cardId;
+  final String cardId;
   final String name;
   final List<int> picture;
   final String description;

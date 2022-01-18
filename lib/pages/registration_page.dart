@@ -18,10 +18,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
         reverse: true,
         child: Container(
+          height: _height,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topRight,
@@ -33,10 +36,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
               children: [
                 Expanded(
                     flex: 1,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: VerticalText(text: 'РЕГИСТРАЦИЯ'),
-                    )
+                    child: _width > 400
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: VerticalText(text: 'РЕГИСТРАЦИЯ'),
+                          )
+                        : Text('')
                 ),
                 Expanded(
                     flex: 8,

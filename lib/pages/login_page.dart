@@ -8,6 +8,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
           decoration: BoxDecoration(
@@ -21,10 +22,12 @@ class LoginPage extends StatelessWidget {
             children: [
               Expanded(
                   flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: VerticalText(text: 'АВТОРИЗАЦИЯ'),
-                  )
+                  child: _width > 400
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: VerticalText(text: 'АВТОРИЗАЦИЯ'),
+                        )
+                      : Text('')
               ),
               Expanded(
                   flex: 8,
