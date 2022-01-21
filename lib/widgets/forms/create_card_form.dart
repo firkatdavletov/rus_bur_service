@@ -134,10 +134,23 @@ class _CreateCardFormState extends State<CreateCardForm> {
                           },
                           validator: _validate,
                           icon: Icon(Icons.format_quote_sharp),
-                          label: 'Решение проблемы',
+                          label: 'Описание проблемы',
                           helperText: '',
                         ),
                       )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInit(
+                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).area,
+                      onSaved: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeArea(value);
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.format_quote_sharp),
+                      label: 'Зона выявления дефекта',
+                      helperText: '',
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -347,7 +360,8 @@ class _CreateCardFormState extends State<CreateCardForm> {
         recommend: Provider.of<DiagnosticCardsNotifier>(context, listen: false).recommend,
         time: Provider.of<DiagnosticCardsNotifier>(context, listen: false).time,
         effect: Provider.of<DiagnosticCardsNotifier>(context, listen: false).effect,
-        manHours: Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours
+        manHours: Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours,
+        part: Provider.of<DiagnosticCardsNotifier>(context, listen: false).part
     );
     db.upgradeCard(_newCard);
   }

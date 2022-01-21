@@ -88,6 +88,7 @@ class _PartsListState extends State<PartsList> {
                               if (p.isChecked) {
                                 var _operations = await db.getOperations('part_id', p.id);
                                 for (Operation op in _operations) {
+                                  print('parts_list: ${p.name}');
                                   DiagnosticCard _card = DiagnosticCard(
                                       id: '$_reportId-${p.id}-${op.id}',
                                       name: op.name,
@@ -95,13 +96,14 @@ class _PartsListState extends State<PartsList> {
                                       reportId: _reportId,
                                       conclusion: 0,
                                       description: '',
-                                      area: p.name,
+                                      area: '',
                                       damage: '',
                                       priority: 0,
                                       recommend: '',
                                       time: '',
                                       effect: '',
-                                      manHours: 0
+                                      manHours: 0,
+                                      part: p.name
                                   );
                                   db.insertCard(_card);
                                 }

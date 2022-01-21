@@ -85,7 +85,18 @@ class _TakingPictureAlertState extends State<TakingPictureAlert> {
                 label: 'Название фото'
             ),
           visible: isAdditional,
-        )
+        ),
+        AppTextFormField(
+            helperText: '',
+            onChanged: (String value) {
+              context.read<PictureNotifier>().changePictureDescription(value);
+            },
+            validator: (String value) {
+
+            },
+            icon: Icon(Icons.text_format), //Icon(Icons.light, color: Colors.brown,),
+            label: 'Описание фото'
+        ),
       ],
     );
   }

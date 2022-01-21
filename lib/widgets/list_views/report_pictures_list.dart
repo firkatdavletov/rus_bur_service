@@ -29,6 +29,7 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                       return ListTile(
                         leading: Image.memory(snapshot.data[i].picture),
                         title: Text(snapshot.data[i].name),
+                        subtitle: Text(snapshot.data[i].description),
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {

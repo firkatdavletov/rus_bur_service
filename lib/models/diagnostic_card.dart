@@ -5,6 +5,7 @@ class DiagnosticCard {
   final int reportId;
   final int conclusion;
   final String description;
+  final String part;
   final String area;
   final String damage;
   final int priority;
@@ -20,6 +21,7 @@ class DiagnosticCard {
     required this.reportId,
     required this.conclusion,
     required this.description,
+    required this.part,
     required this.area,
     required this.damage,
     required this.priority,
@@ -37,6 +39,7 @@ class DiagnosticCard {
       'report_id' : reportId,
       'conclusion' : conclusion,
       'description' : description,
+      //'part' : part,
       'area' : area,
       'damage' : damage,
       'priority' : priority,
@@ -62,7 +65,8 @@ class DiagnosticCard {
         recommend: '',
         time: '',
         effect: '',
-        manHours: 0
+        manHours: 0,
+        part: ''
     );
   }
 }

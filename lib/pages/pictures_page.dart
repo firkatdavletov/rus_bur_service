@@ -12,7 +12,7 @@ import 'package:rus_bur_service/widgets/alert_dialog/take_picture_alert_dialog.d
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/report_pictures_list.dart';
 
-typedef void OnPickImageCallback (String name);
+typedef void OnPickImageCallback (String name, String desc);
 
 class PicturesPage extends StatefulWidget {
   const PicturesPage({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class _PicturesPageState extends State<PicturesPage> {
   ImagePicker _picker = ImagePicker();
 
   _onImageButtonPressed (ImageSource source, {BuildContext? context}) async {
-    await _displayPickImageDialog(context!, (name) async {
+    await _displayPickImageDialog(context!, (name, desc) async {
       final pickedFile = await _picker.pickImage(source: source);
       File temp = File(pickedFile!.path);
       List<int> bytes = await temp.readAsBytes();
@@ -36,7 +36,7 @@ class _PicturesPageState extends State<PicturesPage> {
             cardId: '',
             name: name,
             picture: bytes,
-            description: ''
+            description: desc
         );
         db.insertPicture(_picture);
         imageCache!.clear();
@@ -74,7 +74,10 @@ class _PicturesPageState extends State<PicturesPage> {
                           case PhotoName.additional:
                             // TODO: Handle this case.
                         }
-                        onPick(Provider.of<PictureNotifier>(context, listen: false).addPhotoName);
+                        onPick(
+                            Provider.of<PictureNotifier>(context, listen: false).addPhotoName,
+                            Provider.of<PictureNotifier>(context, listen: false).pictureDescription
+                        );
                       },
                       child: Text('Сделать фото'))
                 ],

@@ -384,10 +384,18 @@ class DbProvider {
   //-----------------Cards------------------------------------------------------
   Future<List<DiagnosticCard>> getCards(int reportId) async {
     final db = await database;
-    List<Map<String, dynamic>> cards = await db.query(
-        'cards',
-        where: 'report_id = ?',
-        whereArgs: ['$reportId']
+    // List<Map<String, dynamic>> cards = await db.query(
+    //     'cards',
+    //     where: 'report_id = ?',
+    //     whereArgs: ['$reportId']
+    // );
+    List<Map<String, dynamic>> cards = await db.rawQuery(
+        '''SELECT * 
+           FROM cards c 
+           LEFT JOIN operations o ON c.operation_id = o.operation_id
+           LEFT JOIN parts p ON o.part_id = p.part_id
+           WHERE c.report_id = ?''',
+        ['$reportId']
     );
     return List.generate(cards.length, (i) {
       return DiagnosticCard(
@@ -403,7 +411,8 @@ class DbProvider {
           recommend: cards[i]['recommend'],
           time: cards[i]['time'],
           effect: cards[i]['effect'],
-          manHours: cards[i]['man_hours']
+          manHours: cards[i]['man_hours'],
+          part: cards[i]['part_name']
       );
     });
   }
@@ -578,6 +587,33 @@ class DbProvider {
           quantity: spares[i]['spares_quantity'],
           measure: spares[i]['spare_measure'],
           priority: spares[i]['spare_priority']
+      );
+    });
+  }
+
+  Future<List<Spare>> getSparesReport(List<String> cardsId) async {
+    final db = await database;
+    String sql = 'card_id = ?';
+    for (int i = 0; i < cardsId.length-1; i++) {
+      sql += ' OR card_id = ?';
+    }
+    List<Map<String, dynamic>> spares = await db.query(
+        'spares',
+        where: sql,
+        whereArgs: cardsId
+    );
+
+    return List.generate(spares.length, (i) {
+      return Spare(
+          id: spares[i]['spare_id'],
+          name: spares[i]['spare_name'],
+          number: spares[i]['spare_number'],
+          cardId: spares[i]['card_id'],
+          quantity: spares[i]['spare_quantity'],
+          priority: spares[i]['spare_priority'],
+          issue: spares[i]['spare_issue'],
+          measure: spares[i]['spare_measure'],
+
       );
     });
   }

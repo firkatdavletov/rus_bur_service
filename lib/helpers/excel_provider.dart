@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:rus_bur_service/helpers/mail_sendler.dart';
 import 'package:rus_bur_service/helpers/save_file.dart';
 import 'package:rus_bur_service/models/diagnostic_card.dart';
+import 'package:rus_bur_service/models/spare.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
@@ -234,10 +235,174 @@ class ExcelProvider {
     }
 
     row++;
-
     List<DiagnosticCard> _cards = await db.getCards(report.id);
+    List<String> _cardsId = [];
 
-    sheet.getRangeByIndex(row, 1).setText('Рекомендуемые мероприятия по результатам проверки');
+    sheet.getRangeByIndex(row, 1).setText('РЕКОМЕНДУЕМЫЕ МЕРОПРИЯТИЯ ПО РЕЗУЛЬТАТАМ ПРОВЕРКИ');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ВАЖНО');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Узел/система');
+    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
+    sheet.getRangeByIndex(row, 7).setText('Решение');
+    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
+    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
+    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
+
+    row++;
+    for (DiagnosticCard c in _cards) {
+      _cardsId.add(c.id);
+      if (c.priority == 3) {
+        sheet.getRangeByIndex(row, 1).setText(c.id);
+        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 4).setText(c.description);
+        sheet.getRangeByIndex(row, 7).setText(c.recommend);
+        sheet.getRangeByIndex(row, 10).setText(c.effect);
+        sheet.getRangeByIndex(row, 13).setText('n/a');
+        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
+        row++;
+      }
+    }
+    //
+    List<Spare> _spares = await db.getSparesReport(_cardsId);
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ПЛАНОВО');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Узел/система');
+    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
+    sheet.getRangeByIndex(row, 7).setText('Решение');
+    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
+    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
+    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
+
+    row++;
+    for (DiagnosticCard c in _cards) {
+      if (c.priority == 2) {
+        sheet.getRangeByIndex(row, 1).setText(c.id);
+        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 4).setText(c.description);
+        sheet.getRangeByIndex(row, 7).setText(c.recommend);
+        sheet.getRangeByIndex(row, 10).setText(c.effect);
+        sheet.getRangeByIndex(row, 13).setText('n/a');
+        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
+        row++;
+      }
+    }
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ – РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Узел/система');
+    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
+    sheet.getRangeByIndex(row, 7).setText('Решение');
+    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
+    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
+    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
+
+    // row++;
+    // for (Spare s in _spares) {
+    //   if (s.priority == 1) {
+    //     sheet.getRangeByIndex(row, 1).setText(s.cardId);
+    //     sheet.getRangeByIndex(row, 2).setText(s.);
+    //     sheet.getRangeByIndex(row, 4).setText(c.description);
+    //     sheet.getRangeByIndex(row, 7).setText(c.recommend);
+    //     sheet.getRangeByIndex(row, 10).setText(c.effect);
+    //     sheet.getRangeByIndex(row, 13).setText('n/a');
+    //     sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
+    //     row++;
+    //   }
+    // }
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПЕРЕЧЕНЬ НЕОБХОДИМЫХ ЗАПЧАСТЕЙ');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ВАЖНО');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Каталожный номер');
+    sheet.getRangeByIndex(row, 4).setText('Наименование');
+    sheet.getRangeByIndex(row, 6).setText('Кол-во');
+    sheet.getRangeByIndex(row, 7).setText('Ед. изм.');
+    sheet.getRangeByIndex(row, 8).setText('Узел/система');
+    sheet.getRangeByIndex(row, 10).setText('Проблема');
+    sheet.getRangeByIndex(row, 14).setText('Страница отчета');
+
+    row++;
+    for (DiagnosticCard c in _cards) {
+      _cardsId.add(c.id);
+      if (c.priority == 3) {
+        sheet.getRangeByIndex(row, 1).setText(c.id);
+        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 4).setText(c.description);
+        sheet.getRangeByIndex(row, 7).setText(c.recommend);
+        sheet.getRangeByIndex(row, 10).setText(c.effect);
+        sheet.getRangeByIndex(row, 13).setText('n/a');
+        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
+        row++;
+      }
+    }
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ПЛАНОВО');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Узел/система');
+    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
+    sheet.getRangeByIndex(row, 7).setText('Решение');
+    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
+    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
+    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
+
+    row++;
+    for (DiagnosticCard c in _cards) {
+      if (c.priority == 2) {
+        sheet.getRangeByIndex(row, 1).setText(c.id);
+        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 4).setText(c.description);
+        sheet.getRangeByIndex(row, 7).setText(c.recommend);
+        sheet.getRangeByIndex(row, 10).setText(c.effect);
+        sheet.getRangeByIndex(row, 13).setText('n/a');
+        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
+        row++;
+      }
+    }
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ – РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Узел/система');
+    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
+    sheet.getRangeByIndex(row, 7).setText('Решение');
+    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
+    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
+    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
+
+    row++;
+    for (DiagnosticCard c in _cards) {
+      if (c.priority == 1) {
+        sheet.getRangeByIndex(row, 1).setText(c.id);
+        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 4).setText(c.description);
+        sheet.getRangeByIndex(row, 7).setText(c.recommend);
+        sheet.getRangeByIndex(row, 10).setText(c.effect);
+        sheet.getRangeByIndex(row, 13).setText('n/a');
+        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
+        row++;
+      }
+    }
 
 
 

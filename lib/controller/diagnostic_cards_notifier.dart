@@ -7,6 +7,7 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   int _reportId = 0;
   int _conclusion = 1;
   String _description = '';
+  String _part = '';
   String _area = '';
   String _damage = '';
   int _priority = 1;
@@ -21,6 +22,7 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   int get reportId => _reportId;
   int get conclusion => _conclusion;
   String get description => _description;
+  String get part => _part;
   String get area => _area;
   String get damage => _damage;
   int get priority => _priority;
@@ -51,6 +53,10 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   }
   changeDescription(String textController) {
     _description = textController;
+    notifyListeners();
+  }
+  changePart(String textController) {
+    _part = textController;
     notifyListeners();
   }
   changeArea(String textController) {

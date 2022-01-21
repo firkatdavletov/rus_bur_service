@@ -63,6 +63,7 @@ class _CardsListState extends State<CardsList> {
                       context.read<DiagnosticCardsNotifier>().changeTime(snapshot.data[i].time);
                       context.read<DiagnosticCardsNotifier>().changeEffect(snapshot.data[i].effect);
                       context.read<DiagnosticCardsNotifier>().changeManHours(snapshot.data[i].manHours);
+                      context.read<DiagnosticCardsNotifier>().changePart(snapshot.data[i].part);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

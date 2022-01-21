@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
-import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_cards_page.dart';
 import 'package:rus_bur_service/widgets/forms/create_card_form.dart';
 
@@ -14,9 +13,10 @@ class CreateCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String _id = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).id}';
     String _name = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).name}';
+    String _partName = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).part}';
     return Scaffold(
       appBar: AppBar(
-        title: Text('$_name #$_id'),
+        title: Text('$_partName - $_name #$_id'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
