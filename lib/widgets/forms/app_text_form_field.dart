@@ -159,6 +159,7 @@ class AppTextFormFieldWithInitMaxLines extends StatelessWidget {
       validator: (value) => validator(value),
       style: AppTextStyle().getInputTextStyle(),
       maxLines: maxLines,
+      minLines: 1,
       decoration: InputDecoration(
           helperText: helperText,
           border: OutlineInputBorder(),

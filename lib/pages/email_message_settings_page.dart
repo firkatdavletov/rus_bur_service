@@ -5,8 +5,8 @@ import 'package:rus_bur_service/pages/waiting_page.dart';
 import '../widgets/forms/app_text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class EmailMessageSettings extends StatelessWidget {
-  const EmailMessageSettings({Key? key}) : super(key: key);
+class EmailMessageSettingsPage extends StatelessWidget {
+  const EmailMessageSettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

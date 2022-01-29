@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
-
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/machine_info_page.dart';
-import 'package:rus_bur_service/pages/report_main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
@@ -27,12 +25,31 @@ class _CreateReportFormState extends State<CreateReportForm> {
       }
   }
 
+  _validateMobile(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter mobile number';
+    }
+    else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    }
+  }
+
+  // _validateEmail(String value) {
+  //   if (value.length == 0) {
+  //     return 'Please enter mobile number';
+  //   }
+  //   else if () {
+  //     return 'Please enter valid mobile number';
+  //   }
+  // }
+
   _getReportsCount(int userId) async {
-    print('user id in _getReportsCount function: $userId');
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     int? mainCounter = (prefs.getInt('main_counter') ?? 0) + 1;
-    print('main counter: $mainCounter');
     await prefs.setInt('main_counter', mainCounter);
 
     int? separateCounter = (prefs.getInt('counter_$userId') ?? 0) + 1;
@@ -47,6 +64,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
   @override
   Widget build(BuildContext context) {
     bool _enable = true;
+    double _width = MediaQuery.of(context).size.width;
 
     _writeReportIdAndName() async {
       var _map = _getReportsCount(Provider.of<UserNotifier>(context, listen: false).user.userId);
@@ -129,7 +147,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                       onSaved: (value) {
                         context.read<ReportNotifier>().changeCustomerPhone(value);
                       },
-                      validator: _validate,
+                      validator: _validateMobile,
                       icon: Icon(Icons.phone),
                       label: 'Контактный телефон',
                       initialValue: context.watch<ReportNotifier>().customerPhone,
@@ -172,7 +190,9 @@ class _CreateReportFormState extends State<CreateReportForm> {
                     children: [
                       Icon(Icons.home),
                       Container(width: 5,),
-                      Text('Главная страница')
+                      _width > 400
+                          ? Text('Главная страница')
+                          : Text('')
                     ],
                   )
               ),
@@ -199,7 +219,9 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   },
                   child: Row(
                     children: [
-                      Text('Данные машины'),
+                      _width > 400
+                          ? Text('Данные машины')
+                          : Text(''),
                       Container(width: 5,),
                       Icon(Icons.arrow_forward_ios)
                     ],

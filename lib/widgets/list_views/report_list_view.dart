@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
+import 'package:rus_bur_service/helpers/mail_sendler.dart';
+import 'package:rus_bur_service/helpers/pdf_provider.dart';
+import 'package:rus_bur_service/helpers/file_provider.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:rus_bur_service/models/user.dart';
+import 'package:rus_bur_service/pages/pdf_view_page.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
+import 'dart:io';
 
 import '../../helpers/excel_provider.dart';
 import '../../main.dart';
@@ -29,7 +34,7 @@ class _ReportListViewState extends State<ReportListView> {
         if (snapshot.hasData) {
           if(snapshot.data.length == 0) {
             return Center(
-              child: Text('Нет отчётов. Нажите Создать для создания первого отчёта'),
+              child: Text('Пока тут пусто'),
             );
           }
           return ListView.builder(
@@ -43,9 +48,27 @@ class _ReportListViewState extends State<ReportListView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: () {
+                        onPressed: () async {
+                          File _pdfFile = await PdfProvider().generate(snapshot.data[i]);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PDFViewPage(file: _pdfFile,)
+                              )
+                          );
+                        },
+                        icon: Icon(Icons.picture_as_pdf)
+                    ),
+                    IconButton(
+                      onPressed: () async {
                         User _user = context.read<UserNotifier>().user;
-                        ExcelProvider(context: context).generateExcel(snapshot.data[i], _user);
+                        final excelFile = await ExcelProvider(context: context)
+                            .generateExcel(snapshot.data[i], _user);
+                        FileProvider().save(excelFile, 'reportnew.xlsx');
+                        print('ExcelProvider: created file');
+                        MailSender(context: context)
+                            .sendMail('reportnew.xlsx', snapshot.data[i].id);
+                        FileProvider().delete('reportnew.xlsx');
                       },
                       icon: Icon(Icons.send),
                     ),
@@ -62,10 +85,6 @@ class _ReportListViewState extends State<ReportListView> {
                                           onPressed: () {
                                             setState(() {
                                               db.deleteReport(snapshot.data[i].id);
-                                              // _decrementReportsCount();
-                                              // _decrementUserReportsCount(
-                                              //     Provider.of<UserNotifier>(context, listen: false).user.userId
-                                              // );
                                               db.deletePictures(snapshot.data[i].id);
                                               Navigator.of(context).pop();
                                             });

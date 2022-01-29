@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:rus_bur_service/pages/email_message_settings_page.dart';
 import 'package:rus_bur_service/pages/parts_settings_page.dart';
+import 'package:rus_bur_service/pages/picture_settings_page.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
-import 'package:rus_bur_service/widgets/drawers/app_drawer.dart';
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../main.dart';
 import 'home_page.dart';
-import 'parts_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -71,7 +70,19 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EmailMessageSettings()
+                    builder: (context) => EmailMessageSettingsPage()
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('Фотографии'),
+            subtitle: Text('Настройки изображения'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PictureSettingsPage()
                 ),
               );
             },
@@ -91,12 +102,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               onPressed: () async {
                                 await deleteDatabase(join(await getDatabasesPath(), 'rb_service_database.db'));
                                 PasswordProvider().deleteAllPasswords();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MyApp()
-                                    )
-                                );
+                                Restart.restartApp();
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => MyApp()
+                                //     )
+                                // );
                               },
                               child: Text('Удалить')
                           ),

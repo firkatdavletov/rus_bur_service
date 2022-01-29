@@ -12,6 +12,7 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Диагностические карты'),
@@ -40,7 +41,9 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
                       children: [
                         Icon(Icons.arrow_back_ios),
                         Container(width: 5,),
-                        Text('Выбрать области'),
+                        _width > 400
+                            ? Text('Выбрать области')
+                            : Text(''),
                       ],
                     )
                 ),
@@ -58,7 +61,9 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        Text('Главная страница'),
+                        _width > 400
+                            ? Text('Главная страница')
+                            : Text(''),
                         Container(width: 5,),
                         Icon(Icons.home)
                       ],

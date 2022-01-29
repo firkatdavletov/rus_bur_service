@@ -1,13 +1,14 @@
-import 'dart:typed_data';
+import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 
 class FullScreenPage extends StatelessWidget {
-  final Uint8List bytes;
+  final File file;
   final String title;
   const FullScreenPage({
     Key? key,
-    required this.bytes,
+    required this.file,
     required this.title
   }) : super(key: key);
 
@@ -20,7 +21,7 @@ class FullScreenPage extends StatelessWidget {
       body: Center(
         child: Hero(
           tag: title,
-          child: Image.memory(bytes),
+          child: Image.file(file),
         ),
       ),
     );

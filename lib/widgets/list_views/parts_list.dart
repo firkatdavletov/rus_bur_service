@@ -22,6 +22,7 @@ class PartsList extends StatefulWidget {
 class _PartsListState extends State<PartsList> {
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     int _reportId = Provider.of<ReportNotifier>(context, listen: false).id;
     return FutureBuilder(
         future: db.getCheckedParts(_reportId),
@@ -75,7 +76,9 @@ class _PartsListState extends State<PartsList> {
                             children: [
                               Icon(Icons.arrow_back_ios),
                               Container(width: 5,),
-                              Text('Фотографии'),
+                              _width > 400
+                                  ? Text('Фотографии')
+                                  : Text(''),
                             ],
                           )
                       ),
@@ -118,7 +121,9 @@ class _PartsListState extends State<PartsList> {
                           },
                           child: Row(
                             children: [
-                              Text('Диагностические карты'),
+                              _width > 400
+                                  ? Text('Диагностические карты')
+                                  : Text(''),
                               Container(width: 5,),
                               Icon(Icons.arrow_forward_ios)
                             ],

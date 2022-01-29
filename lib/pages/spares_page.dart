@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
 import 'package:rus_bur_service/controller/spare_notifier.dart';
-import 'package:rus_bur_service/models/spare.dart';
 import 'package:rus_bur_service/pages/create_card_page.dart';
 import 'package:rus_bur_service/widgets/list_views/spares_list.dart';
 import 'add_spare_page.dart';
@@ -42,16 +40,18 @@ class SparesPage extends StatelessWidget {
           context.read<SpareNotifier>().changeMeasure('');
           context.read<SpareNotifier>().changePriority(1);
           context.read<SpareNotifier>().changeId(0);
-          Spare _newSpare = Spare(
-              id: 0,
-              number: '',
-              quantity: 0,
-              name: '',
-              measure: '',
-              issue: '',
-              cardId: Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
-              priority: 0
-          );
+          //
+          // Spare _newSpare = Spare(
+          //     id: 0,
+          //     number: '',
+          //     quantity: 0,
+          //     name: '',
+          //     measure: '',
+          //     issue: '',
+          //     cardId: Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
+          //     priority: 0,
+          //     part: Provider.of<DiagnosticCardsNotifier>(context, listen: false).part
+          // );
           Navigator.push(
               context,
               MaterialPageRoute(

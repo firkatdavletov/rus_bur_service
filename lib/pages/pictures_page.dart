@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/picture_notifier.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
+import 'package:rus_bur_service/helpers/file_provider.dart';
 import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
@@ -30,14 +32,18 @@ class _PicturesPageState extends State<PicturesPage> {
       File temp = File(pickedFile!.path);
       List<int> bytes = await temp.readAsBytes();
       setState(() {
+        var _random = Random();
+        var _id = _random.nextInt(2147483645);
+        print ('pictures_page: _id =$_id');
         AppPicture _picture = AppPicture(
-            id: 0,
+            id: _id,
             reportId: Provider.of<ReportNotifier>(context, listen: false).id,
             cardId: '',
             name: name,
-            picture: bytes,
+            //picture: bytes,
             description: desc
         );
+        FileProvider().save(bytes, '$_id.jpg');
         db.insertPicture(_picture);
         imageCache!.clear();
       });
@@ -90,6 +96,7 @@ class _PicturesPageState extends State<PicturesPage> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Фотографии'),
@@ -117,7 +124,9 @@ class _PicturesPageState extends State<PicturesPage> {
                       children: [
                         Icon(Icons.arrow_back_ios),
                         Container(width: 5,),
-                        Text('Данные машины'),
+                        _width > 400
+                            ? Text('Данные машины')
+                            : Text(''),
                       ],
                     )
                 ),
@@ -135,7 +144,9 @@ class _PicturesPageState extends State<PicturesPage> {
                     },
                     child: Row(
                       children: [
-                        Text('Выбрать области'),
+                        _width > 400
+                            ? Text('Выбрать области')
+                            : Text(''),
                         Container(width: 5,),
                         Icon(Icons.arrow_forward_ios)
                       ],

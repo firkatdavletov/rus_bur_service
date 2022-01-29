@@ -188,7 +188,8 @@ class _AddSpareFormState extends State<AddSpareForm> {
                           cardId: Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
                           quantity: Provider.of<SpareNotifier>(context, listen: false).quantity, 
                           number: Provider.of<SpareNotifier>(context, listen: false).number,
-                          priority: Provider.of<SpareNotifier>(context, listen: false).priority
+                          priority: Provider.of<SpareNotifier>(context, listen: false).priority,
+                          part: Provider.of<DiagnosticCardsNotifier>(context, listen: false).part
                       );
                       widget.isNewSpare 
                         ? db.insertSpare(_newSpare)

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rus_bur_service/helpers/mail_sendler.dart';
-import 'package:rus_bur_service/helpers/save_file.dart';
+import 'package:rus_bur_service/helpers/file_provider.dart';
 import 'package:rus_bur_service/models/diagnostic_card.dart';
+import 'package:rus_bur_service/models/part.dart';
 import 'package:rus_bur_service/models/spare.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
@@ -19,7 +23,7 @@ class ExcelProvider {
   });
 
   bool success = false;
-  Future<void> generateExcel(Report report, User user) async {
+  Future<List<int>> generateExcel(Report report, User user) async {
     //Create a Excel document.
 
     //Creating a workbook.
@@ -221,8 +225,47 @@ class ExcelProvider {
     range_24.merge();
     range_25.merge();
 
+    //Согласованные направления диагностики
+
+    row += 3;
+    List<Part> _parts = await db.getPartsWithAgreedParts(report.id);
+    sheet.getRangeByIndex(row, 1).setText('Согласованные направления диагностики');
+    sheet.getRangeByIndex(row, 1).cellStyle = style_4;
+    final Range range_26 = sheet.getRangeByIndex(row, 1, row, 14);
+    range_26.merge();
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('Узел/Система');
+    sheet.getRangeByIndex(row, 13).setText('ДА');
+    sheet.getRangeByIndex(row, 14).setText('НЕТ');
+
+    sheet.getRangeByIndex(row, 1, row + (_parts.length), 14)
+        .cellStyle = style_5;
+    sheet.getRangeByIndex(row, 1, row, 14)
+        .cellStyle
+        .backColor = '#DBDBDB';
+
+    row++;
+    for (Part p in _parts) {
+      sheet.getRangeByIndex(row, 1).setText('${p.name}');
+      sheet.getRangeByIndex(row, 13, row, 14)
+          .cellStyle
+          .fontName = 'Wingdings 2';
+      p.isChecked
+          ? sheet.getRangeByIndex(row, 13).setText('P')
+          : sheet.getRangeByIndex(row, 14).setText('P');
+
+      final Range _range1 = sheet.getRangeByIndex(row, 1, row, 12);
+      _range1.merge();
+      row++;
+    }
+    
     // Add images
-    row += 3; //46
+    String? path;
+    final Directory directory = await getApplicationSupportDirectory();
+    path = directory.path;
+    row += 3;
+    print('excel provider: picture starts in $row row');
     var _images = await db.getPicture(report.id, '');
     int column = 1;
     for (var image in _images) {
@@ -230,7 +273,8 @@ class ExcelProvider {
       row++;
       sheet.getRangeByIndex(row, 1).setText('${image.description}');
       row++;
-      sheet.pictures.addStream(row, column, image.picture);
+      List<int> bytes = File('$path/${image.id}.jpg').readAsBytesSync();
+      sheet.pictures.addStream(row, column, bytes);
       row += 70;
     }
 
@@ -239,7 +283,7 @@ class ExcelProvider {
     List<String> _cardsId = [];
 
     sheet.getRangeByIndex(row, 1).setText('РЕКОМЕНДУЕМЫЕ МЕРОПРИЯТИЯ ПО РЕЗУЛЬТАТАМ ПРОВЕРКИ');
-
+    //-----------------------------!!!------------------------------------------
     row++;
     sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ВАЖНО');
 
@@ -257,7 +301,7 @@ class ExcelProvider {
       _cardsId.add(c.id);
       if (c.priority == 3) {
         sheet.getRangeByIndex(row, 1).setText(c.id);
-        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 2).setText(c.part);
         sheet.getRangeByIndex(row, 4).setText(c.description);
         sheet.getRangeByIndex(row, 7).setText(c.recommend);
         sheet.getRangeByIndex(row, 10).setText(c.effect);
@@ -266,9 +310,7 @@ class ExcelProvider {
         row++;
       }
     }
-    //
-    List<Spare> _spares = await db.getSparesReport(_cardsId);
-
+//-----------------------------------!!-----------------------------------------
     row++;
     sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ПЛАНОВО');
 
@@ -285,7 +327,7 @@ class ExcelProvider {
     for (DiagnosticCard c in _cards) {
       if (c.priority == 2) {
         sheet.getRangeByIndex(row, 1).setText(c.id);
-        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 2).setText(c.part);
         sheet.getRangeByIndex(row, 4).setText(c.description);
         sheet.getRangeByIndex(row, 7).setText(c.recommend);
         sheet.getRangeByIndex(row, 10).setText(c.effect);
@@ -294,92 +336,12 @@ class ExcelProvider {
         row++;
       }
     }
-
+//------------------------------------!-----------------------------------------
     row++;
-    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ – РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ');
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
-    sheet.getRangeByIndex(row, 2).setText('Узел/система');
-    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
-    sheet.getRangeByIndex(row, 7).setText('Решение');
-    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
-    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
-    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
-
-    // row++;
-    // for (Spare s in _spares) {
-    //   if (s.priority == 1) {
-    //     sheet.getRangeByIndex(row, 1).setText(s.cardId);
-    //     sheet.getRangeByIndex(row, 2).setText(s.);
-    //     sheet.getRangeByIndex(row, 4).setText(c.description);
-    //     sheet.getRangeByIndex(row, 7).setText(c.recommend);
-    //     sheet.getRangeByIndex(row, 10).setText(c.effect);
-    //     sheet.getRangeByIndex(row, 13).setText('n/a');
-    //     sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
-    //     row++;
-    //   }
-    // }
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('ПЕРЕЧЕНЬ НЕОБХОДИМЫХ ЗАПЧАСТЕЙ');
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ВАЖНО');
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
-    sheet.getRangeByIndex(row, 2).setText('Каталожный номер');
-    sheet.getRangeByIndex(row, 4).setText('Наименование');
-    sheet.getRangeByIndex(row, 6).setText('Кол-во');
-    sheet.getRangeByIndex(row, 7).setText('Ед. изм.');
-    sheet.getRangeByIndex(row, 8).setText('Узел/система');
-    sheet.getRangeByIndex(row, 10).setText('Проблема');
-    sheet.getRangeByIndex(row, 14).setText('Страница отчета');
-
-    row++;
-    for (DiagnosticCard c in _cards) {
-      _cardsId.add(c.id);
-      if (c.priority == 3) {
-        sheet.getRangeByIndex(row, 1).setText(c.id);
-        sheet.getRangeByIndex(row, 2).setText(c.area);
-        sheet.getRangeByIndex(row, 4).setText(c.description);
-        sheet.getRangeByIndex(row, 7).setText(c.recommend);
-        sheet.getRangeByIndex(row, 10).setText(c.effect);
-        sheet.getRangeByIndex(row, 13).setText('n/a');
-        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
-        row++;
-      }
-    }
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ПЛАНОВО');
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
-    sheet.getRangeByIndex(row, 2).setText('Узел/система');
-    sheet.getRangeByIndex(row, 4).setText('Описание проблемы');
-    sheet.getRangeByIndex(row, 7).setText('Решение');
-    sheet.getRangeByIndex(row, 10).setText('Риски, положительный эффект');
-    sheet.getRangeByIndex(row, 13).setText('Страница отчёта');
-    sheet.getRangeByIndex(row, 14).setText('Кол-во чел./ч');
-
-    row++;
-    for (DiagnosticCard c in _cards) {
-      if (c.priority == 2) {
-        sheet.getRangeByIndex(row, 1).setText(c.id);
-        sheet.getRangeByIndex(row, 2).setText(c.area);
-        sheet.getRangeByIndex(row, 4).setText(c.description);
-        sheet.getRangeByIndex(row, 7).setText(c.recommend);
-        sheet.getRangeByIndex(row, 10).setText(c.effect);
-        sheet.getRangeByIndex(row, 13).setText('n/a');
-        sheet.getRangeByIndex(row, 14).setText('${c.manHours}');
-        row++;
-      }
-    }
-
-    row++;
-    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ – РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ');
+    sheet.getRangeByIndex(row, 1).setText(
+        'ПРИОРИТЕТ – РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, '
+            'МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ'
+    );
 
     row++;
     sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
@@ -394,7 +356,7 @@ class ExcelProvider {
     for (DiagnosticCard c in _cards) {
       if (c.priority == 1) {
         sheet.getRangeByIndex(row, 1).setText(c.id);
-        sheet.getRangeByIndex(row, 2).setText(c.area);
+        sheet.getRangeByIndex(row, 2).setText(c.part);
         sheet.getRangeByIndex(row, 4).setText(c.description);
         sheet.getRangeByIndex(row, 7).setText(c.recommend);
         sheet.getRangeByIndex(row, 10).setText(c.effect);
@@ -404,22 +366,99 @@ class ExcelProvider {
       }
     }
 
+    List<Spare> _spares = await db.getSparesReport(report.id);
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПЕРЕЧЕНЬ НЕОБХОДИМЫХ ЗАПЧАСТЕЙ');
+//------------------------------------!!!---------------------------------------
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ВАЖНО');
 
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Каталожный номер');
+    sheet.getRangeByIndex(row, 4).setText('Наименование');
+    sheet.getRangeByIndex(row, 6).setText('Кол-во');
+    sheet.getRangeByIndex(row, 7).setText('Ед. изм.');
+    sheet.getRangeByIndex(row, 8).setText('Узел/система');
+    sheet.getRangeByIndex(row, 10).setText('Проблема');
+    sheet.getRangeByIndex(row, 14).setText('Страница отчета');
 
+    row++;
+    for (Spare s in _spares) {
+      if (s.priority == 3) {
+        sheet.getRangeByIndex(row, 1).setText(s.cardId);
+        sheet.getRangeByIndex(row, 2).setText(s.number);
+        sheet.getRangeByIndex(row, 4).setText(s.name);
+        sheet.getRangeByIndex(row, 6).setText(s.quantity.toString());
+        sheet.getRangeByIndex(row, 7).setText(s.measure);
+        sheet.getRangeByIndex(row, 8).setText(s.part);
+        sheet.getRangeByIndex(row, 10).setText(s.issue);
+        sheet.getRangeByIndex(row, 10).setText('n/a');
+        row++;
+      }
+    }
 
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ - ПЛАНОВО');
 
-    //Save and launch the excel.
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Каталожный номер');
+    sheet.getRangeByIndex(row, 4).setText('Наименование');
+    sheet.getRangeByIndex(row, 6).setText('Кол-во');
+    sheet.getRangeByIndex(row, 7).setText('Ед. изм.');
+    sheet.getRangeByIndex(row, 8).setText('Узел/система');
+    sheet.getRangeByIndex(row, 10).setText('Проблема');
+    sheet.getRangeByIndex(row, 14).setText('Страница отчета');
+
+    row++;
+    for (Spare s in _spares) {
+      if (s.priority == 2) {
+        sheet.getRangeByIndex(row, 1).setText(s.cardId);
+        sheet.getRangeByIndex(row, 2).setText(s.number);
+        sheet.getRangeByIndex(row, 4).setText(s.name);
+        sheet.getRangeByIndex(row, 6).setText(s.quantity.toString());
+        sheet.getRangeByIndex(row, 7).setText(s.measure);
+        sheet.getRangeByIndex(row, 8).setText(s.part);
+        sheet.getRangeByIndex(row, 10).setText(s.issue);
+        sheet.getRangeByIndex(row, 10).setText('n/a');
+        row++;
+      }
+    }
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('ПРИОРИТЕТ – РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ');
+
+    row++;
+    sheet.getRangeByIndex(row, 1).setText('№ диагн-кой карты');
+    sheet.getRangeByIndex(row, 2).setText('Каталожный номер');
+    sheet.getRangeByIndex(row, 4).setText('Наименование');
+    sheet.getRangeByIndex(row, 6).setText('Кол-во');
+    sheet.getRangeByIndex(row, 7).setText('Ед. изм.');
+    sheet.getRangeByIndex(row, 8).setText('Узел/система');
+    sheet.getRangeByIndex(row, 10).setText('Проблема');
+    sheet.getRangeByIndex(row, 14).setText('Страница отчета');
+
+    row++;
+    for (Spare s in _spares) {
+      if (s.priority == 1) {
+        sheet.getRangeByIndex(row, 1).setText(s.cardId);
+        sheet.getRangeByIndex(row, 2).setText(s.number);
+        sheet.getRangeByIndex(row, 4).setText(s.name);
+        sheet.getRangeByIndex(row, 6).setText(s.quantity.toString());
+        sheet.getRangeByIndex(row, 7).setText(s.measure);
+        sheet.getRangeByIndex(row, 8).setText(s.part);
+        sheet.getRangeByIndex(row, 10).setText(s.issue);
+        sheet.getRangeByIndex(row, 10).setText('n/a');
+        row++;
+      }
+    }
 
     final List<int> bytes = workbook.saveAsStream();
-
-    FileSaver().saveAndLaunchFile(bytes, 'reportnew.xlsx');
-    print('ExcelProvider: created file');
-    MailSender(context: context).sendMail('reportnew.xlsx', report.id);
     //Dispose the document.
     workbook.dispose();
+    return bytes;
   }
-
-
 }
 
 

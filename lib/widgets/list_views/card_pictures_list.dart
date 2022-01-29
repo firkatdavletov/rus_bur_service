@@ -41,15 +41,15 @@ class _CardPicturesListState extends State<CardPicturesList> {
                           },
                         ),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FullScreenPage(
-                                      bytes: snapshot.data[i].picture,
-                                      title: snapshot.data[i].name
-                                  )
-                              )
-                          );
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => FullScreenPage(
+                          //             bytes: snapshot.data[i].picture,
+                          //             title: snapshot.data[i].name
+                          //         )
+                          //     )
+                          // );
                         },
                         contentPadding: EdgeInsets.symmetric(vertical: 5.0),
                       );

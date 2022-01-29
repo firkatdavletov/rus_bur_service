@@ -8,6 +8,7 @@ class SpareNotifier with ChangeNotifier {
   String _issue = '';
   int _priority = 1;
   int _id = 0;
+  String _part = '';
 
   String get number => _number;
   int get quantity => _quantity;
@@ -16,6 +17,7 @@ class SpareNotifier with ChangeNotifier {
   String get issue => _issue;
   int get priority => _priority;
   int get id => _id;
+  String get part => _part;
 
   changeNumber (String textController) {
     _number = textController;
@@ -45,6 +47,11 @@ class SpareNotifier with ChangeNotifier {
 
   changeId(int controller) {
     _id = controller;
+    notifyListeners();
+  }
+
+  changePart (String textController) {
+    _part = textController;
     notifyListeners();
   }
 }

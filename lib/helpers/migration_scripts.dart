@@ -63,11 +63,11 @@ const migrationScripts = [
     man_hours INTEGER
   )''',
   '''CREATE TABLE pictures(
-    picture_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    picture_id INTEGER PRIMARY KEY,
     report_id INTEGER NOT NULL,
     card_id TEXT,
     picture_name TEXT,
-    picture BLOB NOT NULL,
+    picture BLOB,
     picture_description TEXT
   )''',
   '''CREATE TABLE agreed_parts(

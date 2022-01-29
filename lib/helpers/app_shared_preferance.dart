@@ -6,6 +6,8 @@ class AppSharedPref {
     prefs.setString('recipients', 'firkat.davletov@ya.ru');
     prefs.setString('subject', 'Subject');
     prefs.setString('text', 'Text');
+    prefs.setDouble('maxPictureHeight', 300.0);
+    prefs.setDouble('maxPictureWidth', 300.0);
+    prefs.setInt('pictureQuality', 80);
   }
-
 }

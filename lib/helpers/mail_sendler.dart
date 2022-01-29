@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:rus_bur_service/api/google_sign_in_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
 
 class MailSender {
   final BuildContext context;
@@ -21,16 +19,9 @@ class MailSender {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? path;
-    if (Platform.isAndroid ||
-        Platform.isIOS ||
-        Platform.isLinux ||
-        Platform.isWindows) {
-      final Directory directory =
-      await path_provider.getApplicationSupportDirectory();
-      path = directory.path;
-    } else {
-      path = await PathProviderPlatform.instance.getApplicationSupportPath();
-    }
+
+    final Directory directory = await getApplicationSupportDirectory();
+    path = directory.path;
 
     // File _file = File('$path/$fileName');
     // print('file size: ${_file.lengthSync()}');
@@ -39,15 +30,16 @@ class MailSender {
     // File _photo = File('$path/photo.jpg');
     // _photo.writeAsBytes(_images[0].picture);
 
-    // GoogleAuthApi.signOut();
+    GoogleAuthApi.signOut();
     // print('Google sign out');
-    // return;
+
     final user = await GoogleAuthApi.signIn();
 
     if (user == null) {
-      print('User is null, sending is stoped');
+      print('User is null, sending is stopped');
+      showSnackBar('User is null, sending is stopped');
       return;
-    };
+    }
 
     final mailAddress = 'serviceavailable.test@gmail.com';
     final auth = await user.authentication;
@@ -69,17 +61,14 @@ class MailSender {
       '''
       ..attachments = [
         FileAttachment(File('$path/$fileName'))
-        ..fileName = 'Отчёт_$reportId.xlsx'
         ..location = Location.attachment
       ];
 
     try {
       showSnackBar('Sending message...');
-      print('Trying to send...Wait...');
       await send(message, smtpServer);
       showSnackBar('Sent email successfully!');
     } on MailerException catch (e) {
-      print('Email didn\'t sent');
       print(e);
     }
   }

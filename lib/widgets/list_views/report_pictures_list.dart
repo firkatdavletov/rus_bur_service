@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
@@ -27,23 +30,37 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int i) {
                       return ListTile(
-                        leading: Image.memory(snapshot.data[i].picture),
+                        leading: FutureBuilder(
+                          future: _getPath(),
+                          builder: (BuildContext context, AsyncSnapshot<dynamic> path) {
+                            if (path.hasData) {
+                              return Image.file(File('${path.data}/${snapshot.data[i].id}.jpg'));
+                            } else if (path.hasError) {
+                              return Icon(Icons.error);
+                            } else {
+                              return Icon(Icons.access_alarm);
+                            }
+                          },
+                        ),
                         title: Text(snapshot.data[i].name),
                         subtitle: Text(snapshot.data[i].description),
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               db.deletePicture(snapshot.data[i].id);
                             });
+                            String? path = await _getPath();
+                            File('$path/${snapshot.data[i].id}.jpg').delete();
                           },
                         ),
-                        onTap: () {
+                        onTap: () async {
+                          String? path = await _getPath();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FullScreenPage(
-                                      bytes: snapshot.data[i].picture,
+                                      file: File('$path/${snapshot.data[i].id}.jpg'),
                                       title: snapshot.data[i].name
                                   )
                               )
@@ -55,12 +72,19 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                 )
             );
           } else if (snapshot.hasError) {
-            return ErrorPage();
+            return Text('Snapshot error: ${snapshot.error}');
           } else {
             return WaitingPage();
           }
         }
     );
+  }
+
+  Future<String?> _getPath() async {
+    String? path;
+    final Directory directory = await getApplicationSupportDirectory();
+    path = directory.path;
+    return path;
   }
 }
 

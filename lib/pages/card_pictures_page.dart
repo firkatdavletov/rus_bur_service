@@ -36,7 +36,7 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
             reportId: Provider.of<ReportNotifier>(context, listen: false).id,
             cardId: Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
             name: name,
-            picture: bytes,
+            //picture: bytes,
             description: ''
         );
         db.insertPicture(_picture);
@@ -72,6 +72,7 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     String _id = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).id}';
     String _name = '${Provider.of<DiagnosticCardsNotifier>(context, listen: false).name}';
     return Scaffold(
@@ -101,7 +102,9 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
                       children: [
                         Icon(Icons.arrow_back_ios),
                         Container(width: 5,),
-                        Text('$_name #$_id'),
+                        _width > 400
+                            ? Text('$_name #$_id')
+                            : Text(''),
                       ],
                     )
                 ),

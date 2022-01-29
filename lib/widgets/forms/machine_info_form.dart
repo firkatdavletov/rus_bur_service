@@ -25,6 +25,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -180,7 +181,9 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                     children: [
                       Icon(Icons.arrow_back_ios),
                       Container(width: 5,),
-                      Text('Данные заказчика'),
+                      _width > 400
+                          ? Text('Данные заказчика')
+                          : Text(''),
                     ],
                   )
               ),
@@ -202,7 +205,9 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   },
                   child: Row(
                     children: [
-                      Text('Фотографии'),
+                      _width > 400
+                          ? Text('Фотографии')
+                          : Text(''),
                       Container(width: 5,),
                       Icon(Icons.arrow_forward_ios)
                     ],

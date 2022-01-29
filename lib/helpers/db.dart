@@ -214,6 +214,33 @@ class DbProvider {
     );
   }
 //------------------Part--------------------------------------------------------
+
+  Future<List<Part>> getPartsWithAgreedParts(int reportId) async {
+    final db = await database;
+    List<Map<String, dynamic>> _parts = await db.rawQuery(
+        '''SELECT 
+            p.part_id, 
+            p.part_name, 
+            ap.part_id is_checked 
+            FROM parts p
+            LEFT JOIN agreed_parts ap 
+            ON p.part_id = ap.part_id
+            AND ap.report_id = ?
+        ''',
+        ['$reportId']
+    );
+    return List.generate(_parts.length, (i) {
+      Part _part = Part(
+        id: _parts[i]['part_id'],
+        name: _parts[i]['part_name'],
+      );
+      _parts[i]['is_checked'] != null
+          ? _part.isChecked = true
+          : _part.isChecked = false;
+      return _part;
+    });
+  }
+
   Future<List<Part>> getParts() async {
     final db = await database;
     List<Map<String, dynamic>> parts = await db.query('parts');
@@ -500,7 +527,7 @@ class DbProvider {
           name: pictures[i]['picture_name'],
           reportId: pictures[i]['report_id'],
           cardId: pictures[i]['card_id'],
-          picture: pictures[i]['picture'],
+          //picture: pictures[i]['picture'],
           description: pictures[i]['picture_description']
       );
     });
@@ -572,10 +599,23 @@ class DbProvider {
 
   Future<List<Spare>> getSpare(String cardId) async {
     final db = await database;
-    List<Map<String, dynamic>> spares = await db.query(
-        'spares',
-        where: 'card_id = ?',
-        whereArgs: [cardId]
+    List<Map<String, dynamic>> spares = await db.rawQuery(
+        '''SELECT s.spare_id,
+                  s.spare_name,
+                  s.spare_issue,
+                  s.card_id,
+                  s.spare_number,
+                  s.spares_quantity,
+                  s.spare_measure,
+                  s.spare_priority,
+                  p.part_name
+           FROM spares s
+           LEFT JOIN cards c ON s.card_id = c.card_id
+           LEFT JOIN operations o ON c.operation_id = o.operation_id
+           LEFT JOIN parts p ON o.part_id = p.part_id
+           WHERE s.card_id = ?
+        ''',
+        [cardId]
     );
     return List.generate(spares.length, (i) {
       return Spare(
@@ -586,34 +626,43 @@ class DbProvider {
           number: spares[i]['spare_number'],
           quantity: spares[i]['spares_quantity'],
           measure: spares[i]['spare_measure'],
-          priority: spares[i]['spare_priority']
+          priority: spares[i]['spare_priority'],
+          part: spares[i]['part_name']
       );
     });
   }
 
-  Future<List<Spare>> getSparesReport(List<String> cardsId) async {
+  Future<List<Spare>> getSparesReport(int reportId) async {
     final db = await database;
-    String sql = 'card_id = ?';
-    for (int i = 0; i < cardsId.length-1; i++) {
-      sql += ' OR card_id = ?';
-    }
-    List<Map<String, dynamic>> spares = await db.query(
-        'spares',
-        where: sql,
-        whereArgs: cardsId
+    List<Map<String, dynamic>> spares = await db.rawQuery(
+        '''SELECT s.spare_id,
+                  s.spare_name,
+                  s.spare_issue,
+                  s.card_id,
+                  s.spare_number,
+                  s.spares_quantity,
+                  s.spare_measure,
+                  s.spare_priority,
+                  p.part_name
+           FROM spares s
+           LEFT JOIN cards c ON s.card_id = c.card_id
+           LEFT JOIN operations o ON c.operation_id = o.operation_id
+           LEFT JOIN parts p ON o.part_id = p.part_id
+           WHERE c.report_id = ?
+        ''',
+        ['$reportId']
     );
-
     return List.generate(spares.length, (i) {
       return Spare(
           id: spares[i]['spare_id'],
           name: spares[i]['spare_name'],
-          number: spares[i]['spare_number'],
-          cardId: spares[i]['card_id'],
-          quantity: spares[i]['spare_quantity'],
-          priority: spares[i]['spare_priority'],
           issue: spares[i]['spare_issue'],
+          cardId: spares[i]['card_id'],
+          number: spares[i]['spare_number'],
+          quantity: spares[i]['spares_quantity'],
           measure: spares[i]['spare_measure'],
-
+          priority: spares[i]['spare_priority'],
+          part: spares[i]['part_name']
       );
     });
   }

@@ -35,6 +35,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width;
     int _conclusionState = Provider.of<DiagnosticCardsNotifier>(context, listen: false).conclusion;
     int _priorityState = Provider.of<DiagnosticCardsNotifier>(context, listen: false).priority;
 
@@ -267,6 +268,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   ),
                   TextButton(
                       onPressed: () {
+                        _formKey_1.currentState!.save();
                         _upgradeCard();
                         Navigator.push(
                             context,
@@ -279,6 +281,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   ),
                   TextButton(
                       onPressed: () {
+                        _formKey_1.currentState!.save();
                         _upgradeCard();
                         Navigator.push(
                             context,
@@ -311,7 +314,9 @@ class _CreateCardFormState extends State<CreateCardForm> {
                     children: [
                       Icon(Icons.arrow_back_ios),
                       Container(width: 5,),
-                      Text('Назад'),
+                      _width > 400
+                          ? Text('Назад')
+                          : Text(''),
                     ],
                   )
               ),
@@ -333,7 +338,9 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   },
                   child: Row(
                     children: [
-                      Text('Сохранить'),
+                      _width > 400
+                          ? Text('Сохранить')
+                          : Text(''),
                       Container(width: 5,),
                       Icon(Icons.save)
                     ],

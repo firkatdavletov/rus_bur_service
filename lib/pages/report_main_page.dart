@@ -7,9 +7,6 @@ class ReportMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    double _height = MediaQuery.of(context).size.height - 100;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Данные заказчика'),
