@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/widgets/forms/registration_form.dart';
 import 'package:rus_bur_service/widgets/logo.dart';

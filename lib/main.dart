@@ -7,7 +7,7 @@ import 'package:rus_bur_service/controller/machine_notifier.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:rus_bur_service/pages/registration_page.dart';
-import 'package:rus_bur_service/pages/waiting_page.dart';
+
 import 'package:sqflite/sqflite.dart';
 import 'controller/diagnostic_cards_notifier.dart';
 import 'controller/email_message_notifier.dart';
@@ -93,7 +93,17 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: ErrorPage(),
+              home: Scaffold(
+                body: Center(
+                  child: Column(
+                    children: [
+                      Icon(Icons.error_outline),
+                      Text('Что-то пошло не так...'),
+                      Text('${snapshot.error}')
+                    ],
+                  ),
+                ),
+              ),
             );
           } else {
             return MaterialApp(
@@ -102,7 +112,11 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: WaitingPage(),
+              home: Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             );
           }
         }

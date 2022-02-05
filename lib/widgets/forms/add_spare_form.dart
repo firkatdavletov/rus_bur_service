@@ -95,7 +95,7 @@ class _AddSpareFormState extends State<AddSpareForm> {
                     ),
                   ),
                   Icon(
-                      Icons.check_circle,
+                      Icons.filter_1_rounded,
                       color: _priorityState == 1
                           ? Colors.lightGreen
                           : _priorityState == 2
@@ -150,28 +150,32 @@ class _AddSpareFormState extends State<AddSpareForm> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: AppTextFormFieldWithInit(
+              child: AppDropDownFormField(
+                itemsVisible: 3,
+                items: [
+                  'шт.', 'л', 'компл.'
+                ],
                 initialValue: Provider.of<SpareNotifier>(context, listen: false).measure,
                 onSaved: (value) {
                   context.read<SpareNotifier>().changeMeasure(value);
                 },
-                validator: _validate,
-                icon: Icon(Icons.warning_amber_outlined),
+                icon: Icon(Icons.car_repair),
                 label: 'Единица измерения',
-                helperText: '',
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: AppTextFormFieldWithInit(
+              child: AppDropDownFormField(
+                itemsVisible: 5,
+                items: [
+                  'Износ', 'Отсутствие', 'Плановая замена', 'Модернизация', 'Несоответствие'
+                ],
+                initialValue: Provider.of<SpareNotifier>(context, listen: false).issue,
                 onSaved: (value) {
                   context.read<SpareNotifier>().changeIssue(value);
                 },
-                validator: _validate,
-                icon: Icon(Icons.recommend),
+                icon: Icon(Icons.car_repair),
                 label: 'Проблема',
-                initialValue: Provider.of<SpareNotifier>(context, listen: false).issue,
-                helperText: '',
               ),
             ),
             Padding(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
-import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/full_screen_picture_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 
@@ -34,7 +33,7 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                           future: _getPath(),
                           builder: (BuildContext context, AsyncSnapshot<dynamic> path) {
                             if (path.hasData) {
-                              return Image.file(File('${path.data}/${snapshot.data[i].id}.jpg'));
+                              return Image.file(File('${path.data}/${snapshot.data[i].pictureFileName}.jpg'));
                             } else if (path.hasError) {
                               return Icon(Icons.error);
                             } else {
@@ -51,7 +50,7 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                               db.deletePicture(snapshot.data[i].id);
                             });
                             String? path = await _getPath();
-                            File('$path/${snapshot.data[i].id}.jpg').delete();
+                            File('$path/${snapshot.data[i].pictureFileName}.jpg').delete();
                           },
                         ),
                         onTap: () async {
@@ -60,7 +59,7 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FullScreenPage(
-                                      file: File('$path/${snapshot.data[i].id}.jpg'),
+                                      file: File('$path/${snapshot.data[i].pictureFileName}.jpg'),
                                       title: snapshot.data[i].name
                                   )
                               )

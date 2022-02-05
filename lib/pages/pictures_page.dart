@@ -10,9 +10,10 @@ import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
 import 'package:rus_bur_service/pages/machine_info_page.dart';
-import 'package:rus_bur_service/widgets/alert_dialog/take_picture_alert_dialog.dart';
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/report_pictures_list.dart';
+
+import '../widgets/forms/app_text_form_field.dart';
 
 typedef void OnPickImageCallback (String name, String desc);
 
@@ -26,6 +27,7 @@ class PicturesPage extends StatefulWidget {
 class _PicturesPageState extends State<PicturesPage> {
   ImagePicker _picker = ImagePicker();
 
+
   _onImageButtonPressed (ImageSource source, {BuildContext? context}) async {
     await _displayPickImageDialog(context!, (name, desc) async {
       final pickedFile = await _picker.pickImage(source: source);
@@ -34,14 +36,13 @@ class _PicturesPageState extends State<PicturesPage> {
       setState(() {
         var _random = Random();
         var _id = _random.nextInt(2147483645);
-        print ('pictures_page: _id =$_id');
         AppPicture _picture = AppPicture(
-            id: _id,
+            id: 0,
             reportId: Provider.of<ReportNotifier>(context, listen: false).id,
             cardId: '',
             name: name,
-            //picture: bytes,
-            description: desc
+            description: desc,
+            pictureFileName: _id
         );
         FileProvider().save(bytes, '$_id.jpg');
         db.insertPicture(_picture);
@@ -51,43 +52,61 @@ class _PicturesPageState extends State<PicturesPage> {
   }
 
   _displayPickImageDialog (BuildContext context, OnPickImageCallback onPick) async {
+
+    final _formKey = GlobalKey<FormState>();
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text('Выберите название фото'),
             content: Container(
-              height: 400,
+              height: 530,
               width: 350,
-              child: ListView(
-                children: [
-                  TakingPictureAlert(),
-                  ElevatedButton(
-                      onPressed: () {
-                        switch (Provider.of<PictureNotifier>(context, listen: false).photoName) {
-                          case PhotoName.generalView:
-                            context.read<PictureNotifier>().changeAddPhotoName('Главный вид');
-                            break;
-                          case PhotoName.stateRegNumb:
-                            context.read<PictureNotifier>().changeAddPhotoName('Гос. регистрационный номер');
-                            break;
-                          case PhotoName.generalSerialNumb:
-                            context.read<PictureNotifier>().changeAddPhotoName('Серийный номер установки');
-                            break;
-                          case PhotoName.engineSerialNumb:
-                            context.read<PictureNotifier>().changeAddPhotoName('Серийный номер двигателя');
-                            break;
-                          case PhotoName.additional:
-                            // TODO: Handle this case.
-                        }
-                        onPick(
-                            Provider.of<PictureNotifier>(context, listen: false).addPhotoName,
-                            Provider.of<PictureNotifier>(context, listen: false).pictureDescription
-                        );
-                      },
-                      child: Text('Сделать фото'))
-                ],
-              ),
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      RadioList(),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              switch (Provider.of<PictureNotifier>(context, listen: false).photoName) {
+                                case PhotoName.generalView:
+                                  context.read<PictureNotifier>().changeAddPhotoName('Главный вид');
+                                  break;
+                                case PhotoName.stateRegNumb:
+                                  context.read<PictureNotifier>().changeAddPhotoName('Гос. регистрационный номер');
+                                  break;
+                                case PhotoName.generalSerialNumb:
+                                  context.read<PictureNotifier>().changeAddPhotoName('Серийный номер установки');
+                                  break;
+                                case PhotoName.engineSerialNumb:
+                                  context.read<PictureNotifier>().changeAddPhotoName('Серийный номер двигателя');
+                                  break;
+                                case PhotoName.additional:
+                                // TODO: Handle this case.
+                              }
+                              onPick(
+                                  Provider.of<PictureNotifier>(context, listen: false).addPhotoName,
+                                  Provider.of<PictureNotifier>(context, listen: false).pictureDescription
+                              );
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text('Сделать фото')
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Отмена')
+                      )
+                    ],
+                  ),
+                )
+              )
             )
           );
         }
@@ -190,6 +209,108 @@ class _PicturesPageState extends State<PicturesPage> {
     );
   }
 }
+
+
+
+class RadioList extends StatefulWidget {
+  const RadioList({Key? key}) : super(key: key);
+
+  @override
+  _RadioListState createState() => _RadioListState();
+}
+bool isAdditional = false;
+class _RadioListState extends State<RadioList> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        RadioListTile<PhotoName>(
+            title: Text('Главный вид'),
+            value: PhotoName.generalView,
+            groupValue: Provider.of<PictureNotifier>(context, listen: false).photoName,
+            onChanged: (PhotoName? value) {
+              setState(() {
+                isAdditional = false;
+                context.read<PictureNotifier>().changePhotoName(value!);
+              });
+            }
+        ),
+        RadioListTile<PhotoName>(
+            title: Text('Гос. регистрационный номер'),
+            value: PhotoName.stateRegNumb,
+            groupValue: Provider.of<PictureNotifier>(context, listen: false).photoName,
+            onChanged: (PhotoName? value) {
+              setState(() {
+                isAdditional = false;
+                context.read<PictureNotifier>().changePhotoName(value!);
+              });
+            }
+        ),
+        RadioListTile<PhotoName>(
+            title: Text('Серийный номер установки'),
+            value: PhotoName.generalSerialNumb,
+            groupValue: Provider.of<PictureNotifier>(context, listen: false).photoName,
+            onChanged: (PhotoName? value) {
+              setState(() {
+                isAdditional = false;
+                context.read<PictureNotifier>().changePhotoName(value!);
+              });
+            }
+        ),
+        RadioListTile<PhotoName>(
+            title: Text('Серийный номер двигателя'),
+            value: PhotoName.engineSerialNumb,
+            groupValue: Provider.of<PictureNotifier>(context, listen: false).photoName,
+            onChanged: (PhotoName? value) {
+              setState(() {
+                isAdditional = false;
+                context.read<PictureNotifier>().changePhotoName(value!);
+              });
+            }
+        ),
+        RadioListTile<PhotoName>(
+            title: Text('Дополнительное фото'),
+            value: PhotoName.additional,
+            groupValue: Provider.of<PictureNotifier>(context, listen: false).photoName,
+            onChanged: (PhotoName? value) {
+              setState(() {
+                isAdditional = true;
+                context.read<PictureNotifier>().changePhotoName(value!);
+              });
+            }
+        ),
+        Visibility(
+          child: AppTextFormFieldWithoutIcon(
+              helperText: '',
+              onChanged: (String value) {
+                context.read<PictureNotifier>().changeAddPhotoName(value);
+              },
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return 'Заполните поле';
+                }
+              },
+              label: 'Название фото'
+          ),
+          visible: isAdditional,
+        ),
+        AppTextFormFieldWithoutIcon(
+            helperText: '',
+            onChanged: (String value) {
+              context.read<PictureNotifier>().changePictureDescription(value);
+            },
+            validator: (String value) {
+
+            },
+            label: 'Описание фото'
+        ),
+      ],
+    );
+  }
+}
+
+
+
 
 
 

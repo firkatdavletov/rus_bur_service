@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
-import 'package:open_file/open_file.dart' as open_file;
 
 class FileProvider {
 
@@ -23,18 +22,13 @@ class FileProvider {
     final file = File('$path/$name');
 
     file.writeAsBytesSync(bytes);
-
+    print('FileProvider: pdf is created');
     return file;
   }
 
   Future<void> delete(String fileName) async {
     String? path = await _getPath();
     File('$path/$fileName').delete();
-  }
-
-  Future<void> open(String fileName) async {
-    String? path = await _getPath();
-    await open_file.OpenFile.open('$path/$fileName');
   }
 
   // Future<File> getFile(String fileName) async {

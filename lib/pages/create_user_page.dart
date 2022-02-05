@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/users_page.dart';

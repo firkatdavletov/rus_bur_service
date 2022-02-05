@@ -16,8 +16,7 @@ class _TakingCardPictureAlertState extends State<TakingCardPictureAlert> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Дополнительное фото'),
-        AppTextFormField(
+        AppTextFormFieldWithoutIcon(
             helperText: '',
             onChanged: (String value) {
               context.read<PictureNotifier>().changeAddPhotoName(value);
@@ -25,8 +24,17 @@ class _TakingCardPictureAlertState extends State<TakingCardPictureAlert> {
             validator: (String value) {
 
             },
-            icon: Icon(Icons.text_format), //Icon(Icons.light, color: Colors.brown,),
             label: 'Название фото'
+        ),
+        AppTextFormFieldWithoutIcon(
+            helperText: '',
+            onChanged: (String value) {
+              context.read<PictureNotifier>().changePictureDescription(value);
+            },
+            validator: (String value) {
+
+            },
+            label: 'Описание фото'
         ),
       ],
     );

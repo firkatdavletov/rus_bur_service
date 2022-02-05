@@ -136,10 +136,10 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                       },
                       validator: _validate,
                       icon: Icon(Icons.arrow_right),
-                      label: 'Наработка (пог/м)',
+                      label: 'Наработка (пог.м)',
                       initialValue: context.watch<ReportNotifier>().opTime_3,
                       helperText: '',
-                      suffixText: 'пог/м',
+                      suffixText: 'пог.м',
                     ),
                   ),
                   Padding(
@@ -167,15 +167,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: OutlinedButton (
                   onPressed: () {
-                    if (_formKey_1.currentState!.validate()) {
-                      _formKey_1.currentState!.save();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReportMainPage()
-                          )
-                      );
-                    }
+                    _formKey_1.currentState!.save();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ReportMainPage()
+                        )
+                    );
                   },
                   child: Row(
                     children: [

@@ -30,6 +30,6 @@ class CreateCardPage extends StatelessWidget {
         ),
       ),
       body: CreateCardForm()
-    );;
+    );
   }
 }

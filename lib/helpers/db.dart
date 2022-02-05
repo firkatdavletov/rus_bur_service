@@ -409,7 +409,7 @@ class DbProvider {
   }
 
   //-----------------Cards------------------------------------------------------
-  Future<List<DiagnosticCard>> getCards(int reportId) async {
+  Future<List<DiagnosticCard>> getCards(int reportId, int priority) async {
     final db = await database;
     // List<Map<String, dynamic>> cards = await db.query(
     //     'cards',
@@ -421,8 +421,8 @@ class DbProvider {
            FROM cards c 
            LEFT JOIN operations o ON c.operation_id = o.operation_id
            LEFT JOIN parts p ON o.part_id = p.part_id
-           WHERE c.report_id = ?''',
-        ['$reportId']
+           WHERE c.report_id = ? AND c.priority = ?''',
+        ['$reportId', '$priority']
     );
     return List.generate(cards.length, (i) {
       return DiagnosticCard(
@@ -443,29 +443,63 @@ class DbProvider {
       );
     });
   }
-  Future<int> upgradeCardSelectByUnit(bool value, int id) async {
+  Future<List<DiagnosticCard>> getAllCards(int reportId) async {
     final db = await database;
-    return await db.update(
-        'cards',
-        <String, Object>{
-          'is_selected': value? 1 : 0,
-        },
-        where: 'unit_id = ?',
-        whereArgs: [id]
+    // List<Map<String, dynamic>> cards = await db.query(
+    //     'cards',
+    //     where: 'report_id = ?',
+    //     whereArgs: ['$reportId']
+    // );
+    List<Map<String, dynamic>> cards = await db.rawQuery(
+        '''SELECT * 
+           FROM cards c 
+           LEFT JOIN operations o ON c.operation_id = o.operation_id
+           LEFT JOIN parts p ON o.part_id = p.part_id
+           WHERE c.report_id = ?''',
+        ['$reportId']
     );
+    return List.generate(cards.length, (i) {
+      return DiagnosticCard(
+          id: cards[i]['card_id'],
+          name: cards[i]['operation_name'],
+          operationId: cards[i]['operation_id'],
+          reportId: cards[i]['report_id'],
+          conclusion: cards[i]['conclusion'],
+          description: cards[i]['description'],
+          area: cards[i]['area'],
+          damage: cards[i]['damage'],
+          priority: cards[i]['priority'],
+          recommend: cards[i]['recommend'],
+          time: cards[i]['time'],
+          effect: cards[i]['effect'],
+          manHours: cards[i]['man_hours'],
+          part: cards[i]['part_name']
+      );
+    });
   }
+  // Future<int> upgradeCardSelectByUnit(bool value, int id) async {
+  //   final db = await database;
+  //   return await db.update(
+  //       'cards',
+  //       <String, Object>{
+  //         'is_selected': value? 1 : 0,
+  //       },
+  //       where: 'unit_id = ?',
+  //       whereArgs: [id]
+  //   );
+  // }
 
-  Future<int> upgradeCardSelect(bool value, int id) async {
-    final db = await database;
-    return await db.update(
-        'cards',
-        <String, Object>{
-          'is_selected': value? 1 : 0,
-        },
-        where: 'card_id = ?',
-        whereArgs: [id]
-    );
-  }
+  // Future<int> upgradeCardSelect(bool value, int id) async {
+  //   final db = await database;
+  //   return await db.update(
+  //       'cards',
+  //       <String, Object>{
+  //         'is_selected': value? 1 : 0,
+  //       },
+  //       where: 'card_id = ?',
+  //       whereArgs: [id]
+  //   );
+  // }
 
   insertCard(DiagnosticCard card) async {
     final db = await database;
@@ -497,10 +531,22 @@ class DbProvider {
         'recommend' : newCard.recommend,
         'time' : newCard.time,
         'effect' : newCard.effect,
-        'man_hours' : newCard.manHours
+        'man_hours' : newCard.manHours,
+        'area' : newCard.area
       },
       where: 'card_id = ?',
       whereArgs: [newCard.id]
+    );
+  }
+  upgradeDamageInCard(String cardId, String newDamage) async {
+    final db = await database;
+    await db.update(
+        'cards',
+        <String, Object>{
+          'damage': newDamage,
+        },
+        where: 'card_id = ?',
+        whereArgs: [cardId]
     );
   }
 
@@ -512,6 +558,12 @@ class DbProvider {
       picture.toMap(),
       conflictAlgorithm: ConflictAlgorithm.abort
     );
+  }
+
+  Future<int> getLastPictureId() async {
+    final db = await database;
+    var _id = await db.rawQuery('SELECT last_insert_rowid() FROM pictures');
+    return int.parse(_id[0]['picture_id'].toString());
   }
 
   Future<List<AppPicture>> getPicture(int reportId, String cardId) async {
@@ -527,7 +579,7 @@ class DbProvider {
           name: pictures[i]['picture_name'],
           reportId: pictures[i]['report_id'],
           cardId: pictures[i]['card_id'],
-          //picture: pictures[i]['picture'],
+          pictureFileName: pictures[i]['picture_file_name'],
           description: pictures[i]['picture_description']
       );
     });
@@ -632,7 +684,42 @@ class DbProvider {
     });
   }
 
-  Future<List<Spare>> getSparesReport(int reportId) async {
+  Future<List<Spare>> getSparesReport(int reportId, int priority) async {
+    final db = await database;
+    List<Map<String, dynamic>> spares = await db.rawQuery(
+        '''SELECT s.spare_id,
+                  s.spare_name,
+                  s.spare_issue,
+                  s.card_id,
+                  s.spare_number,
+                  s.spares_quantity,
+                  s.spare_measure,
+                  s.spare_priority,
+                  p.part_name
+           FROM spares s
+           LEFT JOIN cards c ON s.card_id = c.card_id
+           LEFT JOIN operations o ON c.operation_id = o.operation_id
+           LEFT JOIN parts p ON o.part_id = p.part_id
+           WHERE c.report_id = ? AND s.spare_priority = ?
+        ''',
+        ['$reportId', '$priority']
+    );
+    return List.generate(spares.length, (i) {
+      return Spare(
+          id: spares[i]['spare_id'],
+          name: spares[i]['spare_name'],
+          issue: spares[i]['spare_issue'],
+          cardId: spares[i]['card_id'],
+          number: spares[i]['spare_number'],
+          quantity: spares[i]['spares_quantity'],
+          measure: spares[i]['spare_measure'],
+          priority: spares[i]['spare_priority'],
+          part: spares[i]['part_name']
+      );
+    });
+  }
+
+  Future<List<Spare>> getAllSparesReport(int reportId) async {
     final db = await database;
     List<Map<String, dynamic>> spares = await db.rawQuery(
         '''SELECT s.spare_id,

@@ -38,7 +38,7 @@ class _SparesListState extends State<SparesList> {
                     },
                   ),
                   leading: Icon(
-                      Icons.check_circle,
+                      Icons.filter_1_rounded,
                       color: snapshot.data[i].priority == 1
                           ? Colors.lightGreen
                           : snapshot.data[i].priority == 2

@@ -4,6 +4,7 @@ import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/machine_info_page.dart';
+import 'package:rus_bur_service/widgets/gps_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
@@ -127,6 +128,10 @@ class _CreateReportFormState extends State<CreateReportForm> {
                       label: 'Место проведения',
                       helperText: 'Населенный пункт',
                     ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                      child: GpsWidget(),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),

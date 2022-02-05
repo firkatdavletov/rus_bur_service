@@ -20,7 +20,7 @@ class _CardsListState extends State<CardsList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: db.getCards(Provider.of<ReportNotifier>(context, listen: false).id),
+        future: db.getAllCards(Provider.of<ReportNotifier>(context, listen: false).id),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -29,17 +29,34 @@ class _CardsListState extends State<CardsList> {
                   return ListTile(
                     title: Text(snapshot.data[i].name),
                     subtitle: Text(snapshot.data[i].area),
-                    leading: Icon(
-                        Icons.check_circle,
-                        color: snapshot.data[i].priority == 1
-                            ? Colors.lightGreen
-                            : snapshot.data[i].priority == 2
-                            ? Colors.orangeAccent
-                            : snapshot.data[i].priority == 3
-                            ? Colors.redAccent
-                            : snapshot.data[i].priority == 0
-                            ? Colors.grey
-                            : null
+                    leading: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                            Icons.filter_1_rounded,
+                            color: snapshot.data[i].priority == 1
+                                ? Colors.lightGreen
+                                : snapshot.data[i].priority == 2
+                                ? Colors.orangeAccent
+                                : snapshot.data[i].priority == 3
+                                ? Colors.redAccent
+                                : snapshot.data[i].priority == 0
+                                ? Colors.grey
+                                : null
+                        ),
+                        Icon(
+                            Icons.check_circle,
+                            color: snapshot.data[i].conclusion == 1
+                                ? Colors.lightGreen
+                                : snapshot.data[i].conclusion == 2
+                                ? Colors.orangeAccent
+                                : snapshot.data[i].conclusion == 3
+                                ? Colors.redAccent
+                                : snapshot.data[i].conclusion == 0
+                                ? Colors.grey
+                                : null
+                        )
+                      ],
                     ),
                     trailing: IconButton(
                         icon: Icon(Icons.delete),

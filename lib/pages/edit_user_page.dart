@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
-import 'package:rus_bur_service/widgets/forms/password_field.dart';
 import 'package:rus_bur_service/widgets/forms/text_form_field_edit_user.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../main.dart';
 import '../helpers/password_provider.dart';
@@ -22,8 +19,6 @@ class EditUser extends StatefulWidget {
 class _EditUserState extends State<EditUser> {
 
   final TextEditingController _inputUserLogin = TextEditingController();
-  final TextEditingController _inputUserPassword = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +51,6 @@ class _EditUserState extends State<EditUser> {
            final TextEditingController _inputUserFirstName = TextEditingController(text: snapshot.data.firstName);
            final TextEditingController _inputUserLastName = TextEditingController(text: snapshot.data.lastName);
            final TextEditingController _inputUserMiddleName = TextEditingController(text: snapshot.data.middleName);
-           final TextEditingController _inputPassword = TextEditingController();
            return Container(
              padding: EdgeInsets.all(20.0),
              child: Column(

@@ -1,19 +1,21 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
 import 'package:rus_bur_service/controller/picture_notifier.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
+import 'package:rus_bur_service/helpers/file_provider.dart';
 import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/pages/create_card_page.dart';
-import 'package:rus_bur_service/widgets/alert_dialog/take_card_picture_dialog.dart';
-import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/card_pictures_list.dart';
 
+import '../widgets/forms/app_text_form_field.dart';
 
-typedef void OnPickImageCallback (String name);
+
+typedef void OnPickImageCallback (String name, String desc);
 
 class CardPicturesPage extends StatefulWidget {
   const CardPicturesPage({Key? key}) : super(key: key);
@@ -26,19 +28,22 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
   ImagePicker _picker = ImagePicker();
 
   _onImageButtonPressed (ImageSource source, {BuildContext? context}) async {
-    await _displayPickImageDialog(context!, (name) async {
+    await _displayPickImageDialog(context!, (name, desc) async {
       final pickedFile = await _picker.pickImage(source: source);
       File temp = File(pickedFile!.path);
       List<int> bytes = await temp.readAsBytes();
       setState(() {
+        var _random = Random();
+        var _id = _random.nextInt(2147483645);
         AppPicture _picture = AppPicture(
-            id: 0,
+            id: _id,
             reportId: Provider.of<ReportNotifier>(context, listen: false).id,
             cardId: Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
             name: name,
-            //picture: bytes,
-            description: ''
+            description: desc,
+            pictureFileName: _id
         );
+        FileProvider().save(bytes, '$_id.jpg');
         db.insertPicture(_picture);
         imageCache!.clear();
       });
@@ -46,23 +51,66 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
   }
 
   _displayPickImageDialog (BuildContext context, OnPickImageCallback onPick) async {
+    final _formKey = GlobalKey<FormState>();
     return showDialog(
         context: context,
         builder: (context) {
+          context.read<PictureNotifier>().changePictureDescription('');
+          context.read<PictureNotifier>().changeAddPhotoName('');
           return AlertDialog(
-              title: Text('Выберите название фото'),
+              title: Text('Введите название и описание фото', textAlign: TextAlign.center,),
               content: Container(
-                height: 400,
+                height: 250,
                 width: 350,
-                child: ListView(
-                  children: [
-                    TakingCardPictureAlert(),
-                    ElevatedButton(
-                        onPressed: () {
-                          onPick(Provider.of<PictureNotifier>(context, listen: false).addPhotoName);
-                        },
-                        child: Text('Сделать фото'))
-                  ],
+                child: SingleChildScrollView(
+                  reverse: true,
+                  child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          AppTextFormFieldWithoutIcon(
+                              helperText: '',
+                              onChanged: (String value) {
+                                context.read<PictureNotifier>().changeAddPhotoName(value);
+                              },
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Пожалуйста, заполните поле';
+                                }
+                              },
+                              label: 'Название фото'
+                          ),
+                          AppTextFormFieldWithoutIcon(
+                              helperText: '',
+                              onChanged: (String value) {
+                                context.read<PictureNotifier>().changePictureDescription(value);
+                              },
+                              validator: (String value) {
+
+                              },
+                              label: 'Описание фото'
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  onPick(
+                                      Provider.of<PictureNotifier>(context, listen: false).addPhotoName,
+                                      Provider.of<PictureNotifier>(context, listen: false).pictureDescription
+                                  );
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Text('Сделать фото')
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Отмена')
+                          )
+                        ],
+                      )
+                  ),
                 ),
               )
           );
@@ -78,8 +126,18 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Фотографии'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CreateCardPage()
+                )
+            );
+          },
+        ),
       ),
-      drawer: ReportDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -120,7 +178,6 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
             label: 'image_picker_example_from_gallery',
             child: FloatingActionButton(
               onPressed: () {
-                context.read<PictureNotifier>().changePhotoName(PhotoName.generalView);
                 _onImageButtonPressed(ImageSource.gallery, context: context);
               },
               heroTag: 'image0',
@@ -132,7 +189,6 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
             padding: const EdgeInsets.only(top: 16.0),
             child: FloatingActionButton(
               onPressed: () {
-                context.read<PictureNotifier>().changePhotoName(PhotoName.generalView);
                 _onImageButtonPressed(ImageSource.camera, context: context);
               },
               heroTag: 'image1',

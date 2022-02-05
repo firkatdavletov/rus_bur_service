@@ -79,7 +79,9 @@ class _TakingPictureAlertState extends State<TakingPictureAlert> {
                   context.read<PictureNotifier>().changeAddPhotoName(value);
                 },
                 validator: (String value) {
-
+                  if (value.isEmpty) {
+                    return 'Пожалуйста, заполните поле';
+                  }
                 },
                 icon: Icon(Icons.text_format), //Icon(Icons.light, color: Colors.brown,),
                 label: 'Название фото'

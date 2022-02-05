@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:rus_bur_service/pages/email_message_settings_page.dart';
 import 'package:rus_bur_service/pages/parts_settings_page.dart';
 import 'package:rus_bur_service/pages/picture_settings_page.dart';
@@ -102,13 +101,6 @@ class _SettingsPageState extends State<SettingsPage> {
                               onPressed: () async {
                                 await deleteDatabase(join(await getDatabasesPath(), 'rb_service_database.db'));
                                 PasswordProvider().deleteAllPasswords();
-                                Restart.restartApp();
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => MyApp()
-                                //     )
-                                // );
                               },
                               child: Text('Удалить')
                           ),

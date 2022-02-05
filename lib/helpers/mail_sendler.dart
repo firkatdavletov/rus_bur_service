@@ -2,9 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:rus_bur_service/api/google_sign_in_api.dart';
+import 'package:rus_bur_service/models/report.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -15,33 +14,18 @@ class MailSender {
     required this.context
   });
 
-  Future<void> sendMail(String fileName, int reportId) async {
+  Future<bool> sendMail(File file, Report report) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? path;
-
-    final Directory directory = await getApplicationSupportDirectory();
-    path = directory.path;
-
-    // File _file = File('$path/$fileName');
-    // print('file size: ${_file.lengthSync()}');
-    //
-    // var _images = await db.getPicture(reportId, 0);
-    // File _photo = File('$path/photo.jpg');
-    // _photo.writeAsBytes(_images[0].picture);
-
-    GoogleAuthApi.signOut();
-    // print('Google sign out');
 
     final user = await GoogleAuthApi.signIn();
 
     if (user == null) {
-      print('User is null, sending is stopped');
-      showSnackBar('User is null, sending is stopped');
-      return;
+      showSnackBar('Ошибка авторизации');
+      GoogleAuthApi.signOut();
+      return false;
     }
 
-    final mailAddress = 'serviceavailable.test@gmail.com';
+    const mailAddress = 'serviceavailable.test@gmail.com';
     final auth = await user.authentication;
     final token = auth.accessToken!;
 
@@ -50,26 +34,33 @@ class MailSender {
     final smtpServer = gmailSaslXoauth2(mailAddress, token);
 
     final message = Message()
-      ..from = Address(mailAddress, 'Firkat')
+      ..from = Address(mailAddress, 'ООО "РусБурСервис"')
       ..recipients = [prefs.getString('recipients')]
-      ..subject = prefs.getString('subject')
+      ..subject = 'Отчет по результатам диагностики бурового станка №${report.name} от ${report.date}'
       //..text = prefs.getString('text')
       ..html = '''
-      <h1>Test</h1>
-      <p>This is a test email</p>
-      <img src="cid:app"/>
+        <h2 align="center">ОТЧЕТ ПО РЕЗУЛЬТАТАМ</h2>
+        <h2 align="center">ДИАГНОСТИКИ БУРОВОГО СТАНКА</h2>
+        <h2 align="center">${report.name}</h2>
+        <p>Модель машины: ${report.machineModel}</p>
+        <p>Год выпуска машины: ${report.machineYear}</p>
+        <p>Место проведения: ${report.place}</p>
+        <p>Дата проведения: ${report.date}</p>
+        <img src="cid:app"/>
       '''
       ..attachments = [
-        FileAttachment(File('$path/$fileName'))
+        FileAttachment(file)
         ..location = Location.attachment
       ];
 
     try {
-      showSnackBar('Sending message...');
+      showSnackBar('Отправка отчета...');
       await send(message, smtpServer);
-      showSnackBar('Sent email successfully!');
+      showSnackBar('Отчет отправлен успешно!');
+      return true;
     } on MailerException catch (e) {
-      print(e);
+      showSnackBar('$e');
+      return false;
     }
   }
 

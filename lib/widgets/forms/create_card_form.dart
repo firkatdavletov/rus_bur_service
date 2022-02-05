@@ -81,6 +81,55 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
+                          child: Text('ПРИОРИТЕТ :'),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          child: DropdownButton<String>(
+                            value: _dropdownPriorityValue,
+                            items: _priority.map((String value) {
+                              return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                context.read<DiagnosticCardsNotifier>().changePriority(
+                                    newValue == 'РЕКОМЕНДУЕТСЯ'
+                                        ? 1
+                                        : newValue == 'ПЛАНОВО'
+                                        ? 2
+                                        : newValue == 'СРОЧНО'
+                                        ? 3
+                                        : 0
+                                );
+                              });
+                            },
+                          ),
+                        ),
+                        Icon(
+                            Icons.filter_1_rounded,
+                            color: _priorityState == 1
+                                ? Colors.lightGreen
+                                : _priorityState == 2
+                                ? Colors.orangeAccent
+                                : _priorityState == 3
+                                ? Colors.redAccent
+                                : _priorityState == 0
+                                ? Colors.grey
+                                : null
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
                           child: Text('ЗАКЛЮЧЕНИЕ :'),
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                         ),
@@ -105,6 +154,11 @@ class _CreateCardFormState extends State<CreateCardForm> {
                                         ? 3
                                         : 0
                                 );
+                                if (newValue == 'УСПЕШНО') {
+                                  context.read<DiagnosticCardsNotifier>().changeDescription('');
+                                  context.read<DiagnosticCardsNotifier>().changeArea('');
+                                  context.read<DiagnosticCardsNotifier>().changeDamage('');
+                                }
                               });
                             },
                           ),
@@ -140,91 +194,72 @@ class _CreateCardFormState extends State<CreateCardForm> {
                         ),
                       )
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).area,
-                      onSaved: (value) {
-                        context.read<DiagnosticCardsNotifier>().changeArea(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.format_quote_sharp),
-                      label: 'Зона выявления дефекта',
-                      helperText: '',
-                    ),
+                  Visibility(
+                      visible: _conclusionState != 1,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInit(
+                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).area,
+                          onSaved: (value) {
+                            context.read<DiagnosticCardsNotifier>().changeArea(value);
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.format_quote_sharp),
+                          label: 'Зона выявления дефекта',
+                          helperText: '',
+                        ),
+                      )
+                  ),
+                  Visibility(
+                      visible: _conclusionState != 1,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppDropDownFormField(
+                          itemsVisible: 5,
+                          items: [
+                            'Износ', 'Отсутствие', 'Плановая замена', 'Модернизация', 'Несоответствие'
+                          ],
+                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).damage,
+                          onSaved: (value) {
+                            context.read<DiagnosticCardsNotifier>().changeDamage(value);
+                          },
+                          icon: Icon(Icons.car_repair),
+                          label: 'Повреждения',
+                        ),
+                      )
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).damage,
-                      onSaved: (value) {
-                        context.read<DiagnosticCardsNotifier>().changeDamage(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.car_repair),
-                      label: 'Повреждения',
-                      helperText: '',
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Text('ПРИОРИТЕТ :'),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                          child: DropdownButton<String>(
-                            value: _dropdownPriorityValue,
-                            items: _priority.map((String value) {
-                              return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value)
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                context.read<DiagnosticCardsNotifier>().changePriority(
-                                    newValue == 'РЕКОМЕНДУЕТСЯ'
-                                        ? 1
-                                        : newValue == 'ПЛАНОВО'
-                                        ? 2
-                                        : newValue == 'СРОЧНО'
-                                        ? 3
-                                        : 0
-                                );
-                              });
-                            },
-                          ),
-                        ),
-                        Icon(
-                            Icons.check_circle,
-                            color: _priorityState == 1
-                                ? Colors.lightGreen
-                                : _priorityState == 2
-                                ? Colors.orangeAccent
-                                : _priorityState == 3
-                                ? Colors.redAccent
-                                : _priorityState == 0
-                                ? Colors.grey
-                                : null
-                        )
+                    child: AppDropDownFormField(
+                      itemsVisible: 5,
+                      items: [
+                        'Замена', 'Ремонт', 'Установка', 'Диагностика', 'Очистка'
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
+                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).recommend,
                       onSaved: (value) {
                         context.read<DiagnosticCardsNotifier>().changeRecommend(value);
                       },
-                      validator: _validate,
-                      icon: Icon(Icons.recommend),
-                      label: 'Рекомендации',
+                      icon: Icon(Icons.car_repair),
+                      label: 'Рекомендуемое решение',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppDropDownFormField(
+                      itemsVisible: 5,
+                      items: [
+                        'Снижение расходов',
+                        'Безопасность работников',
+                        'Профилактическое обслуживание',
+                        'Сокращение времени простоя',
+                        'Безопасность оборудования'
+                      ],
                       initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).recommend,
-                      helperText: '',
+                      onSaved: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeRecommend(value);
+                      },
+                      icon: Icon(Icons.car_repair),
+                      label: 'Риски, положительный эффект',
                     ),
                   ),
                   Padding(
@@ -237,19 +272,6 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       icon: Icon(Icons.watch),
                       label: 'Время устранения',
                       initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).time,
-                      helperText: '',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      onSaved: (value) {
-                        context.read<DiagnosticCardsNotifier>().changeEffect(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.east_rounded),
-                      label: 'Эффект',
-                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).effect,
                       helperText: '',
                     ),
                   ),
