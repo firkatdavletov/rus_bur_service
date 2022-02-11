@@ -4,7 +4,6 @@ import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
-import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
 import 'package:rus_bur_service/widgets/forms/password_field.dart';

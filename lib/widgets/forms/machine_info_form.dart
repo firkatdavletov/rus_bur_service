@@ -104,12 +104,12 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFormFieldWithInitSuffix(
                       onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_1(value);
+                        context.read<ReportNotifier>().changeOpTime_1(int.parse(value));
                       },
                       validator: _validate,
                       icon: Icon(Icons.arrow_right),
                       label: 'Наработка (м/ч)',
-                      initialValue: context.watch<ReportNotifier>().opTime_1,
+                      initialValue: context.watch<ReportNotifier>().opTime_1.toString(),
                       helperText: '',
                       suffixText: 'м/ч',
                     ),
@@ -118,12 +118,12 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFormFieldWithInitSuffix(
                       onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_2(value);
+                        context.read<ReportNotifier>().changeOpTime_2(int.parse(value));
                       },
                       validator: _validate,
                       icon: Icon(Icons.arrow_right),
                       label: 'Наработка (уд/ч)',
-                      initialValue: context.watch<ReportNotifier>().opTime_2,
+                      initialValue: context.watch<ReportNotifier>().opTime_2.toString(),
                       helperText: '',
                       suffixText: 'уд/ч',
                     ),
@@ -132,12 +132,26 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFormFieldWithInitSuffix(
                       onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_3(value);
+                        context.read<ReportNotifier>().changeOpTime_3(int.parse(value));
                       },
                       validator: _validate,
                       icon: Icon(Icons.arrow_right),
                       label: 'Наработка (пог.м)',
-                      initialValue: context.watch<ReportNotifier>().opTime_3,
+                      initialValue: context.watch<ReportNotifier>().opTime_3.toString(),
+                      helperText: '',
+                      suffixText: 'пог.м',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInitSuffix(
+                      onSaved: (value) {
+                        context.read<ReportNotifier>().changeOpTime_4(int.parse(value));
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.arrow_right),
+                      label: 'Гусеничный движитель',
+                      initialValue: context.watch<ReportNotifier>().opTime_4.toString(),
                       helperText: '',
                       suffixText: 'пог.м',
                     ),

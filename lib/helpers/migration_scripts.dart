@@ -15,9 +15,10 @@ const migrationScripts = [
     report_note TEXT,
     engine_model TEXT,
     engine_sn TEXT,
-    engine_optime_1 TEXT,
-    engine_optime_2 TEXT,
-    engine_optime_3 TEXT
+    engine_optime_1 INTEGER,
+    engine_optime_2 INTEGER,
+    engine_optime_3 INTEGER,
+    engine_optime_4 INTEGER
   )''',
   '''CREATE TABLE users(
     user_id INTEGER PRIMARY KEY,
@@ -58,9 +59,13 @@ const migrationScripts = [
     damage TEXT,
     priority INTEGER NOT NULL,
     recommend TEXT,
-    time TEXT,
     effect TEXT,
-    man_hours INTEGER
+    term_week INTEGER,
+    term_mh INTEGER,
+    term_bh INTEGER,
+    term_m INTEGER,
+    man_hours INTEGER,
+    status INTEGER NOT NULL
   )''',
   '''CREATE TABLE pictures(
     picture_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -193,7 +198,8 @@ const migrationScripts = [
     engine_sn,
     engine_optime_1,
     engine_optime_2,
-    engine_optime_3
+    engine_optime_3,
+    engine_optime_4
   ) VALUES (
     1,
     "1-1",
@@ -211,7 +217,8 @@ const migrationScripts = [
     "45675-6",
     "23",
     "6",
-    "0" 
+    "0",
+    "1" 
   )''',
   '''INSERT INTO reports (
     user_id,
@@ -230,7 +237,8 @@ const migrationScripts = [
     engine_sn,
     engine_optime_1,
     engine_optime_2,
-    engine_optime_3
+    engine_optime_3,
+    engine_optime_4
   ) VALUES (
     1,
     "1-2",
@@ -248,7 +256,8 @@ const migrationScripts = [
     "45235-6",
     "0",
     "356",
-    "2" 
+    "2",
+    "1" 
   )''',
   '''INSERT INTO reports (
     user_id,
@@ -267,7 +276,8 @@ const migrationScripts = [
     engine_sn,
     engine_optime_1,
     engine_optime_2,
-    engine_optime_3
+    engine_optime_3,
+    engine_optime_4
   ) VALUES (
     1,
     "1-3",
@@ -285,7 +295,8 @@ const migrationScripts = [
     "45335-6",
     "45",
     "3",
-    "2" 
+    "2",
+    "1" 
   )''',
   '''INSERT INTO agreed_parts (
     report_id,
@@ -347,9 +358,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "1-2-3",
       "card name",
@@ -361,9 +376,13 @@ const migrationScripts = [
       "Повреждения",
       1,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -376,9 +395,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "1-2-4",
       "card name",
@@ -390,9 +413,13 @@ const migrationScripts = [
       "Повреждения",
       2,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -405,9 +432,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "1-3-5",
       "card name",
@@ -419,9 +450,13 @@ const migrationScripts = [
       "Повреждения",
       3,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -434,9 +469,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "1-3-6",
       "card name",
@@ -448,9 +487,13 @@ const migrationScripts = [
       "Повреждения",
       1,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -463,9 +506,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "1-4-7",
       "card name",
@@ -477,9 +524,13 @@ const migrationScripts = [
       "Повреждения",
       2,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -492,9 +543,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "2-4-7",
       "card name",
@@ -506,9 +561,13 @@ const migrationScripts = [
       "Повреждения",
       2,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -521,9 +580,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "2-1-1",
       "card name",
@@ -535,9 +598,13 @@ const migrationScripts = [
       "Повреждения",
       3,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -550,9 +617,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "2-1-2",
       "card name",
@@ -564,9 +635,13 @@ const migrationScripts = [
       "Повреждения",
       2,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -579,9 +654,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "3-1-1",
       "card name",
@@ -593,9 +672,13 @@ const migrationScripts = [
       "Повреждения",
       1,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -608,9 +691,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "3-1-2",
       "card name",
@@ -622,9 +709,13 @@ const migrationScripts = [
       "Повреждения",
       2,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO cards(
       card_id,
@@ -637,9 +728,13 @@ const migrationScripts = [
       damage,
       priority,
       recommend,
-      time,
       effect,
-      man_hours
+      man_hours,
+      term_week,
+      term_mh,
+      term_bh,
+      term_m,
+      status
     ) VALUES (
       "3-5-8",
       "card name",
@@ -651,9 +746,13 @@ const migrationScripts = [
       "Повреждения",
       3,
       "Рекомендации",
-      "5ч",
       "Положительный эффект",
-      4
+      4,
+      1,
+      2,
+      3,
+      4,
+      0
     )''',
   '''INSERT INTO spares(
       spare_number,

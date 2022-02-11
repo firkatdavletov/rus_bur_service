@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../models/report.dart';
+
 class ReportNotifier with ChangeNotifier{
   int _id = 0;
   int _userId = 0;
@@ -15,9 +17,10 @@ class ReportNotifier with ChangeNotifier{
   String _machineYear = '';
   String _engineModel = '';
   String _engineNumb = '';
-  String _opTime_1 = '';
-  String _opTime_2 = '';
-  String _opTime_3 = '';
+  int _opTime_1 = 0;
+  int _opTime_2 = 0;
+  int _opTime_3 = 0;
+  int _opTime_4 = 0;
   String _note = '';
 
   bool _isNewReport = false;
@@ -36,9 +39,10 @@ class ReportNotifier with ChangeNotifier{
   String get machineYear => _machineYear;
   String get engineModel => _engineModel;
   String get engineNumb => _engineNumb;
-  String get opTime_1 => _opTime_1;
-  String get opTime_2 => _opTime_2;
-  String get opTime_3 => _opTime_3;
+  int get opTime_1 => _opTime_1;
+  int get opTime_2 => _opTime_2;
+  int get opTime_3 => _opTime_3;
+  int get opTime_4 => _opTime_4;
   String get note => _note;
 
   bool get isNewReport => _isNewReport;
@@ -111,6 +115,10 @@ class ReportNotifier with ChangeNotifier{
     _opTime_3 = textController;
     notifyListeners();
   }
+  void changeOpTime_4(textController) {
+    _opTime_4 = textController;
+    notifyListeners();
+  }
   void changeNote(textController) {
     _note = textController;
     notifyListeners();
@@ -121,9 +129,56 @@ class ReportNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  reset() {
+    DateTime now = DateTime.now();
+
+    //changeUserId(0);
+    //changeReportId(0);
+    changeName('');
+    changeDate('${now.day}/${now.month}/${now.year}');
+    changeCompany('');
+    changePlace('');
+    //changeCustomerName('');
+    changeCustomerPhone('');
+    changeCustomerEmail('');
+    changeMachineModel('');
+    changeMachineNumb('');
+    changeMachineYear('');
+    changeEngineModel('');
+    changeEngineNumb('');
+    changeOpTime_1(0);
+    changeOpTime_2(0);
+    changeOpTime_3(0);
+    changeOpTime_4(0);
+    changeNote('');
+    changeReportState(true);
+  }
+
+  set(Report report) {
+    changeReportState(false);
+    changeName(report.name);
+    changeReportId(report.id);
+    changeUserId(report.userId);
+    changeCompany(report.company);
+    changeDate(report.date);
+    changePlace(report.place);
+    changeCustomerName(report.customerName);
+    changeCustomerPhone(report.customerPhone);
+    changeCustomerEmail(report.customerEmail);
+    changeMachineModel(report.machineModel);
+    changeMachineNumb(report.machineNumb);
+    changeMachineYear(report.machineYear);
+    changeEngineModel(report.engineModel);
+    changeEngineNumb(report.engineNumb);
+    changeOpTime_1(report.opTime_1);
+    changeOpTime_2(report.opTime_2);
+    changeOpTime_3(report.opTime_3);
+    changeNote(report.note);
+  }
+
   Map<String, dynamic> toMap() {
     return {
-      'report_id' : id,
+      //'report_id' : id,
       'user_id' : userId,
       'report_name' : name,
       'report_date' : date,
@@ -140,7 +195,8 @@ class ReportNotifier with ChangeNotifier{
       'engine_sn' : engineNumb,
       'engine_optime_1' : opTime_1,
       'engine_optime_2' : opTime_2,
-      'engine_optime_3' : opTime_3
+      'engine_optime_3' : opTime_3,
+      'engine_optime_4' : opTime_4
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +61,7 @@ class _PicturesPageState extends State<PicturesPage> {
           return AlertDialog(
             title: Text('Выберите название фото'),
             content: Container(
-              height: 530,
+              height: 450,
               width: 350,
               child: SingleChildScrollView(
                 reverse: true,
@@ -95,13 +96,33 @@ class _PicturesPageState extends State<PicturesPage> {
                               Navigator.pop(context);
                             }
                           },
-                          child: Text('Сделать фото')
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_a_photo_outlined),
+                              SizedBox(width: 10.0),
+                              Text('Сделать фото')
+                            ],
+                          ),
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(Size(200.0, 38.7))
+                          ),
                       ),
-                      ElevatedButton(
+                      OutlinedButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('Отмена')
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.cancel_outlined),
+                              SizedBox(width: 10.0),
+                              Text('Отмена')
+                            ],
+                          ),
+                        style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(Size(200.0, 38.7))
+                        ),
                       )
                     ],
                   ),
@@ -223,6 +244,7 @@ class _RadioListState extends State<RadioList> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RadioListTile<PhotoName>(
             title: Text('Главный вид'),

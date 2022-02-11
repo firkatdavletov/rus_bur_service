@@ -118,7 +118,16 @@ class _ReportListViewState extends State<ReportListView> {
             child: Text('Ошибка получения данных'),
           );
         } else {
-          return Text('Получение данных ');
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 10.0,),
+                Text('Составляю список отчетов... ')
+              ],
+            ),
+          );
         }
       },
     );

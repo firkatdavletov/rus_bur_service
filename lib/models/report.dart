@@ -13,9 +13,10 @@ class Report {
   final String machineYear;
   final String engineModel;
   final String engineNumb;
-  final String opTime_1;
-  final String opTime_2;
-  final String opTime_3;
+  final int opTime_1;
+  final int opTime_2;
+  final int opTime_3;
+  final int opTime_4;
   final String note;
 
   Report({
@@ -36,6 +37,7 @@ class Report {
     required this.opTime_1,
     required this.opTime_2,
     required this.opTime_3,
+    required this.opTime_4,
     required this.note
   });
 

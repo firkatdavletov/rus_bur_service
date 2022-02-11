@@ -96,16 +96,20 @@ class _PartsListState extends State<PartsList> {
                                       name: op.name,
                                       operationId: op.id,
                                       reportId: _reportId,
-                                      conclusion: 0,
+                                      conclusion: 1,
                                       description: '',
                                       area: '',
                                       damage: '',
-                                      priority: 0,
+                                      priority: 1,
                                       recommend: '',
-                                      time: '',
+                                      termWeek: 0,
+                                      term_bh: 0,
+                                      term_m: 0,
+                                      term_mh: 0,
                                       effect: '',
                                       manHours: 0,
-                                      part: p.name
+                                      part: p.name,
+                                      status: 0
                                   );
                                   db.insertCard(_card);
                                 }

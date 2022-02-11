@@ -9,14 +9,18 @@ import 'package:rus_bur_service/models/part.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rus_bur_service/models/spare.dart';
+import 'package:rus_bur_service/models/status.dart';
 import 'package:rus_bur_service/models/user.dart';
 import '../main.dart';
 
 
 
 class PdfProvider {
-  Future<File> generate(Report report, User user) async {
-    print('PdfProvider is started');
+
+  Future<bool> generate(Report report, User user) async {
+    if (report.machineModel.isEmpty || report.machineModel.length < 1) {
+      return false;
+    }
     final _dataFont = await rootBundle.load("assets/fonts/font.ttf");
     final _myFont = Font.ttf(_dataFont);
     final TextStyle titleStyle = TextStyle(
@@ -122,7 +126,6 @@ class PdfProvider {
         Text('${item.description}', style: tableStyle)
       ]
     )).toList();
-
     if (_pictureWidgets.length != 0) {
       pdf.addPage(MultiPage(
           pageFormat: PdfPageFormat.a4,
@@ -134,9 +137,13 @@ class PdfProvider {
     }
 
     final List<DiagnosticCard> _importantCards = await db.getCards(report.id, 3);
+    print('flag');
     final _importantCardsList = _importantCards.map((item) {
+      String _name;
+      int i = item.id.indexOf('-');
+      _name = item.id.substring(i+1);
       return [
-        '${item.id}',
+        '$_name',
         '${item.part.replaceAll('ё', 'е')}',
         '${item.description.replaceAll('ё', 'е')}',
         '${item.recommend.replaceAll('ё', 'е')}',
@@ -146,8 +153,11 @@ class PdfProvider {
     }).toList();
     final List<DiagnosticCard> _plannedCards = await db.getCards(report.id, 2);
     final _plannedCardsList = _plannedCards.map((item) {
+      String _name;
+      int i = item.id.indexOf('-');
+      _name = item.id.substring(i+1);
       return [
-        '${item.id}',
+        '$_name',
         '${item.part.replaceAll('ё', 'е')}',
         '${item.description.replaceAll('ё', 'е')}',
         '${item.recommend.replaceAll('ё', 'е')}',
@@ -157,8 +167,11 @@ class PdfProvider {
     }).toList();
     final List<DiagnosticCard> _recommendCards = await db.getCards(report.id, 1);
     final _recommendCardsList = _recommendCards.map((item) {
+      String _name;
+      int i = item.id.indexOf('-');
+      _name = item.id.substring(i+1);
       return [
-        '${item.id}',
+        '$_name',
         '${item.part.replaceAll('ё', 'е')}',
         '${item.description.replaceAll('ё', 'е')}',
         '${item.recommend.replaceAll('ё', 'е')}',
@@ -191,8 +204,11 @@ class PdfProvider {
 
     final List<Spare> _importantSpares = await db.getSparesReport(report.id, 3);
     final _importantSparesList = _importantSpares.map((item) {
+      String _name;
+      int i = item.cardId.indexOf('-');
+      _name = item.cardId.substring(i+1);
       return [
-        '${item.cardId}',
+        '$_name',
         '${item.number}',
         '${item.name.replaceAll('ё', 'е')}',
         '${item.quantity}',
@@ -203,8 +219,11 @@ class PdfProvider {
     }).toList();
     final List<Spare> _plannedSpares = await db.getSparesReport(report.id, 2);
     final _plannedSparesList = _plannedSpares.map((item) {
+      String _name;
+      int i = item.cardId.indexOf('-');
+      _name = item.cardId.substring(i+1);
       return [
-        '${item.cardId}',
+        '$_name',
         '${item.number}',
         '${item.name.replaceAll('ё', 'е')}',
         '${item.quantity}',
@@ -215,8 +234,11 @@ class PdfProvider {
     }).toList();
     final List<Spare> _recommendSpares = await db.getSparesReport(report.id, 1);
     final _recommendSparesList = _recommendSpares.map((item) {
+      String _name;
+      int i = item.cardId.indexOf('-');
+      _name = item.cardId.substring(i+1);
       return [
-        '${item.cardId}',
+        '$_name',
         '${item.number}',
         '${item.name.replaceAll('ё', 'е')}',
         '${item.quantity}',
@@ -250,10 +272,13 @@ class PdfProvider {
     print('PDF provider: page 6 is created');
     final List<DiagnosticCard> allCards = await db.getAllCards(report.id);
     for (DiagnosticCard dc in allCards) {
+      String _name;
+      int i = dc.id.indexOf('-');
+      _name = dc.id.substring(i+1);
       final _cardImages = await db.getPicture(report.id, dc.id);
       final _cardPicturesWidgets = _cardImages.map((item) => Column(
           children: [
-            Text('${item.name}', style: tableStyle),
+            Text('$_name', style: tableStyle),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
             Image(
               MemoryImage(File('$path/${item.pictureFileName}.jpg').readAsBytesSync()),
@@ -268,7 +293,7 @@ class PdfProvider {
           build: (context) => [
             buildLogo(buffer.asUint8List(), 50.0),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
-            buildTitlePage('ДИАГНОСТИЧЕСКАЯ КАРТА ${dc.id}', styles[0]),
+            buildTitlePage('ДИАГНОСТИЧЕСКАЯ КАРТА $_name', styles[0]),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
             buildTable5(dc, tableStyle),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
@@ -282,8 +307,9 @@ class PdfProvider {
       print('PDF provider: page 7 is created');
     }
     print('PDF provider: start save pdf');
-    final File _file = await FileProvider().savePdf(name: ' Отчет ${report.name}.pdf', pdf: pdf);
-    return _file;
+    FileProvider().savePdf(name: 'report_pdf.pdf', pdf: pdf);
+    print('PDF Provider: pdf is created');
+    return true;
   }
 
   static Widget buildLogo(Uint8List bytes, double height) => Row(
@@ -303,30 +329,33 @@ class PdfProvider {
       ]
   );
 
-  static Widget buildTitle(Report report, TextStyle style) => Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text(
-          'ОТЧЕТ ПО РЕЗУЛЬТАТАМ',
-          style: style,
-      ),
-      SizedBox(height: 0.2 * PdfPageFormat.cm),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+  static Widget buildTitle(Report report, TextStyle style) {
+    return Column(
+
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-              'ДИАГНОСТИКИ БУРОВОГО СТАНКА',
+            'ОТЧЕТ ПО РЕЗУЛЬТАТАМ',
+            style: style,
+          ),
+          SizedBox(height: 0.2 * PdfPageFormat.cm),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    'ДИАГНОСТИКИ БУРОВОГО СТАНКА',
+                    style: style
+                )
+              ]
+          ),
+          SizedBox(height: 0.2 * PdfPageFormat.cm),
+          Text(
+              '${report.name}',
               style: style
           )
         ]
-      ),
-      SizedBox(height: 0.2 * PdfPageFormat.cm),
-      Text(
-          '${report.name}',
-          style: style
-      )
-    ]
-  );
+    );
+  }
 
   static Widget buildSubtitle(Report report, User user, List<TextStyle> styles) => Column(
     children: [
@@ -382,9 +411,10 @@ class PdfProvider {
       ['Год выпуска', '${report.machineYear}'],
       ['Модель двигателя', '${report.engineModel.replaceAll('ё', 'е')}'],
       ['Серийный номер\nдвигателя', '${report.engineNumb}'],
-      ['Наработка', '${report.opTime_1} м/ч\n'
-          '${report.opTime_2} уд/ч\n'
-          '${report.opTime_3} пог.м'],
+      ['Наработка двигателя', '${report.opTime_1} м/ч'],
+      ['Наработка редуктора', '${report.opTime_2} уд/ч'],
+      ['Наработка в погоных метрах', '${report.opTime_3} пог.м'],
+      ['Наработка гусеничного движителя', '${report.opTime_4} м/ч'],
       ['Примечание', '${report.note.replaceAll('ё', 'е')}']
     ]
   );
@@ -471,6 +501,7 @@ class PdfProvider {
       data: data
   );
   static buildTable5(DiagnosticCard dc, TextStyle cellStyle) {
+    Status status = Status();
     BoxDecoration _dec(int i, dynamic data, int j) {
       if (i == 0) {
         return BoxDecoration(color: PdfColors.grey300);
@@ -478,6 +509,83 @@ class PdfProvider {
         return BoxDecoration();
       }
 
+    }
+    int i = 1;
+    String damage = '';
+    if (dc.status&status.status1 == status.status1) {
+      damage += '$i) Износ\n';
+      i++;
+    }
+    if (dc.status&status.status2 == status.status2) {
+      damage += '$i) Отсутствие\n';
+      i++;
+    }
+    if (dc.status&status.status3 == status.status3) {
+      damage += '$i) Плановая замена\n';
+      i++;
+    }
+    if (dc.status&status.status4 == status.status4) {
+      damage += '$i) Модернизация\n';
+      i++;
+    }
+    if (dc.status&status.status5 == status.status5) {
+      damage += '$i) Несоответствие\n';
+      i++;
+    }
+    damage += '$i) ${dc.damage.replaceAll('ё', 'е')}';
+    String recommend = '';
+    i = 1;
+    if (dc.status&status.status6 == status.status6) {
+      recommend += '$i) Замена\n';
+      i++;
+    }
+    if (dc.status&status.status7 == status.status7) {
+      recommend += '$i) Ремонт\n';
+      i++;
+    }
+    if (dc.status&status.status8 == status.status8) {
+      recommend += '$i) Установка\n';
+      i++;
+    }
+    if (dc.status&status.status9 == status.status9) {
+      recommend += '$i) Диагностика\n';
+      i++;
+    }
+    if (dc.status&status.status10 == status.status10) {
+      recommend += '$i) Очистка\n';
+      i++;
+    }
+    recommend += '$i) ${dc.recommend.replaceAll('ё', 'е')}';
+    String effect = '';
+    i = 1;
+    if (dc.status&status.status11 == status.status11) {
+      effect += '$i) Замена\n';
+      i++;
+    }
+    if (dc.status&status.status12 == status.status12) {
+      effect += '$i) Ремонт\n';
+      i++;
+    }
+    if (dc.status&status.status13 == status.status13) {
+      effect += '$i) Установка\n';
+      i++;
+    }
+    if (dc.status&status.status14 == status.status14) {
+      effect += '$i) Диагностика\n';
+      i++;
+    }
+    if (dc.status&status.status15 == status.status15) {
+      effect += '$i) Очистка\n';
+      i++;
+    }
+    effect += '$i) ${dc.effect.replaceAll('ё', 'е')}';
+    String _prefix;
+    if (dc.termWeek%10 == 1) {
+      _prefix = 'я';
+    } else if(dc.termWeek > 1 && dc.termWeek < 5) {
+      _prefix = 'и';
+    } else {
+      _prefix = 'ь';
     }
     return Table.fromTextArray(
         cellStyle: cellStyle,
@@ -496,18 +604,18 @@ class PdfProvider {
               : dc.conclusion == 2
               ? 'ВНИМАНИЕ'
               : 'НЕУДАЧА'],
-          ['Описание проблемы', '${dc.description.replaceAll('ё', 'е')}'],
+          dc.conclusion != 1? ['Описание проблемы', '${dc.description.replaceAll('ё', 'е')}']: [],
           ['Узел/система', '${dc.part.replaceAll('ё', 'е')}'],
-          ['Зона выявления дефекта', '${dc.area.replaceAll('ё', 'е')}'],
-          ['Вид повреждения', '${dc.damage.replaceAll('ё', 'е')}'],
+          dc.conclusion != 1? ['Зона выявления дефекта', '${dc.area.replaceAll('ё', 'е')}']: [],
+          dc.conclusion != 1? ['Вид повреждения', damage]: [],
           ['Приоритетность решения выявленной проблемы', dc.priority == 1
               ? 'РЕКОМЕНДУЕТСЯ'
               : dc.conclusion == 2
               ? 'ПЛАНОВО'
               : 'СРОЧНО'],
-          ['Рекомендуемое решение', '${dc.recommend.replaceAll('ё', 'е')}'],
-          ['Срок на реализацию', '${dc.time}'],
-          ['Риски, положительный эффект', '${dc.effect.replaceAll('ё', 'е')}'],
+          ['Рекомендуемое решение', recommend],
+          ['Срок на реализацию', '${dc.termWeek} недел$_prefix\n${dc.term_mh} м/ч\n${dc.term_bh} уд./ч\n${dc.term_m} м'],
+          ['Риски, положительный эффект', effect],
           ['Кол-во чел/ч на ремонт (планово)', '${dc.manHours}']
         ]
     );

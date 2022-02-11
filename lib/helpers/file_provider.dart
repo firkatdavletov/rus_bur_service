@@ -22,7 +22,6 @@ class FileProvider {
     final file = File('$path/$name');
 
     file.writeAsBytesSync(bytes);
-    print('FileProvider: pdf is created');
     return file;
   }
 

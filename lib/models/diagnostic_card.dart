@@ -10,9 +10,13 @@ class DiagnosticCard {
   final String damage;
   final int priority;
   final String recommend;
-  final String time;
+  final int termWeek;
+  final int term_mh;
+  final int term_bh;
+  final int term_m;
   final String effect;
   final int manHours;
+  final int status;
 
   DiagnosticCard({
     required this.id,
@@ -26,9 +30,13 @@ class DiagnosticCard {
     required this.damage,
     required this.priority,
     required this.recommend,
-    required this.time,
+    required this.termWeek,
+    required this.term_mh,
+    required this.term_bh,
+    required this.term_m,
     required this.effect,
-    required this.manHours
+    required this.manHours,
+    required this.status
   });
 
   Map<String, dynamic> toMap() {
@@ -44,13 +52,34 @@ class DiagnosticCard {
       'damage' : damage,
       'priority' : priority,
       'recommend' : recommend,
-      'time' : time,
+      'term_week' : termWeek,
+      'term_mh' : term_mh,
+      'term_bh' : term_bh,
+      'term_m' : term_m,
       'effect' : effect,
-      'man_hours' : manHours
+      'man_hours' : manHours,
+      'status' : status
     };
   }
 
-  @override
+  Map<String, dynamic> toLittleMap() {
+    return <String, Object>{
+      'conclusion': conclusion,
+      'description' : description,
+      'damage' : damage,
+      'priority' : priority,
+      'recommend' : recommend,
+      'term_week' : termWeek,
+      'term_mh' : term_mh,
+      'term_bh' : term_bh,
+      'term_m' : term_m,
+      'effect' : effect,
+      'man_hours' : manHours,
+      'area' : area,
+      'status' : status
+    };
+  }
+
   init() {
     return DiagnosticCard(
         id: '',
@@ -63,10 +92,14 @@ class DiagnosticCard {
         damage: '',
         priority: 1,
         recommend: '',
-        time: '',
+        termWeek: 0,
         effect: '',
         manHours: 0,
-        part: ''
+        part: '',
+        term_mh: 0,
+        term_m: 0,
+        term_bh: 0,
+        status: 0
     );
   }
 }

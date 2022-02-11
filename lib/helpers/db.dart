@@ -69,38 +69,39 @@ class DbProvider {
           opTime_1: maps[i]['engine_optime_1'],
           opTime_2: maps[i]['engine_optime_2'],
           opTime_3: maps[i]['engine_optime_3'],
+          opTime_4: maps[i]['engine_optime_4'],
           note: maps[i]['report_note']
       );
       return report;
     });
   }
 
-  Future<int> upgradeReport(Report report) async {
-    final db = await database;
-    return await db.update(
-        'reports',
-        <String, Object>{
-          'report_id': '${report.id}',
-          'report_name': '${report.name}',
-          'user_id' : '${report.userId}',
-          'customer_company' : '${report.company}',
-          'customer_name' : '${report.customerName}',
-          'customer_email' : '${report.customerEmail}',
-          'customer_phone' : '${report.customerPhone}',
-          'report_place' : '${report.place}',
-          'report_date' : '${report.date}',
-          'engine_model' : '${report.engineModel}',
-          'engine_sn' : '${report.engineNumb}',
-          'machine_model' : '${report.machineModel}',
-          'machine_sn' : '${report.machineNumb}',
-          'machine_year' : '${report.machineYear}',
-          'engine_optime' : '${report.opTime_1}',
-          'report_note' : '${report.note}'
-        },
-        where: 'report_id = ?',
-        whereArgs: [report.id]
-    );
-  }
+  // Future<int> upgradeReport(Report report) async {
+  //   final db = await database;
+  //   return await db.update(
+  //       'reports',
+  //       <String, Object>{
+  //         'report_id': '${report.id}',
+  //         'report_name': '${report.name}',
+  //         'user_id' : '${report.userId}',
+  //         'customer_company' : '${report.company}',
+  //         'customer_name' : '${report.customerName}',
+  //         'customer_email' : '${report.customerEmail}',
+  //         'customer_phone' : '${report.customerPhone}',
+  //         'report_place' : '${report.place}',
+  //         'report_date' : '${report.date}',
+  //         'engine_model' : '${report.engineModel}',
+  //         'engine_sn' : '${report.engineNumb}',
+  //         'machine_model' : '${report.machineModel}',
+  //         'machine_sn' : '${report.machineNumb}',
+  //         'machine_year' : '${report.machineYear}',
+  //         'engine_optime' : '${report.opTime_1}',
+  //         'report_note' : '${report.note}'
+  //       },
+  //       where: 'report_id = ?',
+  //       whereArgs: [report.id]
+  //   );
+  // }
 
   Future<int> upgradeReport_2(BuildContext context) async {
     final db = await database;
@@ -436,10 +437,14 @@ class DbProvider {
           damage: cards[i]['damage'],
           priority: cards[i]['priority'],
           recommend: cards[i]['recommend'],
-          time: cards[i]['time'],
+          termWeek: cards[i]['term_week'],
+          term_mh: cards[i]['term_mh'],
+          term_bh: cards[i]['term_bh'],
+          term_m: cards[i]['term_m'],
           effect: cards[i]['effect'],
           manHours: cards[i]['man_hours'],
-          part: cards[i]['part_name']
+          part: cards[i]['part_name'],
+          status: cards[i]['status']
       );
     });
   }
@@ -470,10 +475,14 @@ class DbProvider {
           damage: cards[i]['damage'],
           priority: cards[i]['priority'],
           recommend: cards[i]['recommend'],
-          time: cards[i]['time'],
+          termWeek: cards[i]['term_week'],
+          term_mh: cards[i]['term_mh'],
+          term_bh: cards[i]['term_bh'],
+          term_m: cards[i]['term_m'],
           effect: cards[i]['effect'],
           manHours: cards[i]['man_hours'],
-          part: cards[i]['part_name']
+          part: cards[i]['part_name'],
+          status: cards[i]['status']
       );
     });
   }
@@ -523,17 +532,7 @@ class DbProvider {
     final db = await database;
     await db.update(
         'cards',
-      <String, Object>{
-        'conclusion': newCard.conclusion,
-        'description' : newCard.description,
-        'damage' : newCard.damage,
-        'priority' : newCard.priority,
-        'recommend' : newCard.recommend,
-        'time' : newCard.time,
-        'effect' : newCard.effect,
-        'man_hours' : newCard.manHours,
-        'area' : newCard.area
-      },
+      newCard.toLittleMap(),
       where: 'card_id = ?',
       whereArgs: [newCard.id]
     );
