@@ -18,9 +18,14 @@ import '../main.dart';
 class PdfProvider {
 
   Future<bool> generate(Report report, User user) async {
-    if (report.machineModel.isEmpty || report.machineModel.length < 1) {
+    if (report.machineModel.isEmpty || report.machineModel.length < 1
+        || report.machineYear.isEmpty || report.machineYear.length < 1
+        || report.machineNumb.isEmpty || report.machineNumb.length < 1) {
       return false;
     }
+
+    Status status = Status();
+
     final _dataFont = await rootBundle.load("assets/fonts/font.ttf");
     final _myFont = Font.ttf(_dataFont);
     final TextStyle titleStyle = TextStyle(
@@ -65,6 +70,9 @@ class PdfProvider {
     final buffer = data.buffer;
 
     final List<Part> _parts = await db.getPartsWithAgreedParts(report.id);
+    if (_parts.isEmpty) {
+      return false;
+    }
     final partsData = _parts.map((item) {
       return [
         '${item.name}',
@@ -271,7 +279,37 @@ class PdfProvider {
     ));
     print('PDF provider: page 6 is created');
     final List<DiagnosticCard> allCards = await db.getAllCards(report.id);
+    if (allCards.isEmpty) {
+      return false;
+    }
     for (DiagnosticCard dc in allCards) {
+
+      if (dc.conclusion != 1
+          && (dc.description == ''
+              || dc.area == null
+              || dc.damage == ''
+                  && dc.status&status.status1 != status.status1
+                  && dc.status&status.status2 != status.status2
+                  && dc.status&status.status3 != status.status3
+                  && dc.status&status.status4 != status.status4
+                  && dc.status&status.status5 != status.status5)) {
+        return false;
+      } else if (dc.effect == ''
+          && dc.status&status.status6 != status.status6
+          && dc.status&status.status7 != status.status7
+          && dc.status&status.status8 != status.status8
+          && dc.status&status.status9 != status.status9
+          && dc.status&status.status10 != status.status10) {
+        return false;
+      } else if (dc.recommend == ''
+          && dc.status&status.status11 != status.status11
+          && dc.status&status.status12 != status.status12
+          && dc.status&status.status13 != status.status13
+          && dc.status&status.status14 != status.status14
+          && dc.status&status.status15 != status.status15) {
+        return false;
+      }
+
       String _name;
       int i = dc.id.indexOf('-');
       _name = dc.id.substring(i+1);

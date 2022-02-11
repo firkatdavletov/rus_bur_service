@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/cards_list.dart';
 
+import '../controller/user_notifier.dart';
+import '../widgets/drawers/app_drawer.dart';
 import 'home_page.dart';
 
 class AgreedDiagnosticCardsPage extends StatelessWidget {
@@ -17,7 +20,7 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Диагностические карты'),
       ),
-      drawer: ReportDrawer(),
+      drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),
       body: Column(
         children: [
           Expanded(

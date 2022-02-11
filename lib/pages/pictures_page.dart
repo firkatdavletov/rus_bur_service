@@ -14,6 +14,8 @@ import 'package:rus_bur_service/pages/machine_info_page.dart';
 import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/report_pictures_list.dart';
 
+import '../controller/user_notifier.dart';
+import '../widgets/drawers/app_drawer.dart';
 import '../widgets/forms/app_text_form_field.dart';
 
 typedef void OnPickImageCallback (String name, String desc);
@@ -141,7 +143,7 @@ class _PicturesPageState extends State<PicturesPage> {
       appBar: AppBar(
         title: Text('Фотографии'),
       ),
-      drawer: ReportDrawer(),
+      drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

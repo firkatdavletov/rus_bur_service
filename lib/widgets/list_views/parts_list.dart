@@ -87,8 +87,10 @@ class _PartsListState extends State<PartsList> {
                       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                       child: OutlinedButton (
                           onPressed: () async {
+                            bool isGood = false;
                             for (Part p in snapshot.data) {
                               if (p.isChecked) {
+                                isGood = true;
                                 var _operations = await db.getOperations('part_id', p.id);
                                 for (Operation op in _operations) {
                                   DiagnosticCard _card = DiagnosticCard(
@@ -115,12 +117,30 @@ class _PartsListState extends State<PartsList> {
                                 }
                               }
                             }
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => new AgreedDiagnosticCardsPage()
-                                )
-                            );
+                            if (isGood) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => new AgreedDiagnosticCardsPage()
+                                  )
+                              );
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text(' Выберите узлы диагностики.'),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('OK')
+                                        )
+                                      ],
+                                    );
+                                  });
+                            }
                           },
                           child: Row(
                             children: [

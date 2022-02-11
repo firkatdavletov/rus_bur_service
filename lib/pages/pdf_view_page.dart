@@ -39,6 +39,7 @@ class PDFViewPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text('Отчет не заполнен.'),
+                        SizedBox(height: 20.0,),
                         ElevatedButton(
                             onPressed: () {
                               context.read<ReportNotifier>().set(report);
