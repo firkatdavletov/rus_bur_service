@@ -52,27 +52,17 @@ class _CardsListState extends State<CardsList> {
                       && snapshot.data[i].status&status.status15 != status.status15) {
                     cardIsFilled = false;
                   }
-
+                  String _name;
+                  int k = snapshot.data[i].id.indexOf('-');
+                  _name = snapshot.data[i].id.substring(k+1);
                   return ListTile(
-                    title: Text(snapshot.data[i].name),
+                    title: Text('$_name ${snapshot.data[i].name}'),
                     subtitle: cardIsFilled
                         ? Text('Заполнено', style: TextStyle(color: Colors.green))
                           : Text('Не заполнено', style: TextStyle(color: Colors.redAccent)),
                     leading: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                            Icons.filter_1_rounded,
-                            color: snapshot.data[i].priority == 1
-                                ? Colors.lightGreen
-                                : snapshot.data[i].priority == 2
-                                ? Colors.orangeAccent
-                                : snapshot.data[i].priority == 3
-                                ? Colors.redAccent
-                                : snapshot.data[i].priority == 0
-                                ? Colors.grey
-                                : null
-                        ),
                         Icon(
                             Icons.check_circle,
                             color: snapshot.data[i].conclusion == 1
@@ -82,6 +72,18 @@ class _CardsListState extends State<CardsList> {
                                 : snapshot.data[i].conclusion == 3
                                 ? Colors.redAccent
                                 : snapshot.data[i].conclusion == 0
+                                ? Colors.grey
+                                : null
+                        ),
+                        Icon(
+                            Icons.filter_1_rounded,
+                            color: snapshot.data[i].priority == 1
+                                ? Colors.lightGreen
+                                : snapshot.data[i].priority == 2
+                                ? Colors.orangeAccent
+                                : snapshot.data[i].priority == 3
+                                ? Colors.redAccent
+                                : snapshot.data[i].priority == 0
                                 ? Colors.grey
                                 : null
                         )
@@ -107,6 +109,9 @@ class _CardsListState extends State<CardsList> {
                       context.read<DiagnosticCardsNotifier>().changePriority(snapshot.data[i].priority);
                       context.read<DiagnosticCardsNotifier>().changeRecommend(snapshot.data[i].recommend);
                       context.read<DiagnosticCardsNotifier>().changeTermWeek(snapshot.data[i].termWeek);
+                      context.read<DiagnosticCardsNotifier>().changeTerm_mh(snapshot.data[i].term_mh);
+                      context.read<DiagnosticCardsNotifier>().changeTerm_m(snapshot.data[i].term_m);
+                      context.read<DiagnosticCardsNotifier>().changeTerm_bh(snapshot.data[i].term_bh);
                       context.read<DiagnosticCardsNotifier>().changeEffect(snapshot.data[i].effect);
                       context.read<DiagnosticCardsNotifier>().changeManHours(snapshot.data[i].manHours);
                       context.read<DiagnosticCardsNotifier>().changePart(snapshot.data[i].part);

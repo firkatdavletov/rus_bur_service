@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
-import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/cards_list.dart';
 
 import '../controller/user_notifier.dart';

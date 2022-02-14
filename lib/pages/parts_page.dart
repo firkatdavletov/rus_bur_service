@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/main.dart';
-import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/models/operation.dart';
 import 'package:rus_bur_service/models/part.dart';
-import 'package:rus_bur_service/widgets/buttons/button.dart';
-import 'package:rus_bur_service/widgets/drawers/app_drawer.dart';
-import 'package:rus_bur_service/widgets/dropdown_menu.dart';
+
 
 class PartsPage extends StatefulWidget {
   const PartsPage({Key? key}) : super(key: key);

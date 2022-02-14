@@ -9,6 +9,7 @@ class UserNotifier with ChangeNotifier {
     isAdmin: false,
     firstName: '',
     userId: 0,
+    isSuperAdmin: false
   );
 
   User get user => _user;

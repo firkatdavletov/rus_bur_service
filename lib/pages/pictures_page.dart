@@ -11,7 +11,6 @@ import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
 import 'package:rus_bur_service/pages/machine_info_page.dart';
-import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
 import 'package:rus_bur_service/widgets/list_views/report_pictures_list.dart';
 
 import '../controller/user_notifier.dart';

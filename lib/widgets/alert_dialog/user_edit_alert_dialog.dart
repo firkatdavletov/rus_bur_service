@@ -4,7 +4,6 @@ import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
-import 'package:rus_bur_service/widgets/buttons/app_outlined_button.dart';
 import 'package:rus_bur_service/widgets/forms/app_text_form_field.dart';
 import 'package:rus_bur_service/widgets/forms/password_field.dart';
 
@@ -36,12 +35,7 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
   bool _checkBoxValue = false;
   @override
   Widget build(BuildContext context) {
-    _delete() {
 
-    }
-    _cancel() {
-
-    }
     if (_flag) {
       _checkBoxValue = widget.user.isAdmin;
       _flag = false;
@@ -195,7 +189,8 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                                     middleName: _middleName,
                                     login: _login,
                                     userId: widget.user.userId,
-                                    isAdmin: _isAdmin
+                                    isAdmin: _isAdmin,
+                                    isSuperAdmin: false
                                 );
                                 db.upgradeUser(_user);
                                 PasswordProvider().deletePassword(widget.user.login);
@@ -215,14 +210,31 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
                         child: OutlinedButton(
                             onPressed: (){
-                              db.deleteUser(widget.user.userId);
-                              PasswordProvider().deletePassword(widget.user.login);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => UsersPage()
-                                  )
-                              );
+                              if (!widget.user.isSuperAdmin) {
+                                db.deleteUser(widget.user.userId);
+                                PasswordProvider().deletePassword(widget.user.login);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UsersPage()
+                                    )
+                                );
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Text ('Вы не можете удалить этого пользователя'),
+                                        actions: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('Назад'))
+                                        ],
+                                      );
+                                    });
+                              }
                             },
                             child: Text('Удалить')
                         )

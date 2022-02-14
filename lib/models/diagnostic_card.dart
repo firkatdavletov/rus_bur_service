@@ -17,6 +17,7 @@ class DiagnosticCard {
   final String effect;
   final int manHours;
   final int status;
+  final int termStatus;
 
   DiagnosticCard({
     required this.id,
@@ -36,7 +37,8 @@ class DiagnosticCard {
     required this.term_m,
     required this.effect,
     required this.manHours,
-    required this.status
+    required this.status,
+    required this.termStatus
   });
 
   Map<String, dynamic> toMap() {
@@ -58,7 +60,8 @@ class DiagnosticCard {
       'term_m' : term_m,
       'effect' : effect,
       'man_hours' : manHours,
-      'status' : status
+      'status' : status,
+      'term_status' : termStatus
     };
   }
 
@@ -76,7 +79,8 @@ class DiagnosticCard {
       'effect' : effect,
       'man_hours' : manHours,
       'area' : area,
-      'status' : status
+      'status' : status,
+      'term_status' : termStatus
     };
   }
 
@@ -99,7 +103,8 @@ class DiagnosticCard {
         term_mh: 0,
         term_m: 0,
         term_bh: 0,
-        status: 0
+        status: 0,
+        termStatus: 0
     );
   }
 }

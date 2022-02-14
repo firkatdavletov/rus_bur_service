@@ -150,13 +150,67 @@ class PdfProvider {
       String _name;
       int i = item.id.indexOf('-');
       _name = item.id.substring(i+1);
+
+      String recommend = '';
+      int j = 1;
+      if (item.status&status.status6 == status.status6) {
+        recommend += '$j) Замена\n';
+        j++;
+      }
+      if (item.status&status.status7 == status.status7) {
+        recommend += '$j) Ремонт\n';
+        j++;
+      }
+      if (item.status&status.status8 == status.status8) {
+        recommend += '$j) Установка\n';
+        j++;
+      }
+      if (item.status&status.status9 == status.status9) {
+        recommend += '$j) Диагностика\n';
+        j++;
+      }
+      if (item.status&status.status10 == status.status10) {
+        recommend += '$j) Очистка\n';
+        j++;
+      }
+      if (item.recommend.length > 0) {
+        recommend += '$j) ${item.recommend.replaceAll('ё', 'е')}';
+      }
+
+      String effect = '';
+      j = 1;
+      if (item.status&status.status11 == status.status11) {
+        effect += '$j) Снижение расходов\n';
+        j++;
+      }
+      if (item.status&status.status12 == status.status12) {
+        effect += '$j) Безопасность работников\n';
+        j++;
+      }
+      if (item.status&status.status13 == status.status13) {
+        effect += '$j) Профилактическое обслуживание\n';
+        j++;
+      }
+      if (item.status&status.status14 == status.status14) {
+        effect += '$j) Сокращение времени простоя\n';
+        j++;
+      }
+      if (item.status&status.status15 == status.status15) {
+        effect += '$j) Безопасность оборудования\n';
+        j++;
+      }
+      if (item.effect.length > 0) {
+        effect += '$j) ${item.effect.replaceAll('ё', 'е')}';
+      }
+
+
       return [
         '$_name',
         '${item.part.replaceAll('ё', 'е')}',
         '${item.description.replaceAll('ё', 'е')}',
-        '${item.recommend.replaceAll('ё', 'е')}',
-        '${item.effect.replaceAll('ё', 'е')}',
-        '${item.manHours}'
+        '${recommend.replaceAll('ё', 'е')}',
+        '${effect.replaceAll('ё', 'е')}',
+        '${item.manHours} чел.*ч'
       ];
     }).toList();
     final List<DiagnosticCard> _plannedCards = await db.getCards(report.id, 2);
@@ -164,12 +218,66 @@ class PdfProvider {
       String _name;
       int i = item.id.indexOf('-');
       _name = item.id.substring(i+1);
+
+      String recommend = '';
+      int j = 1;
+      if (item.status&status.status6 == status.status6) {
+        recommend += '$j) Замена\n';
+        j++;
+      }
+      if (item.status&status.status7 == status.status7) {
+        recommend += '$j) Ремонт\n';
+        j++;
+      }
+      if (item.status&status.status8 == status.status8) {
+        recommend += '$j) Установка\n';
+        j++;
+      }
+      if (item.status&status.status9 == status.status9) {
+        recommend += '$j) Диагностика\n';
+        j++;
+      }
+      if (item.status&status.status10 == status.status10) {
+        recommend += '$j) Очистка\n';
+        j++;
+      }
+      if (item.recommend.length > 0) {
+        recommend += '$j) ${item.recommend.replaceAll('ё', 'е')}';
+      }
+
+      String effect = '';
+      j = 1;
+      if (item.status&status.status11 == status.status11) {
+        effect += '$j) Снижение расходов\n';
+        j++;
+      }
+      if (item.status&status.status12 == status.status12) {
+        effect += '$j) Безопасность работников\n';
+        j++;
+      }
+      if (item.status&status.status13 == status.status13) {
+        effect += '$j) Профилактическое обслуживание\n';
+        j++;
+      }
+      if (item.status&status.status14 == status.status14) {
+        effect += '$j) Сокращение времени простоя\n';
+        j++;
+      }
+      if (item.status&status.status15 == status.status15) {
+        effect += '$j) Безопасность оборудования\n';
+        j++;
+      }
+      if (item.effect.length > 0) {
+        effect += '$j) ${item.effect.replaceAll('ё', 'е')}';
+      }
+
+
       return [
         '$_name',
         '${item.part.replaceAll('ё', 'е')}',
         '${item.description.replaceAll('ё', 'е')}',
-        '${item.recommend.replaceAll('ё', 'е')}',
-        '${item.effect.replaceAll('ё', 'е')}',
+        '${recommend.replaceAll('ё', 'е')}',
+        '${effect.replaceAll('ё', 'е')}',
         '${item.manHours}'
       ];
     }).toList();
@@ -178,12 +286,66 @@ class PdfProvider {
       String _name;
       int i = item.id.indexOf('-');
       _name = item.id.substring(i+1);
+
+      String recommend = '';
+      int j = 1;
+      if (item.status&status.status6 == status.status6) {
+        recommend += '$j) Замена\n';
+        j++;
+      }
+      if (item.status&status.status7 == status.status7) {
+        recommend += '$j) Ремонт\n';
+        j++;
+      }
+      if (item.status&status.status8 == status.status8) {
+        recommend += '$j) Установка\n';
+        j++;
+      }
+      if (item.status&status.status9 == status.status9) {
+        recommend += '$j) Диагностика\n';
+        j++;
+      }
+      if (item.status&status.status10 == status.status10) {
+        recommend += '$j) Очистка\n';
+        j++;
+      }
+      if (item.recommend.length > 0) {
+        recommend += '$j) ${item.recommend.replaceAll('ё', 'е')}';
+      }
+
+      String effect = '';
+      j = 1;
+      if (item.status&status.status11 == status.status11) {
+        effect += '$j) Снижение расходов\n';
+        j++;
+      }
+      if (item.status&status.status12 == status.status12) {
+        effect += '$j) Безопасность работников\n';
+        j++;
+      }
+      if (item.status&status.status13 == status.status13) {
+        effect += '$j) Профилактическое обслуживание\n';
+        j++;
+      }
+      if (item.status&status.status14 == status.status14) {
+        effect += '$j) Сокращение времени простоя\n';
+        j++;
+      }
+      if (item.status&status.status15 == status.status15) {
+        effect += '$j) Безопасность оборудования\n';
+        j++;
+      }
+      if (item.effect.length > 0) {
+        effect += '$j) ${item.effect.replaceAll('ё', 'е')}';
+      }
+
+
       return [
         '$_name',
         '${item.part.replaceAll('ё', 'е')}',
         '${item.description.replaceAll('ё', 'е')}',
-        '${item.recommend.replaceAll('ё', 'е')}',
-        '${item.effect.replaceAll('ё', 'е')}',
+        '${recommend.replaceAll('ё', 'е')}',
+        '${effect.replaceAll('ё', 'е')}',
         '${item.manHours}'
       ];
     }).toList();
@@ -286,7 +448,7 @@ class PdfProvider {
 
       if (dc.conclusion != 1
           && (dc.description == ''
-              || dc.area == null
+              || dc.area == ''
               || dc.damage == ''
                   && dc.status&status.status1 != status.status1
                   && dc.status&status.status2 != status.status2
@@ -497,7 +659,7 @@ class PdfProvider {
         'Описание проблемы',
         'Решение',
         'Риски, положительный эффект',
-        'Кол-во чел/часов (плановое)'
+        'Трудозатраты (плановое)'
       ],
       columnWidths: {
         0 : FlexColumnWidth(),
@@ -505,7 +667,7 @@ class PdfProvider {
         2 : FlexColumnWidth(),
         3 : FlexColumnWidth(),
         4 : FlexColumnWidth(),
-        5 : FixedColumnWidth(75.0),
+        5 : FixedColumnWidth(85.0),
       },
       cellStyle: cellStyle,
       data: data
@@ -570,7 +732,10 @@ class PdfProvider {
       damage += '$i) Несоответствие\n';
       i++;
     }
-    damage += '$i) ${dc.damage.replaceAll('ё', 'е')}';
+    if (dc.damage.length > 0) {
+      damage += '$i) ${dc.damage.replaceAll('ё', 'е')}';
+    }
+
     String recommend = '';
     i = 1;
     if (dc.status&status.status6 == status.status6) {
@@ -593,38 +758,50 @@ class PdfProvider {
       recommend += '$i) Очистка\n';
       i++;
     }
-    recommend += '$i) ${dc.recommend.replaceAll('ё', 'е')}';
+    if (dc.recommend.length > 0) {
+      recommend += '$i) ${dc.recommend.replaceAll('ё', 'е')}';
+    }
+
     String effect = '';
     i = 1;
     if (dc.status&status.status11 == status.status11) {
-      effect += '$i) Замена\n';
+      effect += '$i) Снижение расходов\n';
       i++;
     }
     if (dc.status&status.status12 == status.status12) {
-      effect += '$i) Ремонт\n';
+      effect += '$i) Безопасность работников\n';
       i++;
     }
     if (dc.status&status.status13 == status.status13) {
-      effect += '$i) Установка\n';
+      effect += '$i) Профилактическое обслуживание\n';
       i++;
     }
     if (dc.status&status.status14 == status.status14) {
-      effect += '$i) Диагностика\n';
+      effect += '$i) Сокращение времени простоя\n';
       i++;
     }
     if (dc.status&status.status15 == status.status15) {
-      effect += '$i) Очистка\n';
+      effect += '$i) Безопасность оборудования\n';
       i++;
     }
-    effect += '$i) ${dc.effect.replaceAll('ё', 'е')}';
-    String _prefix;
-    if (dc.termWeek%10 == 1) {
-      _prefix = 'я';
-    } else if(dc.termWeek > 1 && dc.termWeek < 5) {
-      _prefix = 'и';
-    } else {
-      _prefix = 'ь';
+    if (dc.effect.length > 0) {
+      effect += '$i) ${dc.effect.replaceAll('ё', 'е')}';
     }
+
+
+    String _prefix;
+    const termStatusType1 = ['день', 'неделя', 'месяц'];
+    const termStatusType2 = ['дней', 'недель', 'месяцев'];
+    const termStatusType3 = ['дня', 'недели', 'месяца'];
+
+    if (dc.termWeek%10 == 1) {
+      _prefix = termStatusType1[dc.termStatus];
+    } else if(dc.termWeek > 1 && dc.termWeek < 5) {
+      _prefix = termStatusType3[dc.termStatus];
+    } else {
+      _prefix = termStatusType2[dc.termStatus];
+    }
+
     return Table.fromTextArray(
         cellStyle: cellStyle,
         headerCount: 0,
@@ -652,9 +829,9 @@ class PdfProvider {
               ? 'ПЛАНОВО'
               : 'СРОЧНО'],
           ['Рекомендуемое решение', recommend],
-          ['Срок на реализацию', '${dc.termWeek} недел$_prefix\n${dc.term_mh} м/ч\n${dc.term_bh} уд./ч\n${dc.term_m} м'],
+          ['Срок на реализацию', '${dc.termWeek} $_prefix\n${dc.term_mh} м/ч\n${dc.term_bh} уд./ч\n${dc.term_m} м'],
           ['Риски, положительный эффект', effect],
-          ['Кол-во чел/ч на ремонт (планово)', '${dc.manHours}']
+          ['Трудозатраты (планово)', '${dc.manHours} чел.*ч']
         ]
     );
   }

@@ -111,7 +111,8 @@ class _PartsListState extends State<PartsList> {
                                       effect: '',
                                       manHours: 0,
                                       part: p.name,
-                                      status: 0
+                                      status: 0,
+                                      termStatus: 0
                                   );
                                   db.insertCard(_card);
                                 }

@@ -59,7 +59,6 @@ class PDFViewPage extends StatelessWidget {
               onPressed: snapshot.data.isReady
                   ? () {
                           MailSender(context: context).sendMail(
-                              snapshot.data,
                               report
                           );
                           Navigator.push(

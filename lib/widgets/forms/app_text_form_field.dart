@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rus_bur_service/styles/text_style.dart';
 import 'package:dropdownfield2/dropdownfield2.dart';
+
+import '../../controller/diagnostic_cards_notifier.dart';
 
 class AppTextFormField extends StatelessWidget {
   final Function onChanged;
@@ -258,3 +261,45 @@ class AppTextFormFieldWithInitMaxLines extends StatelessWidget {
     );
   }
 }
+
+class TermTextFormField extends StatelessWidget {
+  final String initialValue;
+  final Function onSaved;
+  final Function validator;
+  final Widget suffix;
+  const TermTextFormField({
+    Key? key,
+    required this.initialValue,
+    required this.onSaved,
+    required this.validator,
+    required this.suffix
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    FocusNode appFocusNode = FocusNode();
+    return TextFormField(
+      initialValue:  initialValue,
+      onSaved: (value) => onSaved(value),
+      validator: (value) => validator(value),
+      style: AppTextStyle().getInputTextStyle(),
+      decoration: InputDecoration(
+          helperText: '',
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Colors.black38,
+                  width: 1.5
+              )
+          ),
+          icon: Icon(Icons.calendar_today),
+          label: Text(''),
+          labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
+              : AppTextStyle().getInputLabelStyle(),
+          suffix: suffix
+      ),
+    );
+  }
+}
+

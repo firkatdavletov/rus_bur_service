@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rus_bur_service/api/google_sign_in_api.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,8 +15,11 @@ class MailSender {
     required this.context
   });
 
-  Future<bool> sendMail(File file, Report report) async {
+  Future<bool> sendMail(Report report) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? path;
+    final Directory directory = await getApplicationSupportDirectory();
+    path = directory.path;
 
     final user = await GoogleAuthApi.signIn();
 
@@ -49,7 +53,7 @@ class MailSender {
         <img src="cid:app"/>
       '''
       ..attachments = [
-        FileAttachment(file)
+        FileAttachment(File('$path/report_pdf.pdf'))
         ..location = Location.attachment
       ];
 

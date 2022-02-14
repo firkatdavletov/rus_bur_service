@@ -41,33 +41,14 @@ class _ReportListViewState extends State<ReportListView> {
                   children: [
                     IconButton(
                         onPressed: () async {
-                          context.read<ReportNotifier>().changeReportState(false);
-                          context.read<ReportNotifier>().changeName(snapshot.data[i].name);
-                          context.read<ReportNotifier>().changeReportId(snapshot.data[i].id);
-                          context.read<ReportNotifier>().changeUserId(snapshot.data[i].userId);
-                          context.read<ReportNotifier>().changeCompany(snapshot.data[i].company);
-                          context.read<ReportNotifier>().changeDate(snapshot.data[i].date);
-                          context.read<ReportNotifier>().changePlace(snapshot.data[i].place);
-                          context.read<ReportNotifier>().changeCustomerName(snapshot.data[i].customerName);
-                          context.read<ReportNotifier>().changeCustomerPhone(snapshot.data[i].customerPhone);
-                          context.read<ReportNotifier>().changeCustomerEmail(snapshot.data[i].customerEmail);
-                          context.read<ReportNotifier>().changeMachineModel(snapshot.data[i].machineModel);
-                          context.read<ReportNotifier>().changeMachineNumb(snapshot.data[i].machineNumb);
-                          context.read<ReportNotifier>().changeMachineYear(snapshot.data[i].machineYear);
-                          context.read<ReportNotifier>().changeEngineModel(snapshot.data[i].engineModel);
-                          context.read<ReportNotifier>().changeEngineNumb(snapshot.data[i].engineNumb);
-                          context.read<ReportNotifier>().changeOpTime_1(snapshot.data[i].opTime_1);
-                          context.read<ReportNotifier>().changeOpTime_2(snapshot.data[i].opTime_2);
-                          context.read<ReportNotifier>().changeOpTime_3(snapshot.data[i].opTime_3);
-                          context.read<ReportNotifier>().changeNote(snapshot.data[i].note);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ReportMainPage()
+                                  builder: (context) => PDFViewPage(report: snapshot.data[i],)
                               )
                           );
                         },
-                        icon: Icon(Icons.edit)
+                        icon: Icon(Icons.send)
                     ),
                     IconButton(
                         onPressed: () {
@@ -101,10 +82,11 @@ class _ReportListViewState extends State<ReportListView> {
                   ],
                 ),
                 onTap: () {
+                  context.read<ReportNotifier>().set(snapshot.data[i]);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PDFViewPage(report: snapshot.data[i],)
+                          builder: (context) => ReportMainPage()
                       )
                   );
                 },

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rus_bur_service/models/user.dart';
-import 'package:rus_bur_service/pages/mailer_page.dart';
-import 'package:rus_bur_service/pages/report_main_page.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:rus_bur_service/pages/settings_page.dart';

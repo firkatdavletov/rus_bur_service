@@ -190,7 +190,8 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                                     middleName: _middleName,
                                     login: _login,
                                     userId: int.parse(_id),
-                                    isAdmin: _isAdmin
+                                    isAdmin: _isAdmin,
+                                    isSuperAdmin: false
                                 );
                                 db.insertUser(_user);
                                 PasswordProvider().writePassword(_login, _password);

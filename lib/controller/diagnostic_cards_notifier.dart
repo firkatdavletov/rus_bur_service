@@ -19,6 +19,7 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   String _effect = '';
   int _manHours = 0;
   int _status = 0;
+  int _termStatus = 0;
 
   String get id => _id;
   String get name => _name;
@@ -38,6 +39,12 @@ class DiagnosticCardsNotifier with ChangeNotifier {
   String get effect => _effect;
   int get manHours => _manHours;
   int get status => _status;
+  int get termStatus => _termStatus;
+
+  changeTermStatus(int newStatus) {
+    _termStatus = newStatus;
+    notifyListeners();
+  }
 
   changeId(String textController) {
     _id = textController;

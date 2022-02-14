@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rus_bur_service/pages/email_message_settings_page.dart';
 import 'package:rus_bur_service/pages/parts_settings_page.dart';
 import 'package:rus_bur_service/pages/picture_settings_page.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
-import 'package:rus_bur_service/widgets/drawers/report_drawer.dart';
+import 'package:rus_bur_service/widgets/drawers/app_drawer.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../controller/user_notifier.dart';
 import 'home_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -35,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         title: Text('Настройки'),
       ),
-      drawer: ReportDrawer(),
+      drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),
       body: ListView(
         children: [
           ListTile(

@@ -26,7 +26,8 @@ const migrationScripts = [
     user_firstname TEXT NOT NULL,
     user_lastname TEXT NOT NULL,
     user_middlename TEXT,
-    user_is_admin INTEGER NOT NULL
+    user_is_admin INTEGER NOT NULL,
+    user_is_superadmin INTEGER NOT NULL
   )''',
   '''CREATE TABLE operations(
     operation_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,7 +66,8 @@ const migrationScripts = [
     term_bh INTEGER,
     term_m INTEGER,
     man_hours INTEGER,
-    status INTEGER NOT NULL
+    status INTEGER NOT NULL,
+    term_status INTEGER NOT NULL
   )''',
   '''CREATE TABLE pictures(
     picture_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -364,7 +366,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "1-2-3",
       "card name",
@@ -382,6 +385,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -401,7 +405,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "1-2-4",
       "card name",
@@ -419,6 +424,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -438,7 +444,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "1-3-5",
       "card name",
@@ -456,6 +463,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -475,7 +483,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "1-3-6",
       "card name",
@@ -493,6 +502,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -512,7 +522,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "1-4-7",
       "card name",
@@ -530,6 +541,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -549,7 +561,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "2-4-7",
       "card name",
@@ -567,6 +580,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -586,7 +600,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "2-1-1",
       "card name",
@@ -604,6 +619,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -623,7 +639,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "2-1-2",
       "card name",
@@ -641,6 +658,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -660,7 +678,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "3-1-1",
       "card name",
@@ -678,6 +697,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -697,7 +717,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "3-1-2",
       "card name",
@@ -715,6 +736,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO cards(
@@ -734,7 +756,8 @@ const migrationScripts = [
       term_mh,
       term_bh,
       term_m,
-      status
+      status,
+      term_status
     ) VALUES (
       "3-5-8",
       "card name",
@@ -752,6 +775,7 @@ const migrationScripts = [
       2,
       3,
       4,
+      0,
       0
     )''',
   '''INSERT INTO spares(

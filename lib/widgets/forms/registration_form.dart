@@ -61,7 +61,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
           middleName: _middleName,
           login: _login,
           userId: 1,
-          isAdmin: true
+          isAdmin: true,
+          isSuperAdmin: true
         );
         db.insertUser(_user);
         PasswordProvider().writePassword('rbs_key', 'rbs_key');

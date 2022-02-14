@@ -126,7 +126,8 @@ class DbProvider {
         lastName: maps[i]['user_lastname'],
         middleName: maps[i]['user_middlename'],
         login: maps[i]['user_login'],
-        isAdmin: maps[i]['user_is_admin'] == 1? true : false
+        isAdmin: maps[i]['user_is_admin'] == 1? true : false,
+        isSuperAdmin: maps[i]['user_is_superadmin'] == 1? true : false
       );
     });
   }
@@ -162,7 +163,7 @@ class DbProvider {
           'user_lastname': '${user.lastName}',
           'user_middlename': '${user.middleName}',
           'user_login': '${user.login}',
-          'user_is_admin': user.isAdmin? 1 : 0
+          'user_is_admin': user.isAdmin? 1 : 0,
         },
         where: 'user_id = ?',
       whereArgs: [user.userId]
@@ -190,7 +191,8 @@ class DbProvider {
       lastName: map['user_lastname'],
       middleName: map['user_middlename'],
       login: map['user_login'],
-      isAdmin: map['user_is_admin'] == 1? true : false
+      isAdmin: map['user_is_admin'] == 1? true : false,
+      isSuperAdmin: map['user_is_superadmin'] == 1 ? true : false
     );
   }
 
@@ -211,7 +213,8 @@ class DbProvider {
         lastName: map['user_lastname'],
         middleName: map['user_middlename'],
         login: map['user_login'],
-        isAdmin: map['user_is_admin'] == 1? true : false
+        isAdmin: map['user_is_admin'] == 1? true : false,
+        isSuperAdmin: map['user_is_superadmin'] == 1? true : false
     );
   }
 //------------------Part--------------------------------------------------------
@@ -444,7 +447,8 @@ class DbProvider {
           effect: cards[i]['effect'],
           manHours: cards[i]['man_hours'],
           part: cards[i]['part_name'],
-          status: cards[i]['status']
+          status: cards[i]['status'],
+          termStatus: cards[i]['term_status']
       );
     });
   }
@@ -482,7 +486,8 @@ class DbProvider {
           effect: cards[i]['effect'],
           manHours: cards[i]['man_hours'],
           part: cards[i]['part_name'],
-          status: cards[i]['status']
+          status: cards[i]['status'],
+          termStatus: cards[i]['term_status']
       );
     });
   }

@@ -15,3 +15,9 @@ class Status {
   final int status14 = 2<<13;
   final int status15 = 2<<14;
 }
+
+class TermStatus {
+  final type1 = ['день', 'неделя', 'месяц'];
+  final type2 = ['дней', 'недель', 'месяцев'];
+  final type3 = ['дня', 'недели', 'месяца'];
+}

@@ -1,8 +1,3 @@
-import 'package:provider/provider.dart';
-
-import 'package:flutter/material.dart';
-import 'package:rus_bur_service/controller/user_notifier.dart';
-
 class User {
   final int userId;
   final String login;
@@ -10,6 +5,7 @@ class User {
   final String lastName;
   final String middleName;
   final bool isAdmin;
+  final bool isSuperAdmin;
 
   User({
     required this.userId,
@@ -17,7 +13,8 @@ class User {
     required this.firstName,
     required this.lastName,
     required this.middleName,
-    required this.isAdmin
+    required this.isAdmin,
+    required this.isSuperAdmin
   });
 
   Map<String, dynamic> toMap() {
@@ -27,7 +24,8 @@ class User {
       'user_lastname': lastName,
       'user_middlename': middleName,
       'user_login': login,
-      'user_is_admin' : isAdmin? 1 : 0
+      'user_is_admin' : isAdmin? 1 : 0,
+      'user_id_superadmin' : isSuperAdmin? 1 : 0
     };
   }
 

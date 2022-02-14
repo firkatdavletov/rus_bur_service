@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/diagnostic_cards_notifier.dart';
@@ -9,8 +8,6 @@ import 'package:rus_bur_service/pages/agreed_diagnostic_cards_page.dart';
 import 'package:rus_bur_service/pages/card_pictures_page.dart';
 import 'package:rus_bur_service/pages/spares_page.dart';
 import 'app_text_form_field.dart';
-
-Status status = Status();
 
 class CreateCardForm extends StatefulWidget {
   const CreateCardForm({
@@ -30,12 +27,12 @@ class _CreateCardFormState extends State<CreateCardForm> {
     }
   }
 
-
-
   late String _dropdownConclusionValue;
   List<String> _conclusion = ['УСПЕШНО', 'ВНИМАНИЕ', 'НЕУДАЧА'];
   late String _dropdownPriorityValue;
   List<String> _priority = ['РЕКОМЕНДУЕТСЯ','ПЛАНОВО','СРОЧНО'];
+  Status status = Status();
+
 
 
   @override
@@ -72,6 +69,23 @@ class _CreateCardFormState extends State<CreateCardForm> {
       case 3:
         _dropdownPriorityValue = 'СРОЧНО';
     }
+
+    const termStatusType1 = ['день', 'неделя', 'месяц'];
+    const termStatusType2 = ['дней', 'недель', 'месяцев'];
+    const termStatusType3 = ['дня', 'недели', 'месяца'];
+
+    int _termStatus = Provider.of<DiagnosticCardsNotifier>(context, listen: false).termStatus;
+    int _termWeek = Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek;
+    String _prefix;
+
+    if (_termWeek%10 == 1) {
+      _prefix = termStatusType1[_termStatus];
+    } else if(_termWeek > 1 && _termWeek < 5) {
+      _prefix = termStatusType3[_termStatus];
+    } else {
+      _prefix = termStatusType2[_termStatus];
+    }
+
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -572,16 +586,32 @@ class _CreateCardFormState extends State<CreateCardForm> {
                     child: Column(
                       children: [
                         Text('Срок на реализацию', textAlign: TextAlign.start,),
-                        AppTextFormFieldWithInitSuffix(
-                          suffixText: 'недель',
+                        TermTextFormField(
+                          initialValue:  Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek.toString(),
                           onSaved: (value) {
-                            context.read<DiagnosticCardsNotifier>().changeTermWeek(int.parse(value));
+                            context.read<DiagnosticCardsNotifier>().changeTermWeek(int.parse(value!));
                           },
-                          validator: _validate,
-                          icon: Icon(Icons.minimize),
-                          label: '',
-                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek.toString(),
-                          helperText: '',
+                          validator: (value) {},
+                          suffix: GestureDetector(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(_prefix),
+                                Icon(Icons.touch_app_outlined, color: Colors.black38,)
+                              ],
+                            ),
+                            onTap: () {
+                              setState(() {
+                                _formKey_1.currentState!.save();
+                                if (_termStatus < 2) {
+                                  _termStatus++;
+                                } else {
+                                  _termStatus = 0;
+                                }
+                                context.read<DiagnosticCardsNotifier>().changeTermStatus(_termStatus);
+                              });
+                            },
+                          )
                         ),
                         AppTextFormFieldWithInitSuffix(
                           suffixText: 'м/ч',
@@ -621,15 +651,16 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
+                    child: AppTextFormFieldWithInitSuffix(
                       onSaved: (value) {
                         context.read<DiagnosticCardsNotifier>().changeManHours(int.parse(value));
                       },
                       validator: _validate,
                       icon: Icon(Icons.person_sharp),
-                      label: 'Человеко-часы',
+                      label: 'Трудозатраты',
                       initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours.toString(),
                       helperText: '',
+                      suffixText: 'чел.*ч',
                     ),
                   ),
                   TextButton(
@@ -732,13 +763,14 @@ class _CreateCardFormState extends State<CreateCardForm> {
         priority: Provider.of<DiagnosticCardsNotifier>(context, listen: false).priority,
         recommend: Provider.of<DiagnosticCardsNotifier>(context, listen: false).recommend,
         termWeek: Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek,
-        term_mh: 0,
-        term_m: 0,
-        term_bh: 0,
+        term_mh: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_mh,
+        term_m: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_m,
+        term_bh: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_bh,
         effect: Provider.of<DiagnosticCardsNotifier>(context, listen: false).effect,
         manHours: Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours,
         part: Provider.of<DiagnosticCardsNotifier>(context, listen: false).part,
-        status: Provider.of<DiagnosticCardsNotifier>(context, listen: false).status
+        status: Provider.of<DiagnosticCardsNotifier>(context, listen: false).status,
+        termStatus: Provider.of<DiagnosticCardsNotifier>(context, listen: false).termStatus,
     );
     db.upgradeCard(_newCard);
   }
