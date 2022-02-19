@@ -25,19 +25,19 @@ class User {
       'user_middlename': middleName,
       'user_login': login,
       'user_is_admin' : isAdmin? 1 : 0,
-      'user_id_superadmin' : isSuperAdmin? 1 : 0
+      'user_is_superadmin' : isSuperAdmin? 1 : 0
     };
   }
 
-  String nameToString() {
-    return '$firstName $lastName $middleName';
-  }
+  // String nameToString() {
+  //   return '$firstName $lastName $middleName';
+  // }
 
-  String loginToString() {
-    return '$login';
-  }
+  // String loginToString() {
+  //   return '$login';
+  // }
 
-  String idToString() {
-    return '$userId';
-  }
+  // String idToString() {
+  //   return '$userId';
+  // }
 }

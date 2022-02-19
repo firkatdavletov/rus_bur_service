@@ -14,6 +14,12 @@ class Status {
   final int status13 = 2<<12;
   final int status14 = 2<<13;
   final int status15 = 2<<14;
+  final int status16 = 2<<15;
+  final int status17 = 2<<16;
+  final int status18 = 2<<17;
+  final int status19 = 2<<18;
+  final int status20 = 2<<19;
+  final int status21 = 2<<20;
 }
 
 class TermStatus {

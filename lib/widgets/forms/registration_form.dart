@@ -64,6 +64,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           isAdmin: true,
           isSuperAdmin: true
         );
+        print('${_user.login}');
         db.insertUser(_user);
         PasswordProvider().writePassword('rbs_key', 'rbs_key');
         PasswordProvider().writePassword(_login, _password);

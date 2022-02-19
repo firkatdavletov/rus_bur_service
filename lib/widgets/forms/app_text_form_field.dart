@@ -125,6 +125,80 @@ class AppTextFormFieldWithInit extends StatelessWidget {
   }
 }
 
+class AppTextFormFieldWithInitWithoutIcon extends StatelessWidget {
+  final Function onSaved;
+  final Function validator;
+  final String initialValue;
+  final String helperText;
+  const AppTextFormFieldWithInitWithoutIcon({
+    Key? key,
+    required this.onSaved,
+    required this.validator,
+    required this.initialValue,
+    required this.helperText
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    FocusNode appFocusNode = FocusNode();
+    return TextFormField(
+      initialValue: initialValue,
+      onSaved: (value) => onSaved(value),
+      validator: (value) => validator(value),
+      style: AppTextStyle().getInputTextStyle(),
+      decoration: InputDecoration(
+        helperText: helperText,
+        border: OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.black38,
+                width: 1.5
+            )
+        ),
+        labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
+            : AppTextStyle().getInputLabelStyle(),
+      ),
+    );
+  }
+}
+
+class AppTextFormFieldWithInitWithoutIconWithCtrl extends StatelessWidget {
+  final Function onSaved;
+  final Function validator;
+  final String helperText;
+  final TextEditingController controller;
+  const AppTextFormFieldWithInitWithoutIconWithCtrl({
+    Key? key,
+    required this.onSaved,
+    required this.validator,
+    required this.helperText,
+    required this.controller
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    FocusNode appFocusNode = FocusNode();
+    return TextFormField(
+      controller: controller,
+      onSaved: (value) => onSaved(value),
+      validator: (value) => validator(value),
+      style: AppTextStyle().getInputTextStyle(),
+      decoration: InputDecoration(
+        helperText: helperText,
+        border: OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.black38,
+                width: 1.5
+            )
+        ),
+        labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
+            : AppTextStyle().getInputLabelStyle(),
+      ),
+    );
+  }
+}
+
 class AppTextFormFieldWithInitSuffix extends StatelessWidget {
   final Function onSaved;
   final Function validator;

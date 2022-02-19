@@ -14,12 +14,15 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    String userStatus = user.isSuperAdmin
+        ? 'Супер администратор'
+        : user.isAdmin? 'Администратор'
+        : 'Пользователь';
     final drawerItems = ListView(
         children: [
           UserAccountsDrawerHeader(
               accountName: Text('${user.firstName} ${user.lastName}'),
-              accountEmail: Text('ID: ${user.userId} Статус: ${user.isAdmin? 'Администратор':'Пользователь'}'),
+              accountEmail: Text(userStatus),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.yellow,
                 child: Text(

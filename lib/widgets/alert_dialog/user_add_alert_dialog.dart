@@ -51,8 +51,6 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
         }
       });
     }
-
-
     return SingleChildScrollView(
       child: Container(
         width: 350.0,
@@ -63,7 +61,7 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _firstName = value;
@@ -73,13 +71,12 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.circle, color: Colors.greenAccent,),
                       label: 'Имя'
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _lastName = value;
@@ -89,13 +86,12 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.circle, color: Colors.blueAccent,),
                       label: 'Фамилия'
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _middleName = value;
@@ -103,13 +99,12 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                       validator: (String value) {
 
                       },
-                      icon: Icon(Icons.circle, color: Colors.brown,),
                       label: 'Отчество'
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _id = value;
@@ -122,13 +117,12 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'ID уже существует';
                         }
                       },
-                      icon: Icon(Icons.person_pin,),
                       label: 'ID'
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _login = value;
@@ -141,7 +135,6 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'Логин уже занят';
                         }
                       },
-                      icon: Icon(Icons.login_rounded),
                       label: 'Логин'
                   ),
                 ),

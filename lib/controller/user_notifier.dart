@@ -13,9 +13,11 @@ class UserNotifier with ChangeNotifier {
   );
 
   User get user => _user;
+  bool get isSuperAdmin => _user.isSuperAdmin;
 
   void changeUser(User userController) {
     _user = userController;
     notifyListeners();
   }
+
 }

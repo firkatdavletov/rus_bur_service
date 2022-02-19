@@ -141,7 +141,7 @@ class DbProvider {
         conflictAlgorithm: ConflictAlgorithm.abort,
       );
     } catch (e) {
-      print('Значение уже существует');
+      print('$e');
     }
   }
 
@@ -198,7 +198,7 @@ class DbProvider {
 
   Future<User> readUserByLogin(String login) async {
     final db = await database;
-
+    print('login: $login');
     final List<Map<String, dynamic>> maps = await db.query(
         'users',
         where: 'user_login = ?',

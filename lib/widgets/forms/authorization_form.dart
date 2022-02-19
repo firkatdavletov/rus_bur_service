@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/models/user.dart';
-import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 import 'package:rus_bur_service/helpers/password_provider.dart';
@@ -22,11 +22,7 @@ class AuthorizationForm extends StatefulWidget {
 
 class _AuthorizationFormState extends State<AuthorizationForm> {
   final _formKey = GlobalKey<FormState>();
-  _getUser () async {
-    User _user = await db.readUserByLogin(_login);
-    context.read<UserNotifier>().changeUser(_user);
-    return _user;
-  }
+
   _getKey(String key) async {
     return PasswordProvider().getPassword(key);
   }
@@ -86,17 +82,28 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                       _auth() {
                         if(_formKey.currentState!.validate()) {
                           if (_password == snapshot.data) {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Вы успешно авторизовались')));
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => FutureBuilder(
-                                      future: _getUser(),
-                                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                                        if (snapshot.hasData) {
+                                      future: db.readUserByLogin(_login),
+                                      builder: (BuildContext context, AsyncSnapshot<dynamic> userSnapshot) {
+                                        if (userSnapshot.hasData) {
+                                          context.read<UserNotifier>().changeUser(userSnapshot.data);
                                           return HomePage();
-                                        } else if (snapshot.hasError) {
-                                          return ErrorPage();
+                                        } else if (userSnapshot.hasError) {
+                                          return Scaffold(
+                                            body: Center(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(Icons.error),
+                                                  Text('Ошибка получения пользователя\nиз базы данных', textAlign: TextAlign.center,),
+                                                  Text('${userSnapshot.error}')
+                                                ],
+                                              ),
+                                            ),
+                                          );
                                         } else {
                                           return WaitingPage();
                                         }
@@ -104,6 +111,7 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                                     )
                                 )
                             );
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Вы успешно авторизовались')));
                           } else if (snapshot.data == null) {
                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Неверный логин')));
                           } else {

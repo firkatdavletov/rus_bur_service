@@ -25,6 +25,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
 
   @override
   Widget build(BuildContext context) {
+
     double _width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,140 +36,172 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
               child: ListView(
                 children: [
                   SizedBox(height: 20,),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().machineModel,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeMachineModel(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right, color: Colors.black26,),
-                      label: 'Модель машины',
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Модель машины'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().machineModel,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeMachineModel(value);
+                          },
+                          validator: _validate,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().machineNumb,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeMachineNumb(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Серийный номер машины',
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Серийный номер машины'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().machineNumb,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeMachineNumb(value);
+                          },
+                          validator: _validate,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().machineYear,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeMachineYear(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Год выпуска',
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Год выпуска'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().machineYear,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeMachineYear(value);
+                          },
+                          validator: _validate,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().engineModel,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeEngineModel(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Модель двигателя',
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Модель двигателя'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().engineModel,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeEngineModel(value);
+                          },
+                          validator: _validate,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeEngineNumb(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Серийный номер двигателя',
-                      initialValue: context.watch<ReportNotifier>().engineNumb,
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Серийный номер двигателя'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeEngineNumb(value);
+                          },
+                          validator: _validate,
+                          initialValue: context.watch<ReportNotifier>().engineNumb,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitSuffix(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_1(int.parse(value));
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Наработка (м/ч)',
-                      initialValue: context.watch<ReportNotifier>().opTime_1.toString(),
-                      helperText: '',
-                      suffixText: 'м/ч',
-                    ),
+                  ExpansionTile(
+                    title: Text('Наработка'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitSuffix(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeOpTime_1(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.arrow_right),
+                          label: '',
+                          initialValue: context.watch<ReportNotifier>().opTime_1.toString(),
+                          helperText: '',
+                          suffixText: 'м/ч',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitSuffix(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeOpTime_2(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.arrow_right),
+                          label: '',
+                          initialValue: context.watch<ReportNotifier>().opTime_2.toString(),
+                          helperText: '',
+                          suffixText: 'уд/ч',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitSuffix(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeOpTime_3(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.arrow_right),
+                          label: '',
+                          initialValue: context.watch<ReportNotifier>().opTime_3.toString(),
+                          helperText: '',
+                          suffixText: 'пог.м',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitSuffix(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeOpTime_4(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.arrow_right),
+                          label: 'Гусеничный движитель',
+                          initialValue: context.watch<ReportNotifier>().opTime_4.toString(),
+                          helperText: '',
+                          suffixText: 'пог.м',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitSuffix(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_2(int.parse(value));
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Наработка (уд/ч)',
-                      initialValue: context.watch<ReportNotifier>().opTime_2.toString(),
-                      helperText: '',
-                      suffixText: 'уд/ч',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitSuffix(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_3(int.parse(value));
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Наработка (пог.м)',
-                      initialValue: context.watch<ReportNotifier>().opTime_3.toString(),
-                      helperText: '',
-                      suffixText: 'пог.м',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitSuffix(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeOpTime_4(int.parse(value));
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Гусеничный движитель',
-                      initialValue: context.watch<ReportNotifier>().opTime_4.toString(),
-                      helperText: '',
-                      suffixText: 'пог.м',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitMaxLines(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeNote(value);
-                      },
-                      validator: _validate,
-                      maxLines: 5,
-                      icon: Icon(Icons.arrow_right),
-                      label: 'Примечание',
-                      initialValue: context.watch<ReportNotifier>().note,
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Примечание'),
+                    maintainState: true,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitMaxLines(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeNote(value);
+                          },
+                          validator: _validate,
+                          maxLines: 5,
+                          icon: Icon(Icons.arrow_right),
+                          label: 'Примечание',
+                          initialValue: context.watch<ReportNotifier>().note,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )

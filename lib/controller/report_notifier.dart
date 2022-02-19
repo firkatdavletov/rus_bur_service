@@ -138,7 +138,7 @@ class ReportNotifier with ChangeNotifier{
     changeDate('${now.day}/${now.month}/${now.year}');
     changeCompany('');
     changePlace('');
-    //changeCustomerName('');
+    changeCustomerName('');
     changeCustomerPhone('');
     changeCustomerEmail('');
     changeMachineModel('');

@@ -8,6 +8,7 @@ import 'package:rus_bur_service/pages/machine_info_page.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
+import '../../models/status.dart';
 import 'app_text_form_field.dart';
 
 class CreateReportForm extends StatefulWidget {
@@ -55,6 +56,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
 
   @override
   Widget build(BuildContext context) {
+
     bool _enable = true;
     double _width = MediaQuery.of(context).size.width;
 
@@ -82,112 +84,154 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   Container(
                     height: 20,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().company,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeCompany(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.circle, color: Colors.green,),
-                      label: 'Заказчик',
-                      helperText: 'Наименование юридического лица',
-                    ),
+                  ExpansionTile(
+                      title: Text('Заказчик'),
+                      maintainState: true,
+                      leading: context.watch<ReportNotifier>().company.isEmpty
+                          ? Icon(Icons.error_outline)
+                          : Icon(Icons.check),
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          child: AppTextFormFieldWithInitWithoutIcon(
+                            initialValue: context.watch<ReportNotifier>().company,
+                            onSaved: (value) {
+                              context.read<ReportNotifier>().changeCompany(value);
+                            },
+                            validator: _validate,
+                            helperText: 'Наименование юридического лица',
+                          ),
+                        ),
+                      ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().date,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeDate(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.calendar_today),
-                      label: 'Дата осмотра',
-                      helperText: 'ДД/ММ/ГГГГ',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().place,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changePlace(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.map),
-                      label: 'Место проведения',
-                      helperText: '',
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 50.0, top: 0.0),
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        _formKey_1.currentState!.save();
-                        Position _position = await determinePosition();
-                        setState(() {
-                          String latitude = '${_position.latitude}';
-                          String longitude = '${_position.longitude}';
-                          String _positionTxt = '$latitude, $longitude;';
-                          context.read<ReportNotifier>().changePlace(_positionTxt);
-                        });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ReportMainPage()
-                            )
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.keyboard_arrow_up),
-                          SizedBox(width: 10.0,),
-                          Text('Вставить координаты')
-                        ],
+                  ExpansionTile(
+                    title: Text('Дата осмотра'),
+                    maintainState: true,
+                    leading: context.watch<ReportNotifier>().date.isEmpty
+                        ? Icon(Icons.error_outline)
+                        : Icon(Icons.check),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().date,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeDate(value);
+                          },
+                          validator: _validate,
+                          helperText: 'ДД/ММ/ГГГГ',
+                        ),
                       ),
-                    )
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
-                    child: AppTextFormFieldWithInit(
-                      initialValue: context.watch<ReportNotifier>().customerName,
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeCustomerName(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.person),
-                      label: 'Контактное лицо заказчика',
-                      helperText: 'ФИО',
-                    ),
+                  ExpansionTile(
+                    title: Text('Место проведения осмотра'),
+                    maintainState: true,
+                    leading: context.watch<ReportNotifier>().place.isEmpty
+                        ? Icon(Icons.error_outline)
+                        : Icon(Icons.check),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().place,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changePlace(value);
+                          },
+                          validator: _validate,
+                          helperText: '',
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 10.0, top: 0.0),
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              _formKey_1.currentState!.save();
+                              Position _position = await determinePosition();
+                              setState(() {
+                                String latitude = '${_position.latitude}';
+                                String longitude = '${_position.longitude}';
+                                String _positionTxt = '$latitude, $longitude;';
+                                context.read<ReportNotifier>().changePlace(_positionTxt);
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ReportMainPage()
+                                  )
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.keyboard_arrow_up),
+                                SizedBox(width: 10.0,),
+                                Text('Вставить координаты')
+                              ],
+                            ),
+                          )
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeCustomerPhone(value);
-                      },
-                      validator: _validateMobile,
-                      icon: Icon(Icons.phone),
-                      label: 'Контактный телефон',
-                      initialValue: context.watch<ReportNotifier>().customerPhone,
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Контактное лицо заказчика'),
+                    maintainState: true,
+                    leading: context.watch<ReportNotifier>().customerName.isEmpty
+                        ? Icon(Icons.error_outline)
+                        : Icon(Icons.check),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          initialValue: context.watch<ReportNotifier>().customerName,
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeCustomerName(value);
+                          },
+                          validator: _validate,
+                          helperText: 'ФИО',
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInit(
-                      onSaved: (value) {
-                        context.read<ReportNotifier>().changeCustomerEmail(value);
-                      },
-                      validator: _validate,
-                      icon: Icon(Icons.email),
-                      label: 'Email',
-                      initialValue: context.watch<ReportNotifier>().customerEmail,
-                      helperText: '',
-                    ),
+                  ExpansionTile(
+                    title: Text('Номер телефона'),
+                    maintainState: true,
+                    leading: context.watch<ReportNotifier>().customerPhone.isEmpty
+                        ? Icon(Icons.error_outline)
+                        : Icon(Icons.check),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeCustomerPhone(value);
+                          },
+                          validator: _validateMobile,
+                          initialValue: context.watch<ReportNotifier>().customerPhone,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
+                  ),
+                  ExpansionTile(
+                    title: Text('Email'),
+                    maintainState: true,
+                    leading: context.watch<ReportNotifier>().customerEmail.isEmpty
+                        ? Icon(Icons.error_outline)
+                        : Icon(Icons.check),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInitWithoutIcon(
+                          onSaved: (value) {
+                            context.read<ReportNotifier>().changeCustomerEmail(value);
+                          },
+                          validator: _validate,
+                          initialValue: context.watch<ReportNotifier>().customerEmail,
+                          helperText: '',
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )
