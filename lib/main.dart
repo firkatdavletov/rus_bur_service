@@ -83,6 +83,12 @@ class MyApp extends StatelessWidget {
               title: 'РусБурСервис',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
+                scaffoldBackgroundColor: Color.fromRGBO(244, 244, 244, 10),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blueAccent
+                  )
+                )
               ),
               home: snapshot.data.length == 0? RegistrationPage(): LoginPage(),
             );

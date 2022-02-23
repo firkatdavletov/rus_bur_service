@@ -11,6 +11,7 @@ import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
 import 'package:rus_bur_service/pages/machine_info_page.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import 'package:rus_bur_service/widgets/list_views/report_pictures_list.dart';
 
 import '../controller/user_notifier.dart';
@@ -139,9 +140,7 @@ class _PicturesPageState extends State<PicturesPage> {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Фотографии'),
-      ),
+      appBar: myAppBar('Фотографии'),
       drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +151,7 @@ class _PicturesPageState extends State<PicturesPage> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: OutlinedButton (
+                child: ElevatedButton (
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -174,7 +173,7 @@ class _PicturesPageState extends State<PicturesPage> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: OutlinedButton (
+                child: ElevatedButton (
                     onPressed: () {
                       Navigator.push(
                           context,

@@ -23,6 +23,13 @@ class AppDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
               accountName: Text('${user.firstName} ${user.lastName}'),
               accountEmail: Text(userStatus),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blueGrey, Colors.lightBlueAccent]
+                ),
+                shape: BoxShape.rectangle,
+                boxShadow: [BoxShadow(blurRadius: 10.0)]
+              ),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.yellow,
                 child: Text(

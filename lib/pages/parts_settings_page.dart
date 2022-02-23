@@ -28,6 +28,16 @@ class _PartsSettingPageState extends State<PartsSettingPage> {
               );
             },
           ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.blueGrey, Colors.lightBlueAccent]
+                )
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(30))
+          ),
         ),
         body: PartsSettingList(),
       floatingActionButton: FloatingActionButton.extended(

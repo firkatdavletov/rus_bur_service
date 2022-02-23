@@ -63,7 +63,7 @@ class _PartsListState extends State<PartsList> {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: OutlinedButton (
+                      child: ElevatedButton (
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -85,7 +85,7 @@ class _PartsListState extends State<PartsList> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: OutlinedButton (
+                      child: ElevatedButton (
                           onPressed: () async {
                             bool isGood = false;
                             for (Part p in snapshot.data) {

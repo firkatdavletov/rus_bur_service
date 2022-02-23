@@ -31,6 +31,16 @@ class _OperationsSettingPageState extends State<OperationsSettingPage> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.blueGrey, Colors.lightBlueAccent]
+              )
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(30))
+        ),
       ),
       body: OperationsSettingList(partId: widget.partId),
       floatingActionButton: FloatingActionButton.extended(

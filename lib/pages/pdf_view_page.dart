@@ -9,6 +9,7 @@ import 'package:rus_bur_service/helpers/mail_sendler.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/machine_info_page.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../controller/user_notifier.dart';
@@ -29,9 +30,7 @@ class PDFViewPage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text('PDF Viewer'),
-            ),
+            appBar: myAppBar('Предварительный просмотр'),
             body: snapshot.data.isReady
                 ? SfPdfViewer.file(File('${snapshot.data.filePath}'))
                 : Center(

@@ -8,7 +8,6 @@ import 'package:rus_bur_service/pages/machine_info_page.dart';
 import 'package:rus_bur_service/pages/report_main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
-import '../../models/status.dart';
 import 'app_text_form_field.dart';
 
 class CreateReportForm extends StatefulWidget {
@@ -87,6 +86,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   ExpansionTile(
                       title: Text('Заказчик'),
                       maintainState: true,
+                      initiallyExpanded: true,
                       leading: context.watch<ReportNotifier>().company.isEmpty
                           ? Icon(Icons.error_outline)
                           : Icon(Icons.check),
@@ -107,6 +107,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   ExpansionTile(
                     title: Text('Дата осмотра'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     leading: context.watch<ReportNotifier>().date.isEmpty
                         ? Icon(Icons.error_outline)
                         : Icon(Icons.check),
@@ -127,6 +128,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   ExpansionTile(
                     title: Text('Место проведения осмотра'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     leading: context.watch<ReportNotifier>().place.isEmpty
                         ? Icon(Icons.error_outline)
                         : Icon(Icons.check),
@@ -176,6 +178,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   ExpansionTile(
                     title: Text('Контактное лицо заказчика'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     leading: context.watch<ReportNotifier>().customerName.isEmpty
                         ? Icon(Icons.error_outline)
                         : Icon(Icons.check),
@@ -196,6 +199,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   ExpansionTile(
                     title: Text('Номер телефона'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     leading: context.watch<ReportNotifier>().customerPhone.isEmpty
                         ? Icon(Icons.error_outline)
                         : Icon(Icons.check),
@@ -216,6 +220,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   ExpansionTile(
                     title: Text('Email'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     leading: context.watch<ReportNotifier>().customerEmail.isEmpty
                         ? Icon(Icons.error_outline)
                         : Icon(Icons.check),
@@ -242,7 +247,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: OutlinedButton (
+              child: ElevatedButton (
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -300,7 +305,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: OutlinedButton (
+              child: ElevatedButton (
                   onPressed: () {
                     if (_formKey_1.currentState!.validate() && _enable) {
                       _formKey_1.currentState!.save();
@@ -326,7 +331,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                       Container(width: 5,),
                       Icon(Icons.arrow_forward_ios)
                     ],
-                  )
+                  ),
               ),
             )
           ],

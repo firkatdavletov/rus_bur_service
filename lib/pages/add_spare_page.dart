@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import 'package:rus_bur_service/widgets/forms/add_spare_form.dart';
 
 class AddSparePage extends StatelessWidget {
@@ -11,10 +12,10 @@ class AddSparePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isNewSpare
-                      ? 'Новая деталь'
-                      : 'Редактрование детали'),
+      appBar: myAppBar(
+          isNewSpare
+          ? 'Новая деталь'
+          : 'Редактрование детали'
       ),
       body: SingleChildScrollView(
         child: AddSpareForm(isNewSpare: isNewSpare),

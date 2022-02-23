@@ -39,6 +39,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Модель машины'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -56,6 +57,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Серийный номер машины'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -73,6 +75,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Год выпуска'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -90,6 +93,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Модель двигателя'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -107,6 +111,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Серийный номер двигателя'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -124,6 +129,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Наработка'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -186,6 +192,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   ExpansionTile(
                     title: Text('Примечание'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -212,7 +219,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: OutlinedButton (
+              child: ElevatedButton (
                   onPressed: () {
                     _formKey_1.currentState!.save();
                     Navigator.push(
@@ -235,7 +242,7 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: OutlinedButton (
+              child: ElevatedButton (
                   onPressed: () {
                     if (_formKey_1.currentState!.validate()) {
                       _formKey_1.currentState!.save();

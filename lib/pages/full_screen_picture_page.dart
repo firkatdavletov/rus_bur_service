@@ -2,6 +2,7 @@ import 'dart:io';
 
 
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 
 class FullScreenPage extends StatelessWidget {
   final File file;
@@ -15,9 +16,7 @@ class FullScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
+      appBar: myAppBar(title),
       body: Center(
         child: Hero(
           tag: title,

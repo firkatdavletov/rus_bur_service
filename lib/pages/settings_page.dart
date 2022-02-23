@@ -35,6 +35,16 @@ class _SettingsPageState extends State<SettingsPage> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.blueGrey, Colors.lightBlueAccent]
+              )
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(30))
+        ),
         title: Text('Настройки'),
       ),
       drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),

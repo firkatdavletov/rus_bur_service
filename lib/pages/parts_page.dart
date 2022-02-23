@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/operation.dart';
 import 'package:rus_bur_service/models/part.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 
 
 class PartsPage extends StatefulWidget {
@@ -30,9 +31,7 @@ class _PartsPageState extends State<PartsPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Диагностические операции'),
-      ),
+      appBar: myAppBar('Диагностические операции'),
       //drawer: DrawerReport(saveData: () {  },),
       body: Column(
         children: [

@@ -211,6 +211,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       child: ExpansionTile(
                         title: Text('Описание проблемы'),
                         maintainState: true,
+                        initiallyExpanded: true,
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -231,6 +232,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       child: ExpansionTile(
                         title: Text('Зона выявления дефекта'),
                         maintainState: true,
+                        initiallyExpanded: true,
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -251,6 +253,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       child: ExpansionTile(
                         title: Text('Повреждения'),
                         maintainState: true,
+                        initiallyExpanded: true,
                         children: [
                           CheckboxListTile(
                             value: currentStatus&status.status1 == status.status1,
@@ -355,6 +358,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   ExpansionTile(
                     title: Text('Риски, положительный эффект'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       CheckboxListTile(
                         value: currentStatus&status.status6 == status.status6,
@@ -458,6 +462,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   ExpansionTile(
                     title: Text('Рекомендуемые решения'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       CheckboxListTile(
                         value: currentStatus&status.status11 == status.status11,
@@ -561,72 +566,86 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   ExpansionTile(
                     title: Text('Срок на реализацию'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
-                      TermTextFormField(
-                          initialValue:  Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek.toString(),
-                          onSaved: (value) {
-                            context.read<DiagnosticCardsNotifier>().changeTermWeek(int.parse(value!));
-                          },
-                          validator: (value) {},
-                          suffix: GestureDetector(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(_prefix),
-                                Icon(Icons.touch_app_outlined, color: Colors.black38,)
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                _formKey_1.currentState!.save();
-                                if (_termStatus < 2) {
-                                  _termStatus++;
-                                } else {
-                                  _termStatus = 0;
-                                }
-                                context.read<DiagnosticCardsNotifier>().changeTermStatus(_termStatus);
-                              });
+                      Padding(
+                        child: TermTextFormField(
+                            initialValue:  Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek.toString(),
+                            onSaved: (value) {
+                              context.read<DiagnosticCardsNotifier>().changeTermWeek(int.parse(value!));
                             },
-                          )
+                            validator: (value) {},
+                            suffix: GestureDetector(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(_prefix),
+                                  Icon(Icons.touch_app_outlined, color: Colors.black38,)
+                                ],
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  _formKey_1.currentState!.save();
+                                  if (_termStatus < 2) {
+                                    _termStatus++;
+                                  } else {
+                                    _termStatus = 0;
+                                  }
+                                  context.read<DiagnosticCardsNotifier>().changeTermStatus(_termStatus);
+                                });
+                              },
+                            )
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                       ),
-                      AppTextFormFieldWithInitSuffix(
-                        suffixText: 'м/ч',
-                        onSaved: (value) {
-                          context.read<DiagnosticCardsNotifier>().changeTerm_mh(int.parse(value));
-                        },
-                        validator: _validate,
-                        icon: Icon(Icons.minimize),
-                        label: '',
-                        initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_mh.toString(),
-                        helperText: '',
+                      Padding(
+                        child: AppTextFormFieldWithInitSuffix(
+                          suffixText: 'м/ч',
+                          onSaved: (value) {
+                            context.read<DiagnosticCardsNotifier>().changeTerm_mh(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.minimize),
+                          label: '',
+                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_mh.toString(),
+                          helperText: '',
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                       ),
-                      AppTextFormFieldWithInitSuffix(
-                        suffixText: 'уд/ч',
-                        onSaved: (value) {
-                          context.read<DiagnosticCardsNotifier>().changeTerm_bh(int.parse(value));
-                        },
-                        validator: _validate,
-                        icon: Icon(Icons.minimize),
-                        label: '',
-                        initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_bh.toString(),
-                        helperText: '',
+                      Padding(
+                        child: AppTextFormFieldWithInitSuffix(
+                          suffixText: 'уд/ч',
+                          onSaved: (value) {
+                            context.read<DiagnosticCardsNotifier>().changeTerm_bh(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.minimize),
+                          label: '',
+                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_bh.toString(),
+                          helperText: '',
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                       ),
-                      AppTextFormFieldWithInitSuffix(
-                        suffixText: 'пог.м',
-                        onSaved: (value) {
-                          context.read<DiagnosticCardsNotifier>().changeTerm_m(int.parse(value));
-                        },
-                        validator: _validate,
-                        icon: Icon(Icons.minimize),
-                        label: '',
-                        initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_m.toString(),
-                        helperText: '',
+                      Padding(
+                        child: AppTextFormFieldWithInitSuffix(
+                          suffixText: 'пог.м',
+                          onSaved: (value) {
+                            context.read<DiagnosticCardsNotifier>().changeTerm_m(int.parse(value));
+                          },
+                          validator: _validate,
+                          icon: Icon(Icons.minimize),
+                          label: '',
+                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_m.toString(),
+                          helperText: '',
+                        ),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0)
                       ),
                     ],
                   ),
                   ExpansionTile(
                     title: Text('Трудозатраты'),
                     maintainState: true,
+                    initiallyExpanded: true,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -644,32 +663,37 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       ),
                     ],
                   ),
-
-                  TextButton(
-                      onPressed: () {
-                        _formKey_1.currentState!.save();
-                        _upgradeCard();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SparesPage()
-                            )
-                        );
-                      },
-                      child: Text('Перечень необходимых запчастей')
+                  Padding(
+                      child: OutlinedButton(
+                          onPressed: () {
+                            _formKey_1.currentState!.save();
+                            _upgradeCard();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SparesPage()
+                                )
+                            );
+                          },
+                          child: Text('Перечень необходимых запчастей')
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0)
                   ),
-                  TextButton(
-                      onPressed: () {
-                        _formKey_1.currentState!.save();
-                        _upgradeCard();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CardPicturesPage()
-                            )
-                        );
-                      },
-                      child: Text('Фотографии')
+                  Padding(
+                    child: OutlinedButton(
+                        onPressed: () {
+                          _formKey_1.currentState!.save();
+                          _upgradeCard();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CardPicturesPage()
+                              )
+                          );
+                        },
+                        child: Text('Фотографии')
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   ),
               ],
             )
@@ -680,7 +704,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: OutlinedButton (
+              child: ElevatedButton (
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -702,7 +726,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: OutlinedButton (
+              child: ElevatedButton (
                   onPressed: () {
                     if (_formKey_1.currentState!.validate()) {
                       _formKey_1.currentState!.save();

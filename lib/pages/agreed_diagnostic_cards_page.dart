@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rus_bur_service/pages/agreed_diagnostic_areas_page.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import 'package:rus_bur_service/widgets/list_views/cards_list.dart';
 
 import '../controller/user_notifier.dart';
@@ -16,9 +17,7 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Диагностические карты'),
-      ),
+      appBar: myAppBar('Диагностические карты'),
       drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),
       body: Column(
         children: [
@@ -30,7 +29,7 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: OutlinedButton (
+                child: ElevatedButton (
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -52,7 +51,7 @@ class AgreedDiagnosticCardsPage extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: OutlinedButton (
+                child: ElevatedButton (
                     onPressed: () {
                       Navigator.push(
                           context,

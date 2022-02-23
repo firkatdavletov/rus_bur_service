@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/settings_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import '../widgets/forms/app_text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,9 +14,7 @@ class EmailMessageSettingsPage extends StatelessWidget {
 
     final _formKey_1 = GlobalKey<FormState>();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(' Настройки сообщения'),
-      ),
+      appBar: myAppBar('Настройки сообщения'),
       body: SingleChildScrollView(
         child: Column(
           children: [

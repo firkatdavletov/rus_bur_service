@@ -4,6 +4,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rus_bur_service/api/google_sign_in_api.dart';
+import 'package:rus_bur_service/helpers/htmlMailPage.dart';
 import 'package:rus_bur_service/models/report.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,16 +43,7 @@ class MailSender {
       ..recipients = [prefs.getString('recipients')]
       ..subject = 'Отчет по результатам диагностики бурового станка №${report.name} от ${report.date}'
       //..text = prefs.getString('text')
-      ..html = '''
-        <h2 align="center">ОТЧЕТ ПО РЕЗУЛЬТАТАМ</h2>
-        <h2 align="center">ДИАГНОСТИКИ БУРОВОГО СТАНКА</h2>
-        <h2 align="center">${report.name}</h2>
-        <p>Модель машины: ${report.machineModel}</p>
-        <p>Год выпуска машины: ${report.machineYear}</p>
-        <p>Место проведения: ${report.place}</p>
-        <p>Дата проведения: ${report.date}</p>
-        <img src="cid:app"/>
-      '''
+      ..html = HtmlMailPage(report: report).html()
       ..attachments = [
         FileAttachment(File('$path/report_pdf.pdf'))
         ..location = Location.attachment

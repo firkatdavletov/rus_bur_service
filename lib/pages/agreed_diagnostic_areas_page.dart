@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import 'package:rus_bur_service/widgets/list_views/parts_list.dart';
 
 import '../controller/user_notifier.dart';
@@ -11,9 +12,7 @@ class AgreedDiagnosticAreas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Согласование направлений диагностики'),
-      ),
+      appBar: myAppBar('Согласование направлений диагностики'),
       drawer: AppDrawer(user: Provider.of<UserNotifier>(context, listen: false).user,),
       body: PartsList(),
     );

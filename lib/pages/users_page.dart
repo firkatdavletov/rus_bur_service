@@ -27,6 +27,16 @@ class _UsersPageState extends State<UsersPage> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.blueGrey, Colors.lightBlueAccent]
+              )
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(30))
+        ),
         title: Text(
           'Настройки пользователей'
         ),

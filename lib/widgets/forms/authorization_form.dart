@@ -86,10 +86,9 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => FutureBuilder(
-                                      future: db.readUserByLogin(_login),
+                                      future: _getUser(_login),
                                       builder: (BuildContext context, AsyncSnapshot<dynamic> userSnapshot) {
                                         if (userSnapshot.hasData) {
-                                          context.read<UserNotifier>().changeUser(userSnapshot.data);
                                           return HomePage();
                                         } else if (userSnapshot.hasError) {
                                           return Scaffold(
@@ -135,5 +134,11 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
           ],
         )
     );
+  }
+
+  Future<User> _getUser(String login) async {
+    User user = await db.readUserByLogin(login);
+    context.read<UserNotifier>().changeUser(user);
+    return user;
   }
 }

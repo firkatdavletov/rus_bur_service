@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rus_bur_service/widgets/appbar/app_bar.dart';
 import 'package:rus_bur_service/widgets/forms/pictures_settings_form.dart';
 
 class PictureSettingsPage extends StatelessWidget {
@@ -7,9 +8,7 @@ class PictureSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Настройки изображения '),
-      ),
+      appBar: myAppBar('Настройки изображения'),
       body: SingleChildScrollView(
         child: PicturesSettingsForm()
       ),

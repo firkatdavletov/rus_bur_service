@@ -18,14 +18,14 @@ class DbProvider {
   DbProvider(this.database);
 
 // -----------------Report------------------------------------------------------
-  Future<void> insertReport(Report report) async {
-    final db = await database;
-    await db.insert(
-      'reports',
-      report.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
+//   Future<void> insertReport(Report report) async {
+//     final db = await database;
+//     await db.insert(
+//       'reports',
+//       report.toMap(),
+//       conflictAlgorithm: ConflictAlgorithm.replace,
+//     );
+//   }
 
   Future<void> insertReport_2(BuildContext context) async {
     final db = await database;
