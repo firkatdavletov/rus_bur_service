@@ -30,17 +30,19 @@ class MailSender {
       return false;
     }
 
-    const mailAddress = 'serviceavailable.test@gmail.com';
+    String? mailAddress = prefs.getString('source_email');
+    List<String>? recipients = prefs.getStringList('recipients_email');
+
     final auth = await user.authentication;
     final token = auth.accessToken!;
 
     print('Authenticated: $mailAddress');
 
-    final smtpServer = gmailSaslXoauth2(mailAddress, token);
+    final smtpServer = gmailSaslXoauth2(mailAddress!, token);
 
     final message = Message()
       ..from = Address(mailAddress, 'ООО "РусБурСервис"')
-      ..recipients = [prefs.getString('recipients')]
+      ..recipients = recipients!
       ..subject = 'Отчет по результатам диагностики бурового станка №${report.name} от ${report.date}'
       //..text = prefs.getString('text')
       ..html = HtmlMailPage(report: report).html()

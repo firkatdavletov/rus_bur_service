@@ -113,7 +113,7 @@ class _PicturesSettingsFormState extends State<PicturesSettingsForm> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: OutlinedButton(
+            child: ElevatedButton(
               child: Text('Сохранить'),
               onPressed: () {
                 setState(() {

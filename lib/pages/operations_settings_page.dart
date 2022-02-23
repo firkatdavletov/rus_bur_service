@@ -52,7 +52,7 @@ class _OperationsSettingPageState extends State<OperationsSettingPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Новая операция'),
+                    title: Text('Новая операция', textAlign: TextAlign.center,),
                     content: OperationAddAlertDialog(partId: widget.partId,),
                   );
                 });

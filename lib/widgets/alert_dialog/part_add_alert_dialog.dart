@@ -28,7 +28,7 @@ class _PartAddAlertDialogState extends State<PartAddAlertDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _name = value;
@@ -38,17 +38,16 @@ class _PartAddAlertDialogState extends State<PartAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.circle, color: Colors.greenAccent,),
                       label: 'Название'
                   ),
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               if (_formKey.currentState!.validate()) {
                                 Part _part = Part(
@@ -69,7 +68,7 @@ class _PartAddAlertDialogState extends State<PartAddAlertDialog> {
                     ),
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               Navigator.pop(context);
                             },

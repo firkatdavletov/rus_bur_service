@@ -109,13 +109,6 @@ class _PartsPageState extends State<PartsPage> {
                       child: Text('Добавить')
                   ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 10.0),
-              //   child: ElevatedButton(
-              //       onPressed: () {},
-              //       child: Text('Edit')
-              //   ),
-              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 child: ElevatedButton(

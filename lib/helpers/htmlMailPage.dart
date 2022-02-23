@@ -42,21 +42,6 @@ class HtmlMailPage {
                 </table>
                 <table style="font: 13px Tahoma, Arial, sans-serif;">
                   <tr>
-                    <td style="width: 2000px; padding-bottom: 5px; vertical-align: top;">
-                      Дата
-                    </td>
-                    <td colspan="2" style="vertical-align: top;">
-                      <table style="width: 100%; font: 13px Tahoma, Arial, sans-serif;">
-                        <tr>
-                          <td style="width: 100%;"><b>${report.date}</b></td>
-                          <td style="color: #077d00; font-weight: bold; text-align: right;"><span></span></td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-                <table style="font: 13px Tahoma, Arial, sans-serif;">
-                  <tr>
                     <td style="width: 200px; padding-bottom: 5px; vertical-align: top;">
                       Заказчик
                     </td>

@@ -34,7 +34,7 @@ class _OperationAddAlertDialogState extends State<OperationAddAlertDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
+                  child: AppTextFormFieldWithoutIcon(
                       helperText: '',
                       onChanged: (String value) {
                         _name = value;
@@ -44,17 +44,16 @@ class _OperationAddAlertDialogState extends State<OperationAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.circle, color: Colors.greenAccent,),
                       label: 'Название'
                   ),
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               if (_formKey.currentState!.validate()) {
                                 Operation _operation = Operation(
@@ -77,7 +76,7 @@ class _OperationAddAlertDialogState extends State<OperationAddAlertDialog> {
                     ),
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               Navigator.pop(context);
                             },

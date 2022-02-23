@@ -18,6 +18,7 @@ class Report {
   final int opTime_3;
   final int opTime_4;
   final String note;
+  bool isExpanded = false;
 
   Report({
     required this.id,

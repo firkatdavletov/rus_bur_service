@@ -35,12 +35,12 @@ class UsersListView extends StatelessWidget {
                   trailing: Text(userStatus),
                   onTap: () {
                     bool isSuperAdmin = Provider.of<UserNotifier>(context, listen: false).isSuperAdmin;
-                    if (snapshot.data[i].isSuperAdmin || !isSuperAdmin) {
+                    if (!snapshot.data[i].isSuperAdmin || isSuperAdmin) {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Редактирование пользователя'),
+                              title: Text('Редактирование пользователя', textAlign: TextAlign.center,),
                               content: UserEditAlertDialog(user: snapshot.data[i],),
                             );
                           });

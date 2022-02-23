@@ -11,6 +11,7 @@ import 'package:rus_bur_service/main.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/pages/create_card_page.dart';
 import 'package:rus_bur_service/widgets/list_views/card_pictures_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/forms/app_text_form_field.dart';
 
@@ -29,7 +30,19 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
 
   _onImageButtonPressed (ImageSource source, {BuildContext? context}) async {
     await _displayPickImageDialog(context!, (name, desc) async {
-      final pickedFile = await _picker.pickImage(source: source);
+      SharedPreferences pref = await SharedPreferences.getInstance();
+
+      double? maxHeight = pref.getDouble('maxPictureHeight');
+      double? maxWidth = pref.getDouble('maxPictureWidth');
+      int? quality = pref.getInt('pictureQuality');
+
+      final pickedFile = await _picker.pickImage(
+          source: source,
+          maxHeight: maxHeight,
+          maxWidth: maxWidth,
+          imageQuality: quality
+      );
+
       File temp = File(pickedFile!.path);
       List<int> bytes = await temp.readAsBytes();
       setState(() {

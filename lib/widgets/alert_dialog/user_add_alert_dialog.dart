@@ -122,7 +122,8 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithoutIcon(
+                  child: AppTextFormField(
+                    icon: Icon(Icons.login),
                       helperText: '',
                       onChanged: (String value) {
                         _login = value;
@@ -153,29 +154,29 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                     label: 'Пароль',
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Администратор'),
-                    Checkbox(
-                        value: _isAdmin,
-                        onChanged: (value) {
-                          setState(() {
-                            _isAdmin = value!;
-                          });
-                        })
-                  ],
+                Padding(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: _isAdmin,
+                          onChanged: (value) {
+                            setState(() {
+                              _isAdmin = value!;
+                            });
+                          }),
+                      Text('Администратор')
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
-                              //_findLoginMatching(_login);
-                              //_findIdMatching(_id);
-
                               if (_formKey.currentState!.validate()) {
                                 User _user = User(
                                     firstName: _firstName,
@@ -201,7 +202,7 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                     ),
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               Navigator.pop(context);
                             },

@@ -50,7 +50,7 @@ class _UsersPageState extends State<UsersPage> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Создание пользователя'),
+                  title: Text('Создание пользователя', textAlign: TextAlign.center,),
                   content: UserAddAlertDialog(),
                 );
               });

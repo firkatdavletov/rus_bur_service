@@ -49,7 +49,7 @@ class _PartsSettingPageState extends State<PartsSettingPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Новый узел'),
+                    title: Text('Новый узел', textAlign: TextAlign.center,),
                     content: PartAddAlertDialog(),
                   );
                 });

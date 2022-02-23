@@ -87,9 +87,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                       title: Text('Заказчик'),
                       maintainState: true,
                       initiallyExpanded: true,
-                      leading: context.watch<ReportNotifier>().company.isEmpty
-                          ? Icon(Icons.error_outline)
-                          : Icon(Icons.check),
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -108,9 +105,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                     title: Text('Дата осмотра'),
                     maintainState: true,
                     initiallyExpanded: true,
-                    leading: context.watch<ReportNotifier>().date.isEmpty
-                        ? Icon(Icons.error_outline)
-                        : Icon(Icons.check),
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -120,7 +114,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                             context.read<ReportNotifier>().changeDate(value);
                           },
                           validator: _validate,
-                          helperText: 'ДД/ММ/ГГГГ',
+                          helperText: 'ММ/ДД/ГГГГ',
                         ),
                       ),
                     ],
@@ -129,9 +123,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                     title: Text('Место проведения осмотра'),
                     maintainState: true,
                     initiallyExpanded: true,
-                    leading: context.watch<ReportNotifier>().place.isEmpty
-                        ? Icon(Icons.error_outline)
-                        : Icon(Icons.check),
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
@@ -179,9 +170,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                     title: Text('Контактное лицо заказчика'),
                     maintainState: true,
                     initiallyExpanded: true,
-                    leading: context.watch<ReportNotifier>().customerName.isEmpty
-                        ? Icon(Icons.error_outline)
-                        : Icon(Icons.check),
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
@@ -191,7 +179,7 @@ class _CreateReportFormState extends State<CreateReportForm> {
                             context.read<ReportNotifier>().changeCustomerName(value);
                           },
                           validator: _validate,
-                          helperText: 'ФИО',
+                          helperText: '',
                         ),
                       ),
                     ],
@@ -200,9 +188,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                     title: Text('Номер телефона'),
                     maintainState: true,
                     initiallyExpanded: true,
-                    leading: context.watch<ReportNotifier>().customerPhone.isEmpty
-                        ? Icon(Icons.error_outline)
-                        : Icon(Icons.check),
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -221,9 +206,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                     title: Text('Email'),
                     maintainState: true,
                     initiallyExpanded: true,
-                    leading: context.watch<ReportNotifier>().customerEmail.isEmpty
-                        ? Icon(Icons.error_outline)
-                        : Icon(Icons.check),
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),

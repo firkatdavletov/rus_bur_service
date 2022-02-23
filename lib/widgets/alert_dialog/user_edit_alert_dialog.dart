@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rus_bur_service/models/user.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/users_page.dart';
@@ -7,6 +8,7 @@ import 'package:rus_bur_service/helpers/password_provider.dart';
 import 'package:rus_bur_service/widgets/forms/app_text_form_field.dart';
 import 'package:rus_bur_service/widgets/forms/password_field.dart';
 
+import '../../controller/user_notifier.dart';
 import '../../main.dart';
 
 class UserEditAlertDialog extends StatefulWidget {
@@ -54,8 +56,8 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                 Text('ID: ${widget.user.userId}'),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInit(
-                      helperText: '',
+                  child: AppTextFormFieldWithInitWithoutIcon(
+                      helperText: 'Имя',
                       initialValue: widget.user.firstName,
                       onSaved: (String value) {
                         _firstName = value;
@@ -64,15 +66,13 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                         if (value.isEmpty) {
                           return 'Пожалуйста, заполните поле';
                         }
-                      },
-                      icon: Icon(Icons.circle, color: Colors.greenAccent,),
-                      label: 'Имя'
+                      }
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInit(
-                      helperText: '',
+                  child: AppTextFormFieldWithInitWithoutIcon(
+                      helperText: 'Фамилия',
                       initialValue: widget.user.lastName,
                       onSaved: (String value) {
                         _lastName = value;
@@ -82,14 +82,12 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.circle, color: Colors.blueAccent,),
-                      label: 'Фамилия'
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInit(
-                      helperText: '',
+                  child: AppTextFormFieldWithInitWithoutIcon(
+                      helperText: 'Отчество',
                       initialValue: widget.user.middleName,
                       onSaved: (String value) {
                         _middleName = value;
@@ -99,14 +97,12 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.circle, color: Colors.brown,),
-                      label: 'Отчество'
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                   child: AppTextFormFieldWithInit(
-                      helperText: '',
+                      helperText: 'Логин',
                       initialValue: widget.user.login,
                       onSaved: (String value) {
                         _login = value;
@@ -117,7 +113,7 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                         }
                       },
                       icon: Icon(Icons.login_rounded),
-                      label: 'Логин'
+                      label: ''
                   ),
                 ),
                 Padding(
@@ -144,7 +140,7 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                                       }
                                     },
                                     icon: Icon(Icons.password),
-                                    label: 'Пароль',
+                                    label: '',
                                     initialValue: _password
                                 ),
                               ),
@@ -159,27 +155,30 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                     },
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Администратор'),
-                    Checkbox(
-                        value: _checkBoxValue,
-                        onChanged: (value) {
-                          setState(() {
-                            _isAdmin = value!;
-                            print(_isAdmin);
-                          });
+                Padding(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: _checkBoxValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _isAdmin = value!;
+                              print(_isAdmin);
+                            });
 
-                        })
-                  ],
+                          }),
+                      Text('Администратор')
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
@@ -206,42 +205,28 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                             child: Text('Сохранить')
                         )
                     ),
-                    Padding(
+                    Visibility(
+                        visible: widget.user.userId != Provider.of<UserNotifier>(context, listen: false).user.userId,
+                        child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
-                              if (!widget.user.isSuperAdmin) {
-                                db.deleteUser(widget.user.userId);
-                                PasswordProvider().deletePassword(widget.user.login);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UsersPage()
-                                    )
-                                );
-                              } else {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Text ('Вы не можете удалить этого пользователя'),
-                                        actions: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('Назад'))
-                                        ],
-                                      );
-                                    });
-                              }
+                              db.deleteUser(widget.user.userId);
+                              PasswordProvider().deletePassword(widget.user.login);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UsersPage()
+                                  )
+                              );
                             },
                             child: Text('Удалить')
                         )
+                    )
                     ),
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: OutlinedButton(
+                        child: ElevatedButton(
                             onPressed: (){
                               Navigator.pop(context);
                             },
