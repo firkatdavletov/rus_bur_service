@@ -247,7 +247,6 @@ class AppTextFormFieldWithInitSuffix extends StatelessWidget {
 
 class AppDropDownFormField extends StatefulWidget {
   final Function onSaved;
-  final Icon icon;
   final String label;
   final String initialValue;
   final List<String> items;
@@ -255,7 +254,6 @@ class AppDropDownFormField extends StatefulWidget {
   const AppDropDownFormField({
     Key? key,
     required this.onSaved,
-    required this.icon,
     required this.label,
     required this.initialValue,
     required this.items,
@@ -278,7 +276,6 @@ class _AppDropDownFormFieldState extends State<AppDropDownFormField> {
       setter: (value) {
         widget.onSaved(value);
       },
-      icon: widget.icon,
       labelText: widget.label,
       itemsVisibleInDropdown: widget.itemsVisible,
       labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
@@ -292,7 +289,6 @@ class _AppDropDownFormFieldState extends State<AppDropDownFormField> {
 class AppTextFormFieldWithInitMaxLines extends StatelessWidget {
   final Function onSaved;
   final Function validator;
-  final Icon icon;
   final String label;
   final String initialValue;
   final String helperText;
@@ -301,7 +297,6 @@ class AppTextFormFieldWithInitMaxLines extends StatelessWidget {
     Key? key,
     required this.onSaved,
     required this.validator,
-    required this.icon,
     required this.label,
     required this.initialValue,
     required this.helperText,
@@ -327,7 +322,6 @@ class AppTextFormFieldWithInitMaxLines extends StatelessWidget {
                   width: 1.5
               )
           ),
-          icon: icon,
           label: Text(label),
           labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
               : AppTextStyle().getInputLabelStyle(),

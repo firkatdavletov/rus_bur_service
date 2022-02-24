@@ -17,9 +17,7 @@ class AddSparePage extends StatelessWidget {
           ? 'Новая деталь'
           : 'Редактрование детали'
       ),
-      body: SingleChildScrollView(
-        child: AddSpareForm(isNewSpare: isNewSpare),
-      ),
+      body: AddSpareForm(isNewSpare: isNewSpare)
     );
     // return ;
   }

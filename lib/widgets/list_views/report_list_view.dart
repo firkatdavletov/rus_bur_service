@@ -27,7 +27,7 @@ class _ReportListViewState extends State<ReportListView> {
         return ListTile(
           leading: Text('${_reports[i].name}'),
           title: Text('${_reports[i].company}'),
-          subtitle: Text('${_reports[i].date}'),
+          subtitle: Text('ID: ${_reports[i].id} DATE: ${_reports[i].date}'),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -55,6 +55,8 @@ class _ReportListViewState extends State<ReportListView> {
                                 ElevatedButton(
                                     onPressed: () {
                                       setState(() {
+                                        print('report list view: reports.l: ${_reports.length}\n index i: $i\nreport[0]: ${_reports[0].id}');
+
                                         _reports.removeAt(i);
                                         db.deleteReport(_reports[i].id);
                                         db.deletePictures(_reports[i].id);

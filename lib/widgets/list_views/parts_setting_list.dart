@@ -28,7 +28,31 @@ class _PartsSettingListState extends State<PartsSettingList> {
                   icon: Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
-                      db.deletePart(snapshot.data[i].id);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Удалить объект?', textAlign: TextAlign.center,),
+                              content: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          db.deletePart(snapshot.data[i].id);
+                                          Navigator.of(context).pop();
+                                        });
+                                      },
+                                      child: Text('Да')),
+                                  OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Отмена'))
+                                ],
+                              ),
+                            );
+                          });
                     });
                   },
                 ),

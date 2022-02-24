@@ -58,146 +58,144 @@ class _AddSpareFormState extends State<AddSpareForm> {
       case 3:
         _dropdownPriorityValue = 'СРОЧНО';
     }
-
     return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
             child: Form(
-                key: _formKey_1,
-                child: ListView(
-                  children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text('ПРИОРИТЕТ :'),
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                            child: DropdownButton<String>(
-                              value: _dropdownPriorityValue,
-                              items: _priority.map((String value) {
-                                return DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value)
+              key: _formKey_1,
+              child: ListView(
+                children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text('ПРИОРИТЕТ :'),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          child: DropdownButton<String>(
+                            value: _dropdownPriorityValue,
+                            items: _priority.map((String value) {
+                              return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                context.read<SpareNotifier>().changePriority(
+                                    newValue == 'РЕКОМЕНДУЕТСЯ'
+                                        ? 1
+                                        : newValue == 'ПЛАНОВО'
+                                        ? 2
+                                        : newValue == 'СРОЧНО'
+                                        ? 3
+                                        : 0
                                 );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  context.read<SpareNotifier>().changePriority(
-                                      newValue == 'РЕКОМЕНДУЕТСЯ'
-                                          ? 1
-                                          : newValue == 'ПЛАНОВО'
-                                          ? 2
-                                          : newValue == 'СРОЧНО'
-                                          ? 3
-                                          : 0
-                                  );
-                                });
-                              },
-                            ),
+                              });
+                            },
                           ),
-                          Icon(
-                              Icons.filter_1_rounded,
-                              color: _priorityState == 1
-                                  ? Colors.lightGreen
-                                  : _priorityState == 2
-                                  ? Colors.orangeAccent
-                                  : _priorityState == 3
-                                  ? Colors.redAccent
-                                  : _priorityState == 0
-                                  ? Colors.grey
-                                  : null
-                          )
-                        ],
-                      ),
+                        ),
+                        Icon(
+                            Icons.filter_1_rounded,
+                            color: _priorityState == 1
+                                ? Colors.lightGreen
+                                : _priorityState == 2
+                                ? Colors.orangeAccent
+                                : _priorityState == 3
+                                ? Colors.redAccent
+                                : _priorityState == 0
+                                ? Colors.grey
+                                : null
+                        )
+                      ],
                     ),
-                    Divider(),
-                    Padding(
-                      child: Text('Каталожный номер', style: TextStyle(color: Colors.blueAccent)),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  ),
+                  Divider(),
+                  Padding(
+                    child: Text('Каталожный номер', style: TextStyle(color: Colors.blueAccent)),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInitWithoutIcon(
+                      initialValue: Provider.of<SpareNotifier>(context, listen: false).number,
+                      onSaved: (value) {
+                        context.read<SpareNotifier>().changeNumber(value);
+                      },
+                      validator: _validate,
+                      helperText: '',
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: AppTextFormFieldWithInitWithoutIcon(
-                        initialValue: Provider.of<SpareNotifier>(context, listen: false).number,
-                        onSaved: (value) {
-                          context.read<SpareNotifier>().changeNumber(value);
-                        },
-                        validator: _validate,
-                        helperText: '',
-                      ),
+                  ),
+                  Divider(),
+                  Padding(
+                    child: Text('Наименование', style: TextStyle(color: Colors.blueAccent)),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInitWithoutIcon(
+                      initialValue: Provider.of<SpareNotifier>(context, listen: false).name,
+                      onSaved: (value) {
+                        context.read<SpareNotifier>().changeName(value);
+                      },
+                      validator: _validate,
+                      helperText: '',
                     ),
-                    Divider(),
-                    Padding(
-                      child: Text('Наименование', style: TextStyle(color: Colors.blueAccent)),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  ),
+                  Divider(),
+                  Padding(
+                    child: Text('Количество', style: TextStyle(color: Colors.blueAccent)),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInitWithoutIcon(
+                      initialValue: Provider.of<SpareNotifier>(context, listen: false).quantity.toString(),
+                      onSaved: (value) {
+                        context.read<SpareNotifier>().changeQuantity(int.parse(value));
+                      },
+                      validator: _validateInt,
+                      helperText: '',
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: AppTextFormFieldWithInitWithoutIcon(
-                        initialValue: Provider.of<SpareNotifier>(context, listen: false).name,
-                        onSaved: (value) {
-                          context.read<SpareNotifier>().changeName(value);
-                        },
-                        validator: _validate,
-                        helperText: '',
-                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppDropDownFormField(
+                      itemsVisible: 3,
+                      items: [
+                        'шт.', 'л', 'компл.'
+                      ],
+                      initialValue: Provider.of<SpareNotifier>(context, listen: false).measure,
+                      onSaved: (value) {
+                        context.read<SpareNotifier>().changeMeasure(value);
+                      },
+                      label: 'Единица измерения',
                     ),
-                    Divider(),
-                    Padding(
-                      child: Text('Количество', style: TextStyle(color: Colors.blueAccent)),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppDropDownFormField(
+                      itemsVisible: 5,
+                      items: [
+                        'Износ', 'Отсутствие', 'Плановая замена', 'Модернизация', 'Несоответствие'
+                      ],
+                      initialValue: Provider.of<SpareNotifier>(context, listen: false).issue,
+                      onSaved: (value) {
+                        context.read<SpareNotifier>().changeIssue(value);
+                      },
+                      label: 'Проблема',
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: AppTextFormFieldWithInitWithoutIcon(
-                        initialValue: Provider.of<SpareNotifier>(context, listen: false).quantity.toString(),
-                        onSaved: (value) {
-                          context.read<SpareNotifier>().changeQuantity(int.parse(value));
-                        },
-                        validator: _validateInt,
-                        helperText: '',
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: AppDropDownFormField(
-                        itemsVisible: 3,
-                        items: [
-                          'шт.', 'л', 'компл.'
-                        ],
-                        initialValue: Provider.of<SpareNotifier>(context, listen: false).measure,
-                        onSaved: (value) {
-                          context.read<SpareNotifier>().changeMeasure(value);
-                        },
-                        icon: Icon(Icons.car_repair),
-                        label: 'Единица измерения',
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                      child: AppDropDownFormField(
-                        itemsVisible: 5,
-                        items: [
-                          'Износ', 'Отсутствие', 'Плановая замена', 'Модернизация', 'Несоответствие'
-                        ],
-                        initialValue: Provider.of<SpareNotifier>(context, listen: false).issue,
-                        onSaved: (value) {
-                          context.read<SpareNotifier>().changeIssue(value);
-                        },
-                        icon: Icon(Icons.car_repair),
-                        label: 'Проблема',
-                      ),
-                    ),
-                  ],
-                )
+                  ),
+                ],
+              )
             )
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),

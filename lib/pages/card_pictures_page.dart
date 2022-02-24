@@ -103,23 +103,28 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
                               },
                               label: 'Описание фото'
                           ),
-                          ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  onPick(
-                                      Provider.of<PictureNotifier>(context, listen: false).addPhotoName,
-                                      Provider.of<PictureNotifier>(context, listen: false).pictureDescription
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: Text('Сделать фото')
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('Отмена')
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      onPick(
+                                          Provider.of<PictureNotifier>(context, listen: false).addPhotoName,
+                                          Provider.of<PictureNotifier>(context, listen: false).pictureDescription
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text('Сделать фото')
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Отмена')
+                              )
+                            ],
                           )
                         ],
                       )

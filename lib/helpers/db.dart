@@ -76,33 +76,6 @@ class DbProvider {
     });
   }
 
-  // Future<int> upgradeReport(Report report) async {
-  //   final db = await database;
-  //   return await db.update(
-  //       'reports',
-  //       <String, Object>{
-  //         'report_id': '${report.id}',
-  //         'report_name': '${report.name}',
-  //         'user_id' : '${report.userId}',
-  //         'customer_company' : '${report.company}',
-  //         'customer_name' : '${report.customerName}',
-  //         'customer_email' : '${report.customerEmail}',
-  //         'customer_phone' : '${report.customerPhone}',
-  //         'report_place' : '${report.place}',
-  //         'report_date' : '${report.date}',
-  //         'engine_model' : '${report.engineModel}',
-  //         'engine_sn' : '${report.engineNumb}',
-  //         'machine_model' : '${report.machineModel}',
-  //         'machine_sn' : '${report.machineNumb}',
-  //         'machine_year' : '${report.machineYear}',
-  //         'engine_optime' : '${report.opTime_1}',
-  //         'report_note' : '${report.note}'
-  //       },
-  //       where: 'report_id = ?',
-  //       whereArgs: [report.id]
-  //   );
-  // }
-
   Future<int> upgradeReport_2(BuildContext context) async {
     final db = await database;
     return await db.update(
@@ -198,7 +171,6 @@ class DbProvider {
 
   Future<User> readUserByLogin(String login) async {
     final db = await database;
-    print('login: $login');
     final List<Map<String, dynamic>> maps = await db.query(
         'users',
         where: 'user_login = ?',

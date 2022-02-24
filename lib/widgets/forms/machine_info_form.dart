@@ -202,7 +202,6 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                           },
                           validator: _validate,
                           maxLines: 5,
-                          icon: Icon(Icons.arrow_right),
                           label: 'Примечание',
                           initialValue: context.watch<ReportNotifier>().note,
                           helperText: '',

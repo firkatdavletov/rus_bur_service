@@ -33,7 +33,31 @@ class _SparesListState extends State<SparesList> {
                     icon: Icon(Icons.delete),
                     onPressed: () {
                       setState(() {
-                        db.deleteSpare(snapshot.data[i].id);
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Удалить деталь?', textAlign: TextAlign.center,),
+                                content: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            db.deleteSpare(snapshot.data[i].id);
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        child: Text('Да')),
+                                    OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Отмена'))
+                                  ],
+                                ),
+                              );
+                            });
                       });
                     },
                   ),

@@ -47,7 +47,31 @@ class _ReportPicturesListState extends State<ReportPicturesList> {
                           icon: Icon(Icons.delete),
                           onPressed: () async {
                             setState(() {
-                              db.deletePicture(snapshot.data[i].id);
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Удалить фото?', textAlign: TextAlign.center,),
+                                      content: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  db.deletePicture(snapshot.data[i].id);
+                                                  Navigator.of(context).pop();
+                                                });
+                                              },
+                                              child: Text('Да')),
+                                          OutlinedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Отмена'))
+                                        ],
+                                      ),
+                                    );
+                                  });
                             });
                             String? path = await _getPath();
                             File('$path/${snapshot.data[i].pictureFileName}.jpg').delete();
