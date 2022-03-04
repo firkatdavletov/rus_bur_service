@@ -206,154 +206,131 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       ],
                     ),
                   ),
-                  Visibility(
-                      visible: _conclusionState != 1,
-                      child: ExpansionTile(
-                        title: Text('Описание проблемы'),
-                        maintainState: true,
-                        initiallyExpanded: true,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                            child: AppTextFormFieldWithInitWithoutIcon(
-                              initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).description,
-                              onSaved: (value) {
-                                context.read<DiagnosticCardsNotifier>().changeDescription(value);
-                              },
-                              validator: _validate,
-                              helperText: '',
-                            ),
-                          )
-                        ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    child: AppTextFormFieldWithInitWithoutIcon(
+                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).description,
+                      onSaved: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeDescription(value);
+                      },
+                      validator: _validate,
+                      helperText: 'Описание проблемы',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    child: AppTextFormFieldWithInitWithoutIcon(
+                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).area,
+                      onSaved: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeArea(value);
+                      },
+                      validator: _validate,
+                      helperText: 'Зона выявления дефекта',
+                    ),
+                  ),
+                  ExpansionTile(
+                    title: Text('Повреждения'),
+                    maintainState: true,
+                    initiallyExpanded: true,
+                    children: [
+                      CheckboxListTile(
+                        value: currentStatus&status.status1 == status.status1,
+                        onChanged: (value) {
+                          setState(() {
+                            if (currentStatus&status.status1 == status.status1) {
+                              int tempStatus = ~status.status1;
+                              currentStatus = currentStatus&tempStatus;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            } else {
+                              currentStatus |= status.status1;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            }
+                          });
+                        },
+                        title: Text('Износ'),
                       ),
-                  ),
-                  Visibility(
-                      visible: _conclusionState != 1,
-                      child: ExpansionTile(
-                        title: Text('Зона выявления дефекта'),
-                        maintainState: true,
-                        initiallyExpanded: true,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                            child: AppTextFormFieldWithInitWithoutIcon(
-                              initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).area,
-                              onSaved: (value) {
-                                context.read<DiagnosticCardsNotifier>().changeArea(value);
-                              },
-                              validator: _validate,
-                              helperText: '',
-                            ),
-                          )
-                        ],
-                      )
-                  ),
-                  Visibility(
-                      visible: _conclusionState != 1,
-                      child: ExpansionTile(
-                        title: Text('Повреждения'),
-                        maintainState: true,
-                        initiallyExpanded: true,
-                        children: [
-                          CheckboxListTile(
-                            value: currentStatus&status.status1 == status.status1,
-                            onChanged: (value) {
-                              setState(() {
-                                if (currentStatus&status.status1 == status.status1) {
-                                  int tempStatus = ~status.status1;
-                                  currentStatus = currentStatus&tempStatus;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                } else {
-                                  currentStatus |= status.status1;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                }
-                              });
+                      CheckboxListTile(
+                        value: currentStatus&status.status2 == status.status2,
+                        onChanged: (value) {
+                          setState(() {
+                            if (currentStatus&status.status2 == status.status2) {
+                              int tempStatus = ~status.status2;
+                              currentStatus = currentStatus&tempStatus;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            } else {
+                              currentStatus |= status.status2;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            }
+                          });
+                        },
+                        title: Text('Отсутствие'),
+                      ),
+                      CheckboxListTile(
+                        value: currentStatus&status.status3 == status.status3,
+                        onChanged: (value) {
+                          setState(() {
+                            if (currentStatus&status.status3 == status.status3) {
+                              int tempStatus = ~status.status3;
+                              currentStatus = currentStatus&tempStatus;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            } else {
+                              currentStatus |= status.status3;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            }
+                          });
+                        },
+                        title: Text('Плановая замена'),
+                      ),
+                      CheckboxListTile(
+                        value: currentStatus&status.status4 == status.status4,
+                        onChanged: (value) {
+                          setState(() {
+                            if (currentStatus&status.status4 == status.status4) {
+                              int tempStatus = ~status.status4;
+                              currentStatus = currentStatus&tempStatus;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            } else {
+                              currentStatus |= status.status4;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            }
+                          });
+                        },
+                        title: Text('Модернизация'),
+                      ),
+                      CheckboxListTile(
+                        value: currentStatus&status.status5 == status.status5,
+                        onChanged: (value) {
+                          setState(() {
+                            if (currentStatus&status.status5 == status.status5) {
+                              int tempStatus = ~status.status5;
+                              currentStatus = currentStatus&tempStatus;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            } else {
+                              currentStatus |= status.status5;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            }
+                          });
+                        },
+                        title: Text('Несоответствие'),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: AppTextFormFieldWithInit(
+                            onSaved: (value) {
+                              context.read<DiagnosticCardsNotifier>().changeDamage(value);
                             },
-                            title: Text('Износ'),
-                          ),
-                          CheckboxListTile(
-                            value: currentStatus&status.status2 == status.status2,
-                            onChanged: (value) {
-                              setState(() {
-                                if (currentStatus&status.status2 == status.status2) {
-                                  int tempStatus = ~status.status2;
-                                  currentStatus = currentStatus&tempStatus;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                } else {
-                                  currentStatus |= status.status2;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                }
-                              });
+                            validator: (value) {
+                              if (value.length > 35) {
+                                return 'Максимальное количество символов - 35';
+                              }
                             },
-                            title: Text('Отсутствие'),
-                          ),
-                          CheckboxListTile(
-                            value: currentStatus&status.status3 == status.status3,
-                            onChanged: (value) {
-                              setState(() {
-                                if (currentStatus&status.status3 == status.status3) {
-                                  int tempStatus = ~status.status3;
-                                  currentStatus = currentStatus&tempStatus;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                } else {
-                                  currentStatus |= status.status3;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                }
-                              });
-                            },
-                            title: Text('Плановая замена'),
-                          ),
-                          CheckboxListTile(
-                            value: currentStatus&status.status4 == status.status4,
-                            onChanged: (value) {
-                              setState(() {
-                                if (currentStatus&status.status4 == status.status4) {
-                                  int tempStatus = ~status.status4;
-                                  currentStatus = currentStatus&tempStatus;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                } else {
-                                  currentStatus |= status.status4;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                }
-                              });
-                            },
-                            title: Text('Модернизация'),
-                          ),
-                          CheckboxListTile(
-                            value: currentStatus&status.status5 == status.status5,
-                            onChanged: (value) {
-                              setState(() {
-                                if (currentStatus&status.status5 == status.status5) {
-                                  int tempStatus = ~status.status5;
-                                  currentStatus = currentStatus&tempStatus;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                } else {
-                                  currentStatus |= status.status5;
-                                  context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
-                                }
-                              });
-                            },
-                            title: Text('Несоответствие'),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                            child: AppTextFormFieldWithInit(
-                                onSaved: (value) {
-                                  context.read<DiagnosticCardsNotifier>().changeDamage(value);
-                                },
-                                validator: (value) {
-                                  if (value.length > 35) {
-                                    return 'Максимальное количество символов - 35';
-                                  }
-                                },
-                                icon: Icon(Icons.add),
-                                label: 'Другое',
-                                initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).damage,
-                                helperText: ''
-                            ),
-                          ),
-                        ],
-                      )
+                            icon: Icon(Icons.add),
+                            label: 'Другое',
+                            initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).damage,
+                            helperText: ''
+                        ),
+                      ),
+                    ],
                   ),
                   ExpansionTile(
                     title: Text('Риски, положительный эффект'),
@@ -642,29 +619,22 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       ),
                     ],
                   ),
-                  ExpansionTile(
-                    title: Text('Трудозатраты'),
-                    maintainState: true,
-                    initiallyExpanded: true,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                        child: AppTextFormFieldWithInitSuffix(
-                          onSaved: (value) {
-                            context.read<DiagnosticCardsNotifier>().changeManHours(int.parse(value));
-                          },
-                          validator: _validate,
-                          icon: Icon(Icons.person_sharp),
-                          label: '',
-                          initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours.toString(),
-                          helperText: '',
-                          suffixText: 'чел.*ч',
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: AppTextFormFieldWithInitSuffix(
+                      onSaved: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeManHours(int.parse(value));
+                      },
+                      validator: _validate,
+                      icon: Icon(Icons.person_sharp),
+                      label: 'Трудозатраты',
+                      initialValue: Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours.toString(),
+                      helperText: '',
+                      suffixText: 'человеко-ч.',
+                    ),
                   ),
                   Padding(
-                      child: OutlinedButton(
+                      child: ElevatedButton(
                           onPressed: () {
                             _formKey_1.currentState!.save();
                             _upgradeCard();
@@ -680,7 +650,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0)
                   ),
                   Padding(
-                    child: OutlinedButton(
+                    child: ElevatedButton(
                         onPressed: () {
                           _formKey_1.currentState!.save();
                           _upgradeCard();

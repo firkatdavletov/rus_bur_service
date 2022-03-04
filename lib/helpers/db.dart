@@ -7,6 +7,7 @@ import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/models/spare.dart';
 import 'package:sqflite/sqflite.dart';
+import '../controller/user_notifier.dart';
 import '../models/operation.dart';
 import '../models/part.dart';
 import '../models/report.dart';
@@ -18,23 +19,30 @@ class DbProvider {
   DbProvider(this.database);
 
 // -----------------Report------------------------------------------------------
-//   Future<void> insertReport(Report report) async {
-//     final db = await database;
-//     await db.insert(
-//       'reports',
-//       report.toMap(),
-//       conflictAlgorithm: ConflictAlgorithm.replace,
-//     );
-//   }
-
-  Future<void> insertReport_2(BuildContext context) async {
+  //Функция записи отчёта
+  Future<void> writeReport(BuildContext context) async {
     final db = await database;
     Map<String, Object?> map = Provider.of<ReportNotifier>(context, listen: false).toMap();
-    print(map);
+
+    Object? userId = map['user_id'];
+
     await db.insert(
       'reports',
       map,
       conflictAlgorithm: ConflictAlgorithm.fail,
+    );
+    //Определения ИД записанного отчёта
+    List<Map<String, Object?>> maxIdList = await db.rawQuery(
+        'SELECT MAX(report_id) FROM reports'
+    );
+
+    int maxId = int.parse(maxIdList.first['MAX(report_id)'].toString());
+    //Обновляем имя отчёта (ИД пользователя - ИД отчёта)
+    await db.update(
+        'reports',
+        {'report_name': userId.toString() + '-' + maxId.toString()},
+        where: 'report_id = ?',
+        whereArgs: [maxId]
     );
   }
 
@@ -43,13 +51,13 @@ class DbProvider {
     await db.rawDelete('DELETE FROM reports WHERE report_id = ?', ['$id']);
   }
 
-  Future<List<Report>> reports() async {
+  Future<List<Report>> readReports() async {
     // Get a reference to the database.
     final db = await database;
 
-    // Query the table for all The Dogs.
+    // Query the table for all reports.
     final List<Map<String, dynamic>> maps = await db.query('reports');
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    // Convert the List<Map<String, dynamic> into a List<Report>.
     return List.generate(maps.length, (i) {
       Report report = Report(
           id: maps[i]['report_id'],
@@ -76,7 +84,44 @@ class DbProvider {
     });
   }
 
-  Future<int> upgradeReport_2(BuildContext context) async {
+  Future<List<Report>> readReportsToUser(int userId) async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Query the table for all reports.
+    final List<Map<String, dynamic>> maps = await db.query(
+        'reports',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+    );
+    // Convert the List<Map<String, dynamic> into a List<Report>.
+    return List.generate(maps.length, (i) {
+      Report report = Report(
+          id: maps[i]['report_id'],
+          name: maps[i]['report_name'],
+          userId: maps[i]['user_id'],
+          company: maps[i]['customer_company'],
+          customerName: maps[i]['customer_name'],
+          customerEmail: maps[i]['customer_email'],
+          customerPhone: maps[i]['customer_phone'],
+          place: maps[i]['report_place'],
+          date: maps[i]['report_date'],
+          engineModel: maps[i]['engine_model'],
+          engineNumb: maps[i]['engine_sn'],
+          machineModel: maps[i]['machine_model'],
+          machineNumb: maps[i]['machine_sn'],
+          machineYear: maps[i]['machine_year'],
+          opTime_1: maps[i]['engine_optime_1'],
+          opTime_2: maps[i]['engine_optime_2'],
+          opTime_3: maps[i]['engine_optime_3'],
+          opTime_4: maps[i]['engine_optime_4'],
+          note: maps[i]['report_note']
+      );
+      return report;
+    });
+  }
+
+  Future<int> upgradeReport(BuildContext context) async {
     final db = await database;
     return await db.update(
         'reports',
@@ -85,7 +130,6 @@ class DbProvider {
         whereArgs: [Provider.of<ReportNotifier>(context, listen: false).id]
     );
   }
-
 //------------------User-------------------------------------------------------
   Future<List<User>> users() async {
     final db = await database;
@@ -114,7 +158,7 @@ class DbProvider {
         conflictAlgorithm: ConflictAlgorithm.abort,
       );
     } catch (e) {
-      print('$e');
+
     }
   }
 
@@ -179,7 +223,7 @@ class DbProvider {
 
     Map<String, dynamic> map = maps.first;
 
-    return User(
+    User _user = User(
         userId: map['user_id'],
         firstName: map['user_firstname'],
         lastName: map['user_lastname'],
@@ -188,6 +232,7 @@ class DbProvider {
         isAdmin: map['user_is_admin'] == 1? true : false,
         isSuperAdmin: map['user_is_superadmin'] == 1? true : false
     );
+    return _user;
   }
 //------------------Part--------------------------------------------------------
 
@@ -249,25 +294,15 @@ class DbProvider {
     });
   }
 
-  Future<String> getPartName (int id) async {
-    final db = await database;
-    List<Map<String, dynamic>> parts = await db.query(
-        'parts',
-        where: 'part_id = ?',
-        whereArgs: ['$id']
-    );
-    return parts.first['part_name'];
-  }
-
-  Future<bool> partIsExists (String name) async {
-    final db = await database;
-    List<Map<String, dynamic>> parts = await db.query(
-        'parts',
-        where: 'part_name = ?',
-        whereArgs: ['$name']
-    );
-    return parts.isNotEmpty? true : false;
-  }
+  // Future<bool> partIsExists (String name) async {
+  //   final db = await database;
+  //   List<Map<String, dynamic>> parts = await db.query(
+  //       'parts',
+  //       where: 'part_name = ?',
+  //       whereArgs: ['$name']
+  //   );
+  //   return parts.isNotEmpty? true : false;
+  // }
 
   insertPart(Part newPart) async {
     final db = await database;
@@ -463,29 +498,6 @@ class DbProvider {
       );
     });
   }
-  // Future<int> upgradeCardSelectByUnit(bool value, int id) async {
-  //   final db = await database;
-  //   return await db.update(
-  //       'cards',
-  //       <String, Object>{
-  //         'is_selected': value? 1 : 0,
-  //       },
-  //       where: 'unit_id = ?',
-  //       whereArgs: [id]
-  //   );
-  // }
-
-  // Future<int> upgradeCardSelect(bool value, int id) async {
-  //   final db = await database;
-  //   return await db.update(
-  //       'cards',
-  //       <String, Object>{
-  //         'is_selected': value? 1 : 0,
-  //       },
-  //       where: 'card_id = ?',
-  //       whereArgs: [id]
-  //   );
-  // }
 
   insertCard(DiagnosticCard card) async {
     final db = await database;

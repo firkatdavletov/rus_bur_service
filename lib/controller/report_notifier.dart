@@ -23,6 +23,7 @@ class ReportNotifier with ChangeNotifier{
   int _opTime_4 = 0;
   String _note = '';
 
+  int _lastId = 0;
   bool _isNewReport = false;
 
   int get userId => _userId;
@@ -45,6 +46,7 @@ class ReportNotifier with ChangeNotifier{
   int get opTime_4 => _opTime_4;
   String get note => _note;
 
+  int get lastId => _lastId;
   bool get isNewReport => _isNewReport;
 
   void changeUserId(int numb) {
@@ -129,11 +131,14 @@ class ReportNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  void changeLastId (controller) {
+    _lastId = controller;
+    notifyListeners();
+  }
+
   reset() {
     DateTime now = DateTime.now();
 
-    //changeUserId(0);
-    //changeReportId(0);
     changeName('');
     changeDate('${now.day}/${now.month}/${now.year}');
     changeCompany('');
@@ -173,12 +178,12 @@ class ReportNotifier with ChangeNotifier{
     changeOpTime_1(report.opTime_1);
     changeOpTime_2(report.opTime_2);
     changeOpTime_3(report.opTime_3);
+    changeOpTime_4(report.opTime_4);
     changeNote(report.note);
   }
 
   Map<String, dynamic> toMap() {
     return {
-      //'report_id' : id,
       'user_id' : userId,
       'report_name' : name,
       'report_date' : date,

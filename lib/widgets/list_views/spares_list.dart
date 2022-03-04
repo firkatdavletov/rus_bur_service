@@ -91,7 +91,6 @@ class _SparesListState extends State<SparesList> {
                 );
               });
         } else if (snapshot.hasError) {
-          print(snapshot.error);
           return ErrorPage();
         } else {
           return WaitingPage();

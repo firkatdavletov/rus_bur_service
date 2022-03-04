@@ -18,6 +18,8 @@ import '../main.dart';
 class PdfProvider {
 
   Future<bool> generate(Report report, User user) async {
+
+
     if (report.machineModel.isEmpty || report.machineModel.length < 1
         || report.machineYear.isEmpty || report.machineYear.length < 1
         || report.machineNumb.isEmpty || report.machineNumb.length < 1) {
@@ -98,7 +100,7 @@ class PdfProvider {
           buildSubtitle(report, user, styles)
         ]
     ));
-    print('PDF provider: page 1 is created');
+
     pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
         build: (context) => [
@@ -107,7 +109,7 @@ class PdfProvider {
           buildTable(report, tableStyle, tableHeaderStyle)
         ]
     ));
-    print('PDF provider: page 2 is created');
+
     pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
         build: (context) => [
@@ -118,7 +120,6 @@ class PdfProvider {
           buildTable2(partsData, tableStyle, tableHeaderStyle)
         ]
     ));
-    print('PDF provider: page 3 is created');
     final _images = await db.getPicture(report.id, '');
     final String? path;
     final Directory directory = await getApplicationSupportDirectory();
@@ -141,11 +142,10 @@ class PdfProvider {
             buildPicturesList(_pictureWidgets)
           ]
       ));
-      print('PDF provider: page 4 is created');
     }
 
     final List<DiagnosticCard> _importantCards = await db.getCards(report.id, 3);
-    print('flag');
+
     final _importantCardsList = _importantCards.map((item) {
       String _name;
       int i = item.id.indexOf('-');
@@ -249,7 +249,6 @@ class PdfProvider {
         effect += '${item.effect.replaceAll('ё', 'е')}';
       }
 
-
       return [
         '$_name',
         '${item.part.replaceAll('ё', 'е')}',
@@ -307,7 +306,6 @@ class PdfProvider {
         effect += '${item.effect.replaceAll('ё', 'е')}';
       }
 
-
       return [
         '$_name',
         '${item.part.replaceAll('ё', 'е')}',
@@ -325,20 +323,31 @@ class PdfProvider {
           SizedBox(height: 0.4 * PdfPageFormat.cm),
           buildTitlePage('РЕКОМЕНДУЕМЫЕ МЕРОПРИЯТИЯ ПО РЕЗУЛЬТАТАМ ПРОВЕРКИ', styles[0]),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          Text('ПРИОРИТЕТ - ВАЖНО', style: tableHeaderStyle),
+          _importantCardsList.isNotEmpty
+              ? Text('ПРИОРИТЕТ - ВАЖНО', style: tableHeaderStyle)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          buildTable3(_importantCardsList, tableHeaderStyle2, tableStyle2),
+          _importantCardsList.isNotEmpty
+            ? buildTable3(_importantCardsList, tableHeaderStyle2, tableStyle2)
+            : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          Text('ПРИОРИТЕТ - ПЛАНОВО', style: tableHeaderStyle),
+          _plannedCardsList.isNotEmpty
+              ? Text('ПРИОРИТЕТ - ПЛАНОВО', style: tableHeaderStyle)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          buildTable3(_plannedCardsList, tableHeaderStyle2, tableStyle2),
+          _plannedCardsList.isNotEmpty
+              ? buildTable3(_plannedCardsList, tableHeaderStyle2, tableStyle2)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          Text('ПРИОРИТЕТ - РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ', style: tableHeaderStyle),
+          _recommendCardsList.isNotEmpty
+              ? Text('ПРИОРИТЕТ - РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ', style: tableHeaderStyle)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          buildTable3(_recommendCardsList, tableHeaderStyle2, tableStyle2)
+          _recommendCardsList.isNotEmpty
+              ? buildTable3(_recommendCardsList, tableHeaderStyle2, tableStyle2)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm)
         ]
     ));
-    print('PDF provider: page 5 is created');
 
     final List<Spare> _importantSpares = await db.getSparesReport(report.id, 3);
     final _importantSparesList = _importantSpares.map((item) {
@@ -394,20 +403,32 @@ class PdfProvider {
           SizedBox(height: 0.4 * PdfPageFormat.cm),
           buildTitlePage('ПЕРЕЧЕНЬ НЕОБХОДИМЫХ ЗАПЧАСТЕЙ', styles[0]),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          Text('ПРИОРИТЕТ - ВАЖНО', style: tableHeaderStyle),
+          _importantSparesList.isNotEmpty
+              ? Text('ПРИОРИТЕТ - ВАЖНО', style: tableHeaderStyle)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          buildTable4(_importantSparesList, tableHeaderStyle2, tableStyle2),
+          _importantSparesList.isNotEmpty
+              ? buildTable4(_importantSparesList, tableHeaderStyle2, tableStyle2)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          Text('ПРИОРИТЕТ - ПЛАНОВО', style: tableHeaderStyle),
+          _plannedSparesList.isNotEmpty
+              ? Text('ПРИОРИТЕТ - ПЛАНОВО', style: tableHeaderStyle)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          buildTable4(_plannedSparesList, tableHeaderStyle2, tableStyle2),
+          _plannedSparesList.isNotEmpty
+              ? buildTable4(_plannedSparesList, tableHeaderStyle2, tableStyle2)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          Text('ПРИОРИТЕТ - РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ', style: tableHeaderStyle),
+          _recommendSparesList.isNotEmpty
+              ? Text('ПРИОРИТЕТ - РЕКОМЕНДАЦИИ, ПРЕДЛОЖЕНИЯ ПО УЛУЧШЕНИЮ, МОДЕРНИЗАЦИИ ОБОРУДОВАНИЯ', style: tableHeaderStyle)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm),
           SizedBox(height: 0.4 * PdfPageFormat.cm),
-          buildTable4(_recommendSparesList, tableHeaderStyle2, tableStyle2)
+          _recommendSparesList.isNotEmpty
+              ? buildTable4(_recommendSparesList, tableHeaderStyle2, tableStyle2)
+              : SizedBox(height: 0.1 * PdfPageFormat.cm)
         ]
     ));
-    print('PDF provider: page 6 is created');
+
     final List<DiagnosticCard> allCards = await db.getAllCards(report.id);
     if (allCards.isEmpty) {
       return false;
@@ -464,6 +485,13 @@ class PdfProvider {
             buildTitlePage('ДИАГНОСТИЧЕСКАЯ КАРТА $_name', styles[0]),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
             buildTable5(dc, tableStyle),
+          ]
+      ));
+      if (_spares.isNotEmpty) {
+        pdf.addPage(MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          build: (context) => [
+            buildLogo(buffer.asUint8List(), 50.0),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
             buildTitlePage('ПЕРЕЧЕНЬ НЕОБХОДИМЫХ ЗАПЧАСТЕЙ', tableHeaderStyle2),
             SizedBox(height: 0.4 * PdfPageFormat.cm),
@@ -471,12 +499,20 @@ class PdfProvider {
             SizedBox(height: 0.4 * PdfPageFormat.cm),
             buildPicturesList(_cardPicturesWidgets)
           ]
-      ));
-      print('PDF provider: page 7 is created');
+        ));
+      }
+      if (_cardPicturesWidgets.isNotEmpty) {
+        pdf.addPage(MultiPage(
+            pageFormat: PdfPageFormat.a4,
+            build: (context) => [
+              buildLogo(buffer.asUint8List(), 50.0),
+              SizedBox(height: 0.4 * PdfPageFormat.cm),
+              buildPicturesList(_cardPicturesWidgets)
+            ]
+        ));
+      }
     }
-    print('PDF provider: start save pdf');
     FileProvider().savePdf(name: 'report_pdf.pdf', pdf: pdf);
-    print('PDF Provider: pdf is created');
     return true;
   }
 

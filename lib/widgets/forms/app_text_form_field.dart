@@ -147,7 +147,7 @@ class AppTextFormFieldWithInitWithoutIcon extends StatelessWidget {
       validator: (value) => validator(value),
       style: AppTextStyle().getInputTextStyle(),
       decoration: InputDecoration(
-        helperText: helperText,
+        label: Text(helperText),
         border: OutlineInputBorder(),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -235,7 +235,7 @@ class AppTextFormFieldWithInitSuffix extends StatelessWidget {
                 width: 1.5
             )
         ),
-        icon: icon,
+        //icon: icon,
         label: Text(label),
         labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
             : AppTextStyle().getInputLabelStyle(),
@@ -361,7 +361,7 @@ class TermTextFormField extends StatelessWidget {
                   width: 1.5
               )
           ),
-          icon: Icon(Icons.calendar_today),
+          //icon: Icon(Icons.calendar_today),
           label: Text(''),
           labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
               : AppTextStyle().getInputLabelStyle(),

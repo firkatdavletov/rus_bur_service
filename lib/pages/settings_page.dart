@@ -90,36 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   },
                 ),
-                ListTile(
-                  title: Text('Удаление базы данных'),
-                  subtitle: Text('Удалить все данные'),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Удалить все данные?'),
-                            content: Row(
-                              children: [
-                                OutlinedButton(
-                                    onPressed: () async {
-                                      await deleteDatabase(join(await getDatabasesPath(), 'rb_service_database.db'));
-                                      PasswordProvider().deleteAllPasswords();
-                                    },
-                                    child: Text('Удалить')
-                                ),
-                                OutlinedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('Отмена')
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                  },
-                ),
               ],
             ),
           ),

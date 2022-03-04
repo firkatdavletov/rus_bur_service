@@ -104,7 +104,6 @@ class _PicturesSettingsFormState extends State<PicturesSettingsForm> {
                     ],
                   );
                 } else if (snapshot.hasError) {
-                  print('pictures_settings: error ${snapshot.error}');
                   return ErrorPage();
                 } else {
                   return WaitingPage();

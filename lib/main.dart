@@ -93,7 +93,6 @@ class MyApp extends StatelessWidget {
               home: snapshot.data.length == 0? RegistrationPage(): LoginPage(),
             );
           } else if (snapshot.hasError) {
-            print('snapshot error: ${snapshot.error}');
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'РусБурСервис',

@@ -151,7 +151,6 @@ class _CardsListState extends State<CardsList> {
                 }
             );
           } else if (snapshot.hasError) {
-            print('snapshot error: ${snapshot.error}');
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

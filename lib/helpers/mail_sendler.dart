@@ -36,8 +36,6 @@ class MailSender {
     final auth = await user.authentication;
     final token = auth.accessToken!;
 
-    print('Authenticated: $mailAddress');
-
     final smtpServer = gmailSaslXoauth2(mailAddress!, token);
 
     final message = Message()
@@ -62,7 +60,6 @@ class MailSender {
     }
   }
 
-
   void showSnackBar (String text) {
     final snackBar = SnackBar(
       content: Text(
@@ -71,7 +68,7 @@ class MailSender {
       ),
       backgroundColor: Colors.green,
     );
-    print(text);
+
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
       ..showSnackBar(snackBar);

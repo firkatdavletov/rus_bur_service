@@ -22,7 +22,7 @@ class AppDrawer extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
               accountName: Text('${user.firstName} ${user.lastName}'),
-              accountEmail: Text(userStatus),
+              accountEmail: Text(userStatus + ' ID:' + user.userId.toString()),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.blueGrey, Colors.lightBlueAccent]

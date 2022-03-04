@@ -41,7 +41,6 @@ class PDFViewPage extends StatelessWidget {
                         SizedBox(height: 20.0,),
                         ElevatedButton(
                             onPressed: () {
-                              context.read<ReportNotifier>().set(report);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -103,7 +102,6 @@ class PDFViewPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('Создаю PDF-файл...', textAlign: TextAlign.center,),
-                  Text('Это может занять несколько минут.', textAlign: TextAlign.center,),
                   SizedBox(
                     height: 20.0,
                   ),

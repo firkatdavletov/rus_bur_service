@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
@@ -27,34 +26,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: myAppBar('Главная страница'),
         drawer: AppDrawer(user: _user),
-        body: FutureBuilder(
-          future: db.reports(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData) {
-              return ReportListView(reports: snapshot.data,);
-            } else if (snapshot.hasError) {
-              print('snapshot error: ${snapshot.error}');
-              return Center(
-                child: Text('Ошибка получения данных'),
-              );
-            } else {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 10.0,),
-                    Text('Составляю список отчетов... ')
-                  ],
-                ),
-              );
-            }
-          },
-        ),
+        body: ReportListView(userId: _user.userId,),
       floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: Colors.lightBlueAccent,
+          backgroundColor: Colors.indigoAccent,
           onPressed: () {
             context.read<ReportNotifier>().reset();
+            context.read<ReportNotifier>().changeUserId(_user.userId);
             Navigator.push(
                 context,
                 MaterialPageRoute(

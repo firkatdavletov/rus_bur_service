@@ -164,7 +164,6 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                           onChanged: (value) {
                             setState(() {
                               _isAdmin = value!;
-                              print(_isAdmin);
                             });
 
                           }),
