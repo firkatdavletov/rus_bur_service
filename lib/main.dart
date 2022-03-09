@@ -4,8 +4,6 @@ import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/spare_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
 import 'package:rus_bur_service/controller/machine_notifier.dart';
-import 'package:rus_bur_service/pages/error_page.dart';
-import 'package:rus_bur_service/pages/home_page.dart';
 import 'package:rus_bur_service/pages/login_page.dart';
 import 'package:rus_bur_service/pages/registration_page.dart';
 

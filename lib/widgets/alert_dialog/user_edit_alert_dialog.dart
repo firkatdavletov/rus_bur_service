@@ -173,10 +173,10 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
                         child: ElevatedButton(
                             onPressed: (){
                               if (_formKey.currentState!.validate()) {
@@ -210,14 +210,37 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
                         child: ElevatedButton(
                             onPressed: (){
-                              db.deleteUser(widget.user.userId);
-                              PasswordProvider().deletePassword(widget.user.login);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => UsersPage()
-                                  )
-                              );
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Удалить пользователя?', textAlign: TextAlign.center,),
+                                      content: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  db.deleteUser(widget.user.userId);
+                                                  PasswordProvider().deletePassword(widget.user.login);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => UsersPage()
+                                                      )
+                                                  );
+                                                });
+                                              },
+                                              child: Text('Да')),
+                                          OutlinedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Отмена'))
+                                        ],
+                                      ),
+                                    );
+                                  });
                             },
                             child: Text('Удалить')
                         )

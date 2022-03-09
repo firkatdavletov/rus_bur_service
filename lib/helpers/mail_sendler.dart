@@ -45,7 +45,7 @@ class MailSender {
       //..text = prefs.getString('text')
       ..html = HtmlMailPage(report: report).html()
       ..attachments = [
-        FileAttachment(File('$path/report_pdf.pdf'))
+        FileAttachment(File('$path/report_pdf.pdf'), fileName: 'Отчет № ${report.name}.pdf')
         ..location = Location.attachment
       ];
 

@@ -81,108 +81,108 @@ const migrationScripts = [
     report_id INTEGER NOT NULL,
     part_id INTEGER NOT NULL
   )''',
-  // '''INSERT INTO parts (
-  //   part_name
-  // ) VALUES (
-  //   "Двигатель"
-  // )''',
-  // '''INSERT INTO parts (
-  //   part_name
-  // ) VALUES (
-  //   "Трансмиссия"
-  // )''',
-  // '''INSERT INTO parts (
-  //   part_name
-  // ) VALUES (
-  //   "Коробка передач"
-  // )''',
-  // '''INSERT INTO parts (
-  //   part_name
-  // ) VALUES (
-  //   "Шасси"
-  // )''',
-  // '''INSERT INTO parts (
-  //   part_name
-  // ) VALUES (
-  //   "Электроника"
-  // )''',
-  // '''INSERT INTO parts (
-  //   part_name
-  // ) VALUES (
-  //   "Гидравлика"
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Произвести диагностику двигателя",
-  //   1,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Замена уплотнительных колец",
-  //   1,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Протяжка всех болтовых соединений",
-  //   2,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Замена трансмиссионного масла",
-  //   2,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Замена масла в коробке передач",
-  //   3,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Регулировка межосевого зазора",
-  //   3,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Замена кронштейна тяги",
-  //   4,
-  //   1
-  // )''',
-  // '''INSERT INTO operations (
-  //   operation_name,
-  //   part_id,
-  //   is_required
-  // ) VALUES (
-  //   "Замена контроллера управления",
-  //   5,
-  //   1
-  // )''',
+  '''INSERT INTO parts (
+    part_name
+  ) VALUES (
+    "Двигатель"
+  )''',
+  '''INSERT INTO parts (
+    part_name
+  ) VALUES (
+    "Трансмиссия"
+  )''',
+  '''INSERT INTO parts (
+    part_name
+  ) VALUES (
+    "Коробка передач"
+  )''',
+  '''INSERT INTO parts (
+    part_name
+  ) VALUES (
+    "Шасси"
+  )''',
+  '''INSERT INTO parts (
+    part_name
+  ) VALUES (
+    "Электроника"
+  )''',
+  '''INSERT INTO parts (
+    part_name
+  ) VALUES (
+    "Гидравлика"
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Произвести диагностику двигателя",
+    1,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Замена уплотнительных колец",
+    1,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Протяжка всех болтовых соединений",
+    2,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Замена трансмиссионного масла",
+    2,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Замена масла в коробке передач",
+    3,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Регулировка межосевого зазора",
+    3,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Замена кронштейна тяги",
+    4,
+    1
+  )''',
+  '''INSERT INTO operations (
+    operation_name,
+    part_id,
+    is_required
+  ) VALUES (
+    "Замена контроллера управления",
+    5,
+    1
+  )''',
   // '''INSERT INTO reports (
   //   user_id,
   //   report_name,

@@ -7,7 +7,6 @@ import 'package:rus_bur_service/models/diagnostic_card.dart';
 import 'package:rus_bur_service/models/picture.dart';
 import 'package:rus_bur_service/models/spare.dart';
 import 'package:sqflite/sqflite.dart';
-import '../controller/user_notifier.dart';
 import '../models/operation.dart';
 import '../models/part.dart';
 import '../models/report.dart';
@@ -37,10 +36,15 @@ class DbProvider {
     );
 
     int maxId = int.parse(maxIdList.first['MAX(report_id)'].toString());
+    //Обновляем номер ИД в провайдере
+    context.read<ReportNotifier>().changeReportId(maxId);
+    //Создаем имя отчета (ИД пользователя - ИД отчёта)
+    String name = userId.toString() + '-' + maxId.toString();
+    context.read<ReportNotifier>().changeName(name);
     //Обновляем имя отчёта (ИД пользователя - ИД отчёта)
     await db.update(
         'reports',
-        {'report_name': userId.toString() + '-' + maxId.toString()},
+        {'report_name': name},
         where: 'report_id = ?',
         whereArgs: [maxId]
     );
@@ -57,6 +61,7 @@ class DbProvider {
 
     // Query the table for all reports.
     final List<Map<String, dynamic>> maps = await db.query('reports');
+
     // Convert the List<Map<String, dynamic> into a List<Report>.
     return List.generate(maps.length, (i) {
       Report report = Report(

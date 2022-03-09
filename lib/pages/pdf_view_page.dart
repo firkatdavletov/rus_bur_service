@@ -52,8 +52,8 @@ class PDFViewPage extends StatelessWidget {
                       ],
                     ),
             ),
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.send),
+            floatingActionButton: FloatingActionButton.extended(
+              backgroundColor: Colors.indigoAccent,
               onPressed: snapshot.data.isReady
                   ? () {
                           MailSender(context: context).sendMail(
@@ -67,6 +67,8 @@ class PDFViewPage extends StatelessWidget {
                           );
                         }
                   : null,
+              label: Text('Отправить'),
+              icon: Icon(Icons.send),
               ),
             );
         } else if (snapshot.hasError) {

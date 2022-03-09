@@ -331,16 +331,20 @@ class AppTextFormFieldWithInitMaxLines extends StatelessWidget {
 }
 
 class TermTextFormField extends StatelessWidget {
-  final String initialValue;
-  final Function onSaved;
+
+  final TextEditingController controller;
   final Function validator;
   final Widget suffix;
+  final String helperText;
+  final String label;
+
   const TermTextFormField({
     Key? key,
-    required this.initialValue,
-    required this.onSaved,
+    required this.controller,
     required this.validator,
-    required this.suffix
+    required this.suffix,
+    required this.label,
+    required this.helperText
   }) : super(key: key);
 
 
@@ -348,12 +352,11 @@ class TermTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     FocusNode appFocusNode = FocusNode();
     return TextFormField(
-      initialValue:  initialValue,
-      onSaved: (value) => onSaved(value),
+      controller:  controller,
       validator: (value) => validator(value),
       style: AppTextStyle().getInputTextStyle(),
       decoration: InputDecoration(
-          helperText: '',
+          helperText: helperText,
           border: OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
@@ -362,10 +365,87 @@ class TermTextFormField extends StatelessWidget {
               )
           ),
           //icon: Icon(Icons.calendar_today),
-          label: Text(''),
+          label: Text(label),
           labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
               : AppTextStyle().getInputLabelStyle(),
           suffix: suffix
+      ),
+    );
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+class AppTextField extends StatelessWidget {
+  final Function validator;
+  final TextEditingController textEditingController;
+  final String helperText;
+  const AppTextField({
+    Key? key,
+    required this.validator,
+    required this.textEditingController,
+    required this.helperText
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    FocusNode appFocusNode = FocusNode();
+    return TextFormField(
+      controller: textEditingController,
+      validator: (value) => validator(value),
+      style: AppTextStyle().getInputTextStyle(),
+      decoration: InputDecoration(
+        label: Text(helperText),
+        border: OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.black38,
+                width: 1.5
+            )
+        ),
+        labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
+            : AppTextStyle().getInputLabelStyle(),
+      ),
+    );
+  }
+}
+
+class AppTextFieldSuffix extends StatelessWidget {
+  final Function validator;
+  final String label;
+  final TextEditingController controller;
+  final String helperText;
+  final String suffixText;
+  const AppTextFieldSuffix({
+    Key? key,
+    required this.controller,
+    required this.validator,
+    required this.label,
+    required this.helperText,
+    required this.suffixText
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    FocusNode appFocusNode = FocusNode();
+    return TextFormField(
+      controller: controller,
+      validator: (value) => validator(value),
+      style: AppTextStyle().getInputTextStyle(),
+      decoration: InputDecoration(
+          helperText: helperText,
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Colors.black38,
+                  width: 1.5
+              )
+          ),
+          //icon: icon,
+          label: Text(label),
+          labelStyle: appFocusNode.hasFocus? AppTextStyle().getFocusedLabelStyle()
+              : AppTextStyle().getInputLabelStyle(),
+          suffixText: suffixText
       ),
     );
   }

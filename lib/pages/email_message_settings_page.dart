@@ -32,7 +32,7 @@ class EmailMessageSettingsPage extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Text('Отправка отчета'),
+                    Text('Отправка отчета с почты:'),
                     SizedBox(height: 20,),
                     Form(
                       key: _formKey_1,
@@ -45,6 +45,7 @@ class EmailMessageSettingsPage extends StatelessWidget {
                           helperText: ''
                       ),
                     ),
+                    SizedBox(height: 20,),
                     ElevatedButton(
                         onPressed: () {
                           if (_formKey_1.currentState!.validate()) {
@@ -56,7 +57,7 @@ class EmailMessageSettingsPage extends StatelessWidget {
                     SizedBox(height: 20,),
                     Divider(),
                     SizedBox(height: 20,),
-                    Text('Получатели отчета'),
+                    Text('Получатели отчета:'),
                     SizedBox(height: 20,),
                     Form(
                       key: _formKey_2,
@@ -93,14 +94,35 @@ class EmailMessageSettingsPage extends StatelessWidget {
                               trailing: IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
-                                  emails.removeAt(i);
-                                  snapshot.data.setStringList('recipients_email', emails);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EmailMessageSettingsPage()
-                                      )
-                                  );
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Удалить адрес?', textAlign: TextAlign.center,),
+                                          content: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    emails.removeAt(i);
+                                                    snapshot.data.setStringList('recipients_email', emails);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => EmailMessageSettingsPage()
+                                                        )
+                                                    );
+                                                  },
+                                                  child: Text('Да')),
+                                              OutlinedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('Отмена'))
+                                            ],
+                                          ),
+                                        );
+                                      });
                                 },
                               ),
                             );

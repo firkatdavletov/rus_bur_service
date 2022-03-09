@@ -86,6 +86,7 @@ class ReportNotifier with ChangeNotifier{
     notifyListeners();
   }
   void changeMachineModel(textController) {
+    print('changed machine model to $textController');
     _machineModel = textController;
     notifyListeners();
   }
@@ -183,6 +184,7 @@ class ReportNotifier with ChangeNotifier{
   }
 
   Map<String, dynamic> toMap() {
+    print('machint model: $machineModel');
     return {
       'user_id' : userId,
       'report_name' : name,
