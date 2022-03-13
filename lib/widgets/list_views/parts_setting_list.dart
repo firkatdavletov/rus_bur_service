@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rus_bur_service/controller/part_notifier.dart';
 import 'package:rus_bur_service/pages/operations_settings_page.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 
+import '../../controller/operation_notifier.dart';
 import '../../main.dart';
 
 class PartsSettingList extends StatefulWidget {
@@ -57,6 +60,8 @@ class _PartsSettingListState extends State<PartsSettingList> {
                   },
                 ),
                 onTap: () {
+                  context.read<PartNotifier>().changeName(snapshot.data[i].name);
+                  context.read<PartNotifier>().changeId(snapshot.data[i].id);
                   Navigator.push(
                       context,
                       MaterialPageRoute(

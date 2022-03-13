@@ -70,6 +70,7 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
         builder: (context) {
           context.read<PictureNotifier>().changePictureDescription('');
           context.read<PictureNotifier>().changeAddPhotoName('');
+          bool fromCamera = context.watch<PictureNotifier>().fromCamera;
           return AlertDialog(
               title: Text('Введите название и описание фото', textAlign: TextAlign.center,),
               content: Container(
@@ -81,8 +82,8 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          AppTextFormFieldWithoutIcon(
-                              helperText: '',
+                          AppTextField(
+                              helperText: 'Название фото',
                               onChanged: (String value) {
                                 context.read<PictureNotifier>().changeAddPhotoName(value);
                               },
@@ -91,17 +92,19 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
                                   return 'Пожалуйста, заполните поле';
                                 }
                               },
-                              label: 'Название фото'
+                              initial: '',
+                              inputType: TextInputType.text,
                           ),
-                          AppTextFormFieldWithoutIcon(
-                              helperText: '',
+                          AppTextField(
+                              helperText: 'Описание фото',
                               onChanged: (String value) {
                                 context.read<PictureNotifier>().changePictureDescription(value);
                               },
                               validator: (String value) {
 
                               },
-                              label: 'Описание фото'
+                              initial: '',
+                              inputType: TextInputType.text,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -116,7 +119,7 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
                                       Navigator.pop(context);
                                     }
                                   },
-                                  child: Text('Сделать фото')
+                                  child: Text(fromCamera? 'Сделать фото' : ' Выбрать фото')
                               ),
                               ElevatedButton(
                                   onPressed: () {
@@ -206,6 +209,7 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
             label: 'image_picker_example_from_gallery',
             child: FloatingActionButton(
               onPressed: () {
+                context.read<PictureNotifier>().changeSource(false);
                 _onImageButtonPressed(ImageSource.gallery, context: context);
               },
               heroTag: 'image0',
@@ -217,6 +221,7 @@ class _CardPicturesPageState extends State<CardPicturesPage> {
             padding: const EdgeInsets.only(top: 16.0),
             child: FloatingActionButton(
               onPressed: () {
+                context.read<PictureNotifier>().changeSource(true);
                 _onImageButtonPressed(ImageSource.camera, context: context);
               },
               heroTag: 'image1',

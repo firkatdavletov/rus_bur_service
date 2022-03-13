@@ -52,7 +52,7 @@ class _PicturesSettingsFormState extends State<PicturesSettingsForm> {
                     children: [
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-                          child: AppTextFormFieldWithInit(
+                          child: AppTextFieldSaved(
                               onSaved: (value) {
                                 snapshot.data.setDouble(
                                   'maxPictureHeight',
@@ -69,7 +69,7 @@ class _PicturesSettingsFormState extends State<PicturesSettingsForm> {
                       ),
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-                          child: AppTextFormFieldWithInit(
+                          child: AppTextFieldSaved(
                               onSaved: (value) {
                                 snapshot.data.setDouble(
                                     'maxPictureWidth',
@@ -86,7 +86,7 @@ class _PicturesSettingsFormState extends State<PicturesSettingsForm> {
                       ),
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-                          child: AppTextFormFieldWithInit(
+                          child: AppTextFieldSaved(
                               onSaved: (value) {
                                 snapshot.data.setInt(
                                     'pictureQuality',

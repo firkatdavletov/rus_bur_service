@@ -60,6 +60,7 @@ class _PicturesPageState extends State<PicturesPage> {
     return showDialog(
         context: context,
         builder: (context) {
+          bool fromCamera = context.watch<PictureNotifier>().fromCamera;
           return AlertDialog(
             title: Text('Выберите название фото'),
             content: Container(
@@ -101,9 +102,9 @@ class _PicturesPageState extends State<PicturesPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.add_a_photo_outlined),
+                              Icon(fromCamera? Icons.add_a_photo_outlined : Icons.image),
                               SizedBox(width: 10.0),
-                              Text('Сделать фото')
+                              Text(fromCamera? 'Сделать фото' : 'Выбрать фото')
                             ],
                           ),
                           style: ButtonStyle(
@@ -205,6 +206,7 @@ class _PicturesPageState extends State<PicturesPage> {
             child: FloatingActionButton(
               onPressed: () {
                 context.read<PictureNotifier>().changePhotoName(PhotoName.generalView);
+                context.read<PictureNotifier>().changeSource(false);
                 _onImageButtonPressed(ImageSource.gallery, context: context);
               },
               heroTag: 'image0',
@@ -217,6 +219,7 @@ class _PicturesPageState extends State<PicturesPage> {
             child: FloatingActionButton(
               onPressed: () {
                 context.read<PictureNotifier>().changePhotoName(PhotoName.generalView);
+                context.read<PictureNotifier>().changeSource(true);
                 _onImageButtonPressed(ImageSource.camera, context: context);
               },
               heroTag: 'image1',
@@ -302,8 +305,8 @@ class _RadioListState extends State<RadioList> {
             }
         ),
         Visibility(
-          child: AppTextFormFieldWithoutIcon(
-              helperText: '',
+          child: AppTextField(
+              helperText: 'Название фото',
               onChanged: (String value) {
                 context.read<PictureNotifier>().changeAddPhotoName(value);
               },
@@ -312,19 +315,21 @@ class _RadioListState extends State<RadioList> {
                   return 'Заполните поле';
                 }
               },
-              label: 'Название фото'
+              inputType: TextInputType.text,
+              initial: '',
           ),
           visible: isAdditional,
         ),
-        AppTextFormFieldWithoutIcon(
-            helperText: '',
+        AppTextField(
+            helperText: 'Описание фото',
             onChanged: (String value) {
               context.read<PictureNotifier>().changePictureDescription(value);
             },
             validator: (String value) {
 
             },
-            label: 'Описание фото'
+            initial: '',
+            inputType: TextInputType.text,
         ),
       ],
     );

@@ -121,13 +121,14 @@ class _AddSpareFormState extends State<AddSpareForm> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: Provider.of<SpareNotifier>(context, listen: false).number,
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: Provider.of<SpareNotifier>(context, listen: false).number,
+                      onChanged: (value) {
                         context.read<SpareNotifier>().changeNumber(value);
                       },
                       validator: _validate,
                       helperText: '',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
@@ -137,13 +138,14 @@ class _AddSpareFormState extends State<AddSpareForm> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: Provider.of<SpareNotifier>(context, listen: false).name,
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: Provider.of<SpareNotifier>(context, listen: false).name,
+                      onChanged: (value) {
                         context.read<SpareNotifier>().changeName(value);
                       },
                       validator: _validate,
                       helperText: '',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
@@ -153,13 +155,14 @@ class _AddSpareFormState extends State<AddSpareForm> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: Provider.of<SpareNotifier>(context, listen: false).quantity.toString(),
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: Provider.of<SpareNotifier>(context, listen: false).quantity.toString(),
+                      onChanged: (value) {
                         context.read<SpareNotifier>().changeQuantity(int.parse(value));
                       },
                       validator: _validateInt,
                       helperText: '',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Padding(

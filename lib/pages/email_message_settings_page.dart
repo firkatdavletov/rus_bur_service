@@ -36,13 +36,15 @@ class EmailMessageSettingsPage extends StatelessWidget {
                     SizedBox(height: 20,),
                     Form(
                       key: _formKey_1,
-                      child: AppTextFormFieldWithInitWithoutIcon(
+                      child: AppTextFieldSaved(
                           onSaved: (value) {
                             snapshot.data.setString('source_email', value);
                           },
                           validator: _validate,
                           initialValue: snapshot.data.getString('source_email'),
-                          helperText: ''
+                          helperText: '',
+                          label: '',
+                          icon: Icon(Icons.email_outlined),
                       ),
                     ),
                     SizedBox(height: 20,),
@@ -61,13 +63,14 @@ class EmailMessageSettingsPage extends StatelessWidget {
                     SizedBox(height: 20,),
                     Form(
                       key: _formKey_2,
-                      child: AppTextFormFieldWithoutIcon(
+                      child: AppTextField(
                           onChanged: (value) {
                             _controller = value;
                           },
                           validator: _validate,
-                          label: '',
-                          helperText: ''
+                          helperText: '',
+                          inputType: TextInputType.emailAddress,
+                          initial: '',
                       ),
                     ),
                     ElevatedButton(

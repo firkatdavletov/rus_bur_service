@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rus_bur_service/controller/part_notifier.dart';
 import 'package:rus_bur_service/pages/settings_page.dart';
-import 'package:rus_bur_service/widgets/alert_dialog/part_add_alert_dialog.dart';
+import 'package:rus_bur_service/widgets/alert_dialog/part_edit_alert_dialog.dart';
 
 import 'package:rus_bur_service/widgets/list_views/parts_setting_list.dart';
 
@@ -48,6 +50,7 @@ class _PartsSettingPageState extends State<PartsSettingPage> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
+                  context.read<PartNotifier>().changeName('');
                   return AlertDialog(
                     title: Text('Новый узел', textAlign: TextAlign.center,),
                     content: PartAddAlertDialog(),

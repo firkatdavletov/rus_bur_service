@@ -50,16 +50,16 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: AppTextFormField(
-                helperText: '',
+              child: AppTextField(
+                helperText: 'Логин',
                 onChanged: (String value) {
                   setState(() {
                     _login = value;
                   });
                 },
                 validator: _validatorName,
-                label: 'Логин',
-                icon: Icon(Icons.person),
+                inputType: TextInputType.text,
+                initial: '',
               ),
             ),
             Padding(
@@ -70,7 +70,7 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                 },
                 validator: _validatorName,
                 label: 'Пароль',
-                icon: Icon(Icons.password, color: Colors.black54),
+                initial: '',
               ),
             ),
             Padding(

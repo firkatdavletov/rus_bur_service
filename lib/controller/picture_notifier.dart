@@ -15,6 +15,7 @@ class PictureNotifier with ChangeNotifier {
   double _maxWidth = 0.0;
   double _maxHeight = 0.0;
   int _quality = 0;
+  bool _fromCamera = false;
 
   PhotoName get photoName => _photoName;
   String get addPhotoName => _addPhotoName;
@@ -22,6 +23,12 @@ class PictureNotifier with ChangeNotifier {
   double get maxWidth => _maxWidth;
   double get maxHeight => _maxHeight;
   int get quality => _quality;
+  bool get fromCamera => _fromCamera;
+
+  changeSource (bool fromCamera) {
+    _fromCamera = fromCamera;
+    notifyListeners();
+  }
 
   changeMaxWidth (double ctrl) {
     _maxWidth = ctrl;

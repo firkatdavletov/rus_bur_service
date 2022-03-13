@@ -52,46 +52,48 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   Container(height: 20),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: context.watch<ReportNotifier>().company,
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: context.watch<ReportNotifier>().company,
+                      onChanged: (value) {
                         context.read<ReportNotifier>().changeCompany(value);
                       },
                       validator: _validate,
                       helperText: 'Наименование юридического лица',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
                   Container(height: 20),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: context.watch<ReportNotifier>().date,
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: context.watch<ReportNotifier>().date,
+                      onChanged: (value) {
                         context.read<ReportNotifier>().changeDate(value);
                       },
                       validator: _validate,
                       helperText: 'Дата (ММ/ДД/ГГГГ)',
+                      inputType: TextInputType.datetime,
                     ),
                   ),
                   Divider(),
                   Container(height: 20),
                   Padding(
                     padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: context.watch<ReportNotifier>().place,
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: context.watch<ReportNotifier>().place,
+                      onChanged: (value) {
                         context.read<ReportNotifier>().changePlace(value);
                       },
                       validator: _validate,
                       helperText: 'Место проведения осмотра',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Padding(
                       padding: EdgeInsets.only(bottom: 5.0, right: 10.0, left: 10.0, top: 0.0),
                       child: ElevatedButton(
                         onPressed: () async {
-                          _formKey_1.currentState!.save();
                           Position _position = await determinePosition();
                           setState(() {
                             String latitude = '${_position.latitude}';
@@ -121,39 +123,42 @@ class _CreateReportFormState extends State<CreateReportForm> {
                   Container(height: 20),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      initialValue: context.watch<ReportNotifier>().customerName,
-                      onSaved: (value) {
+                    child: AppTextField(
+                      initial: context.watch<ReportNotifier>().customerName,
+                      onChanged: (value) {
                         context.read<ReportNotifier>().changeCustomerName(value);
                       },
                       validator: _validate,
                       helperText: 'Контактное лицо заказчика',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
                   Container(height: 20),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      onSaved: (value) {
+                    child: AppTextField(
+                      onChanged: (value) {
                         context.read<ReportNotifier>().changeCustomerPhone(value);
                       },
                       validator: _validateMobile,
-                      initialValue: context.watch<ReportNotifier>().customerPhone,
+                      initial: context.watch<ReportNotifier>().customerPhone,
                       helperText: 'Номер телефона заказчика',
+                      inputType: TextInputType.number,
                     ),
                   ),
                   Divider(),
                   Container(height: 20),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                    child: AppTextFormFieldWithInitWithoutIcon(
-                      onSaved: (value) {
+                    child: AppTextField(
+                      onChanged: (value) {
                         context.read<ReportNotifier>().changeCustomerEmail(value);
                       },
                       validator: _validate,
-                      initialValue: context.watch<ReportNotifier>().customerEmail,
+                      initial: context.watch<ReportNotifier>().customerEmail,
                       helperText: 'Email',
+                      inputType: TextInputType.emailAddress,
                     ),
                   ),
                 ],
@@ -175,7 +180,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
                             ElevatedButton(
                                 onPressed: () async {
                                   if (_formKey_1.currentState!.validate() && _enable) {
-                                    _formKey_1.currentState!.save();
                                     if (Provider.of<ReportNotifier>(context, listen: false).isNewReport) {
                                       await db.writeReport(context);
                                     } else {
@@ -226,7 +230,6 @@ class _CreateReportFormState extends State<CreateReportForm> {
               child: ElevatedButton (
                   onPressed: () async {
                     if (_formKey_1.currentState!.validate() && _enable) {
-                      _formKey_1.currentState!.save();
                       if (Provider.of<ReportNotifier>(context, listen: false).isNewReport) {
                         await db.writeReport(context);
                       } else {

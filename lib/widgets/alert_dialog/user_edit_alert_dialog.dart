@@ -56,25 +56,26 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                 Text('ID: ${widget.user.userId}'),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInitWithoutIcon(
+                  child: AppTextField(
                       helperText: 'Имя',
-                      initialValue: widget.user.firstName,
-                      onSaved: (String value) {
+                      initial: widget.user.firstName,
+                      onChanged: (String value) {
                         _firstName = value;
                       },
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Пожалуйста, заполните поле';
                         }
-                      }
+                      },
+                      inputType: TextInputType.text,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInitWithoutIcon(
+                  child: AppTextField(
                       helperText: 'Фамилия',
-                      initialValue: widget.user.lastName,
-                      onSaved: (String value) {
+                      initial: widget.user.lastName,
+                      onChanged: (String value) {
                         _lastName = value;
                       },
                       validator: (String value) {
@@ -82,29 +83,29 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
+                      inputType: TextInputType.text,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInitWithoutIcon(
+                  child: AppTextField(
                       helperText: 'Отчество',
-                      initialValue: widget.user.middleName,
-                      onSaved: (String value) {
+                      initial: widget.user.middleName,
+                      onChanged: (String value) {
                         _middleName = value;
                       },
                       validator: (String value) {
-                        if (false) {
-                          return 'Пожалуйста, заполните поле';
-                        }
+
                       },
+                      inputType: TextInputType.text,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithInit(
+                  child: AppTextField(
                       helperText: 'Логин',
-                      initialValue: widget.user.login,
-                      onSaved: (String value) {
+                      initial: widget.user.login,
+                      onChanged: (String value) {
                         _login = value;
                       },
                       validator: (String value) {
@@ -112,8 +113,7 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      icon: Icon(Icons.login_rounded),
-                      label: ''
+                      inputType: TextInputType.text,
                   ),
                 ),
                 Padding(
@@ -129,9 +129,8 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
-                                child: PasswordFieldWithInit(
-                                    enabled: true,
-                                    onSaved: (String value) {
+                                child: PasswordField(
+                                    onChanged: (String value) {
                                       _password = value;
                                     },
                                     validator: (String value) {
@@ -139,9 +138,8 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                                         return 'Заполните поле';
                                       }
                                     },
-                                    icon: Icon(Icons.password),
                                     label: '',
-                                    initialValue: _password
+                                    initial: _password
                                 ),
                               ),
                             ],
@@ -165,7 +163,6 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                             setState(() {
                               _isAdmin = value!;
                             });
-
                           }),
                       Text('Администратор')
                     ],
@@ -180,7 +177,6 @@ class _UserEditAlertDialogState extends State<UserEditAlertDialog> {
                         child: ElevatedButton(
                             onPressed: (){
                               if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
                                 User _user = User(
                                     firstName: _firstName,
                                     lastName: _lastName,

@@ -2,6 +2,7 @@ class Part {
   final int id;
   final String name;
   bool isChecked = false;
+  bool enable = true;
 
   Part({
     required this.id,

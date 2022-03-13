@@ -73,8 +73,8 @@ class _TakingPictureAlertState extends State<TakingPictureAlert> {
               }
           ),
         Visibility(
-            child: AppTextFormField(
-                helperText: '',
+            child: AppTextField(
+                helperText: 'Название фото',
                 onChanged: (String value) {
                   context.read<PictureNotifier>().changeAddPhotoName(value);
                 },
@@ -83,21 +83,21 @@ class _TakingPictureAlertState extends State<TakingPictureAlert> {
                     return 'Пожалуйста, заполните поле';
                   }
                 },
-                icon: Icon(Icons.text_format), //Icon(Icons.light, color: Colors.brown,),
-                label: 'Название фото'
+                initial: '',
+                inputType: TextInputType.text,
             ),
           visible: isAdditional,
         ),
-        AppTextFormField(
-            helperText: '',
+        AppTextField(
+            helperText: 'Описание фото',
             onChanged: (String value) {
               context.read<PictureNotifier>().changePictureDescription(value);
             },
             validator: (String value) {
 
             },
-            icon: Icon(Icons.text_format), //Icon(Icons.light, color: Colors.brown,),
-            label: 'Описание фото'
+            initial: '',
+            inputType: TextInputType.text,
         ),
       ],
     );

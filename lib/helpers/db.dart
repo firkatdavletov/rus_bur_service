@@ -280,34 +280,31 @@ class DbProvider {
 
   Future<List<Part>> getCheckedParts(int reportId) async {
     final db = await database;
+    //Получаем данные всех частей
     List<Map<String, dynamic>> parts = await db.query('parts');
+    //Получаем список частей, которые присутствуют в отчете
     var agreedParts = await db.rawQuery(
         'SELECT part_id FROM agreed_parts WHERE report_id = ?',
       ['$reportId']
     );
+    //Возвращаем список частей с аргументом "выбрано"
     return List.generate(parts.length, (i) {
+      //Берем часть из списка
       Part _checkedPart = Part(
         id: parts[i]['part_id'],
         name: parts[i]['part_name'],
       );
+      //Проверяем, есть ли часть с таким же ИД в списке выбраныых
       for (Object e in agreedParts) {
         if (e.toString() == '{part_id: ${_checkedPart.id}}') {
+
+          //Если есть, то ставим флаг "выбрано"
           _checkedPart.isChecked = true;
         }
       }
       return _checkedPart;
     });
   }
-
-  // Future<bool> partIsExists (String name) async {
-  //   final db = await database;
-  //   List<Map<String, dynamic>> parts = await db.query(
-  //       'parts',
-  //       where: 'part_name = ?',
-  //       whereArgs: ['$name']
-  //   );
-  //   return parts.isNotEmpty? true : false;
-  // }
 
   insertPart(Part newPart) async {
     final db = await database;
@@ -321,7 +318,6 @@ class DbProvider {
   deletePart(int id) async {
     final db = await database;
     await db.rawDelete('DELETE FROM parts WHERE part_id = ?', ['$id']);
-    //await db.rawDelete('DELETE FROM cards WHERE part_id = ?', ['$id']);
   }
 
   //------------------------AgreedParts-----------------------------------------
@@ -419,6 +415,19 @@ class DbProvider {
     );
   }
 
+  Future<int> upgradeOperation(Operation op) async {
+    final db = await database;
+    return await db.update(
+        'operations',
+        <String, Object>{
+          'operation_name': '${op.name}',
+          'is_required': op.isRequired? 1 : 0,
+        },
+        where: 'operation_id = ?',
+        whereArgs: [op.id]
+    );
+  }
+
   deleteOperation(int id) async {
     final db = await database;
     await db.rawDelete('DELETE FROM operations WHERE operation_id = ?', ['$id']);
@@ -466,11 +475,7 @@ class DbProvider {
   }
   Future<List<DiagnosticCard>> getAllCards(int reportId) async {
     final db = await database;
-    // List<Map<String, dynamic>> cards = await db.query(
-    //     'cards',
-    //     where: 'report_id = ?',
-    //     whereArgs: ['$reportId']
-    // );
+
     List<Map<String, dynamic>> cards = await db.rawQuery(
         '''SELECT * 
            FROM cards c 
@@ -513,6 +518,10 @@ class DbProvider {
     );
   }
 
+  searchCardByPart (int partId) async {
+    final db = await database;
+  }
+
   deleteCard(String cardId) async {
     final db = await database;
     await db.delete(
@@ -541,6 +550,27 @@ class DbProvider {
         where: 'card_id = ?',
         whereArgs: [cardId]
     );
+  }
+
+  checkIfCardCanBeDeleted (int operationId, int reportId) async {
+    final db = await database;
+    var list = await db.rawQuery(
+      '''SELECT o.is_required 
+         FROM operations o 
+         LEFT JOIN agreed_parts p
+         ON o.part_id = p.part_id
+         WHERE o.operation_id = ? AND p.report_id = ?''',
+        ['$operationId', '$reportId']
+    );
+    if (list.isEmpty) {
+      return true;
+    } else {
+      if (list.first['is_required'] == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   //------------------------PICTURE---------------------------------------------

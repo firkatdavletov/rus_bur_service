@@ -28,8 +28,8 @@ class _PartAddAlertDialogState extends State<PartAddAlertDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithoutIcon(
-                      helperText: '',
+                  child: AppTextField(
+                      helperText: 'Название',
                       onChanged: (String value) {
                         _name = value;
                       },
@@ -38,7 +38,8 @@ class _PartAddAlertDialogState extends State<PartAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      label: 'Название'
+                      initial: '',
+                      inputType: TextInputType.text,
                   ),
                 ),
 

@@ -22,20 +22,19 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
       return 'Пожалуйста, заполните поле';
     }
   }
+  _validateInt(String value) {
+    if (value.isNotEmpty) {
+      try{
+        var numb = int.parse(value);
+      } on FormatException {
+        return 'Введите целое число';
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textEditingController1 = TextEditingController(text: context.watch<ReportNotifier>().machineModel);
-    TextEditingController _textEditingController2 = TextEditingController(text: context.watch<ReportNotifier>().machineNumb);
-    TextEditingController _textEditingController3 = TextEditingController(text: context.watch<ReportNotifier>().machineYear);
-    TextEditingController _textEditingController4 = TextEditingController(text: context.watch<ReportNotifier>().engineModel);
-    TextEditingController _textEditingController5 = TextEditingController(text: context.watch<ReportNotifier>().engineNumb);
-    TextEditingController _textEditingController6 = TextEditingController(text: context.watch<ReportNotifier>().opTime_1.toString());
-    TextEditingController _textEditingController7 = TextEditingController(text: context.watch<ReportNotifier>().opTime_2.toString());
-    TextEditingController _textEditingController8 = TextEditingController(text: context.watch<ReportNotifier>().opTime_3.toString());
-    TextEditingController _textEditingController9 = TextEditingController(text: context.watch<ReportNotifier>().opTime_4.toString());
-    TextEditingController _textEditingController10 = TextEditingController(text: context.watch<ReportNotifier>().note);
-
+    print('machine model in form: ${context.watch<ReportNotifier>().machineModel}');
     double _width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,9 +48,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextField(
+                      initial: context.watch<ReportNotifier>().machineModel,
                       validator: _validate,
                       helperText: 'Модель машины',
-                      textEditingController: _textEditingController1,
+                      onChanged: (value) {
+                        context.read<ReportNotifier>().changeMachineModel(value);
+                      },
+                      inputType: TextInputType.text,
                     )
                   ),
                   Divider(),
@@ -59,9 +62,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextField(
-                      textEditingController: _textEditingController2,
+                      initial: context.watch<ReportNotifier>().machineNumb,
                       validator: _validate,
                       helperText: 'Серийный номер машины',
+                      onChanged: (value) {
+                        context.read<ReportNotifier>().changeMachineNumb(value);
+                      },
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
@@ -69,9 +76,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextField(
-                      textEditingController: _textEditingController3,
+                      initial: context.watch<ReportNotifier>().machineYear,
+                      onChanged: (value) {
+                        context.read<ReportNotifier>().changeMachineYear(value);
+                      },
                       validator: _validate,
                       helperText: 'Год выпуска',
+                      inputType: TextInputType.number,
                     ),
                   ),
                   Divider(),
@@ -79,9 +90,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextField(
-                      textEditingController: _textEditingController4,
+                      initial: context.watch<ReportNotifier>().engineModel,
+                      onChanged: (value) {
+                        context.read<ReportNotifier>().changeEngineModel(value);
+                      },
                       validator: _validate,
                       helperText: 'Модель двигателя',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
@@ -89,9 +104,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextField(
+                      initial: context.watch<ReportNotifier>().engineNumb,
+                      onChanged: (value) {
+                        context.read<ReportNotifier>().changeEngineNumb(value);
+                      },
                       validator: _validate,
-                      textEditingController: _textEditingController5,
                       helperText: 'Серийный номер двигателя',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Divider(),
@@ -99,11 +118,23 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFieldSuffix(
-                      validator: _validate,
+                      initial: context.watch<ReportNotifier>().opTime_1 != 0
+                          ? context.watch<ReportNotifier>().opTime_1.toString()
+                          : '',
+                      validator: _validateInt,
                       label: 'Наработка двигателя',
-                      controller: _textEditingController6,
+                      onChanged: (value) {
+                        int numb = 0;
+                        try{
+                          numb = int.parse(value);
+                        } on FormatException {
+                          context.read<ReportNotifier>().changeOpTime_1(0);
+                        } finally {
+                          context.read<ReportNotifier>().changeOpTime_1(numb);
+                        }
+                      },
                       helperText: '',
-                      suffixText: 'мото-ч.',
+                      suffix: Text('мото-ч.'),
                     ),
                   ),
                   Divider(),
@@ -111,11 +142,23 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFieldSuffix(
-                      validator: _validate,
-                      label: '',
-                      controller: _textEditingController7,
+                      initial: context.watch<ReportNotifier>().opTime_2 != 0
+                          ?context.watch<ReportNotifier>().opTime_2.toString()
+                          : '',
+                      validator: _validateInt,
+                      label: 'Наработка в уд/ч',
+                      onChanged: (value) {
+                        int numb = 0;
+                        try{
+                          numb = int.parse(value);
+                        } on FormatException {
+                          context.read<ReportNotifier>().changeOpTime_2(0);
+                        } finally {
+                          context.read<ReportNotifier>().changeOpTime_2(numb);
+                        }
+                      },
                       helperText: '',
-                      suffixText: 'уд/ч',
+                      suffix: Text('уд/ч'),
                     ),
                   ),
                   Divider(),
@@ -123,11 +166,23 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFieldSuffix(
-                      validator: _validate,
-                      label: '',
-                      controller: _textEditingController8,
+                      initial: context.watch<ReportNotifier>().opTime_3 != 0
+                          ?context.watch<ReportNotifier>().opTime_3.toString()
+                          : '',
+                      validator: _validateInt,
+                      label: 'Наработка в пог. м',
+                      onChanged: (value) {
+                        int numb = 0;
+                        try{
+                          numb = int.parse(value);
+                        } on FormatException {
+                          context.read<ReportNotifier>().changeOpTime_3(0);
+                        } finally {
+                          context.read<ReportNotifier>().changeOpTime_3(numb);
+                        }
+                      },
                       helperText: '',
-                      suffixText: 'пог.м',
+                      suffix: Text('пог.м'),
                     ),
                   ),
                   Divider(),
@@ -135,11 +190,23 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFieldSuffix(
-                      validator: _validate,
+                      initial: context.watch<ReportNotifier>().opTime_4 != 0
+                          ? context.watch<ReportNotifier>().opTime_4.toString()
+                          : '',
+                      validator: _validateInt,
                       label: 'Наработка гусеничного движителя',
-                      controller: _textEditingController9,
+                      onChanged: (value) {
+                        int numb = 0;
+                        try{
+                          numb = int.parse(value);
+                        } on FormatException {
+                          context.read<ReportNotifier>().changeOpTime_4(0);
+                        } finally {
+                          context.read<ReportNotifier>().changeOpTime_4(numb);
+                        }
+                      },
                       helperText: '',
-                      suffixText: 'пог.м',
+                      suffix: Text('пог.м'),
                     ),
                   ),
                   Divider(),
@@ -147,9 +214,13 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextField(
-                      validator: _validate,
-                      textEditingController: _textEditingController10,
+                      initial: context.watch<ReportNotifier>().note,
+                      onChanged: (value) {
+                        context.read<ReportNotifier>().changeNote(value);
+                      },
+                      validator: (value) => null,
                       helperText: 'Примечание',
+                      inputType: TextInputType.text,
                     ),
                   ),
                 ],
@@ -163,16 +234,6 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: ElevatedButton (
                   onPressed: () {
-                    context.read<ReportNotifier>().changeMachineModel(_textEditingController1.text);
-                    context.read<ReportNotifier>().changeMachineNumb(_textEditingController2.text);
-                    context.read<ReportNotifier>().changeMachineYear(_textEditingController3.text);
-                    context.read<ReportNotifier>().changeEngineModel(_textEditingController4.text);
-                    context.read<ReportNotifier>().changeEngineNumb(_textEditingController5.text);
-                    context.read<ReportNotifier>().changeOpTime_1(int.parse(_textEditingController6.text));
-                    context.read<ReportNotifier>().changeOpTime_2(int.parse(_textEditingController7.text));
-                    context.read<ReportNotifier>().changeOpTime_3(int.parse(_textEditingController8.text));
-                    context.read<ReportNotifier>().changeOpTime_4(int.parse(_textEditingController9.text));
-                    context.read<ReportNotifier>().changeNote(_textEditingController10.text);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -196,16 +257,6 @@ class _MachineInfoFormState extends State<MachineInfoForm> {
               child: ElevatedButton (
                   onPressed: () async {
                     if (_formKey_1.currentState!.validate()) {
-                      context.read<ReportNotifier>().changeMachineModel(_textEditingController1.text);
-                      context.read<ReportNotifier>().changeMachineNumb(_textEditingController2.text);
-                      context.read<ReportNotifier>().changeMachineYear(_textEditingController3.text);
-                      context.read<ReportNotifier>().changeEngineModel(_textEditingController4.text);
-                      context.read<ReportNotifier>().changeEngineNumb(_textEditingController5.text);
-                      context.read<ReportNotifier>().changeOpTime_1(int.parse(_textEditingController6.text));
-                      context.read<ReportNotifier>().changeOpTime_2(int.parse(_textEditingController7.text));
-                      context.read<ReportNotifier>().changeOpTime_3(int.parse(_textEditingController8.text));
-                      context.read<ReportNotifier>().changeOpTime_4(int.parse(_textEditingController9.text));
-                      context.read<ReportNotifier>().changeNote(_textEditingController10.text);
                       int result = await db.upgradeReport(context);
                       print('result of upgrade: $result');
                       Navigator.push(

@@ -11,6 +11,7 @@ import 'package:rus_bur_service/pages/pictures_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 
 import '../../main.dart';
+import '../../models/status.dart';
 
 class PartsList extends StatefulWidget {
   const PartsList({Key? key}) : super(key: key);
@@ -93,6 +94,7 @@ class _PartsListState extends State<PartsList> {
                                 isGood = true;
                                 var _operations = await db.getOperations('part_id', p.id);
                                 for (Operation op in _operations) {
+                                  Status status = Status();
                                   DiagnosticCard _card = DiagnosticCard(
                                       id: '$_reportId-${p.id}-${op.id}',
                                       name: op.name,
@@ -111,7 +113,7 @@ class _PartsListState extends State<PartsList> {
                                       effect: '',
                                       manHours: 0,
                                       part: p.name,
-                                      status: 0,
+                                      status: op.isRequired? 0 | status.status16 : 0,
                                       termStatus: 0
                                   );
                                   db.insertCard(_card);

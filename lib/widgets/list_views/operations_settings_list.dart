@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rus_bur_service/controller/operation_notifier.dart';
 import 'package:rus_bur_service/pages/operations_settings_page.dart';
 import 'package:rus_bur_service/pages/error_page.dart';
 import 'package:rus_bur_service/pages/waiting_page.dart';
 
 import '../../main.dart';
+import '../alert_dialog/operation_edit_alert_dialog.dart';
 
 class OperationsSettingList extends StatefulWidget {
   final int partId;
@@ -61,12 +64,15 @@ class _OperationsSettingListState extends State<OperationsSettingList> {
                   },
                 ),
                 onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => OperationsSettingPage(partId: snapshot.data[i].id)
-                  //     )
-                  // );
+                  context.read<OperationNotifier>().setOperation(snapshot.data[i]);
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Редактирование', textAlign: TextAlign.center,),
+                          content: OperationEditAlertDialog(isNew: false),
+                        );
+                      });
                 },
               );
             },

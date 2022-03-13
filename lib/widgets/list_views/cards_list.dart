@@ -89,38 +89,6 @@ class _CardsListState extends State<CardsList> {
                         )
                       ],
                     ),
-                    trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Удалить карту?', textAlign: TextAlign.center,),
-                                    content: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                db.deleteCard(snapshot.data[i].id);
-                                                Navigator.of(context).pop();
-                                              });
-                                            },
-                                            child: Text('Да')),
-                                        OutlinedButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Отмена'))
-                                      ],
-                                    ),
-                                  );
-                                });
-                          });
-                        }
-                    ),
                     onTap: () {
                       context.read<DiagnosticCardsNotifier>().changeId(snapshot.data[i].id);
                       context.read<DiagnosticCardsNotifier>().changeName(snapshot.data[i].name);

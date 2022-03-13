@@ -90,51 +90,51 @@ class _RegistrationFormState extends State<RegistrationForm> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: AppTextFormField(
-                helperText: '',
+              child: AppTextField(
                 onChanged: _saveName,
                 validator: _validatorName,
-                label: 'Имя',
-                icon: Icon(Icons.person, color: Colors.black54,),
+                helperText: 'Имя',
+                initial: '',
+                inputType: TextInputType.text,
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: AppTextFormField(
-                helperText: '',
+              child: AppTextField(
                 onChanged: _saveLastName,
                 validator: _validatorName,
-                label: 'Фамилия',
-                icon: Icon(Icons.person, color: Colors.black54),
+                helperText: 'Фамилия',
+                initial: '',
+                inputType: TextInputType.text,
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: AppTextFormField(
-                helperText: '',
+              child: AppTextField(
                 onChanged: _saveMiddleName,
                 validator: (value) {},
-                label: 'Отчество (не обязательно)',
-                icon: Icon(Icons.person, color: Colors.black54),
+                helperText: 'Отчество (не обязательно)',
+                inputType: TextInputType.text,
+                initial: '',
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: AppTextFormField(
-                helperText: '',
+              child: AppTextField(
                 onChanged: _saveLogin,
                 validator: _validatorName,
-                label: 'Логин',
-                icon: Icon(Icons.person),
+                helperText: 'Логин',
+                initial: '',
+                inputType: TextInputType.text,
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
               child: PasswordField(
+                initial: '',
                 onChanged: _savePassword,
                 validator: _validatorName,
                 label: 'Пароль',
-                icon: Icon(Icons.password, color: Colors.black54),
               ),
             ),
             Padding(

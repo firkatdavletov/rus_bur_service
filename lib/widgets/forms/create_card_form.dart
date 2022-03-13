@@ -27,6 +27,16 @@ class _CreateCardFormState extends State<CreateCardForm> {
     }
   }
 
+  _validateInt(String value) {
+    if (value.isNotEmpty) {
+      try{
+        var numb = int.parse(value);
+      } on FormatException {
+        return 'Введите целое число';
+      }
+    }
+  }
+
   late String _dropdownConclusionValue;
   List<String> _conclusion = ['УСПЕШНО', 'ВНИМАНИЕ', 'НЕУДАЧА'];
   late String _dropdownPriorityValue;
@@ -86,37 +96,6 @@ class _CreateCardFormState extends State<CreateCardForm> {
       _prefix = termStatusType2[_termStatus];
     }
 
-    TextEditingController _descController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().description
-    );
-    TextEditingController _areaController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().area
-    );
-    TextEditingController _damageController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().damage
-    );
-    TextEditingController _effectController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().effect
-    );
-    TextEditingController _recommendController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().effect
-    );
-    TextEditingController _termController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().termWeek.toString()
-    );
-    TextEditingController _term_m_Controller = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().term_m.toString()
-    );
-    TextEditingController _term_bh_Controller = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().term_bh.toString()
-    );
-    TextEditingController _term_mh_Controller = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().term_mh.toString()
-    );
-    TextEditingController _manHoursController = TextEditingController(
-        text: context.watch<DiagnosticCardsNotifier>().manHours.toString()
-    );
-
     _upgradeCard() {
       DiagnosticCard _newCard = DiagnosticCard(
           id:           Provider.of<DiagnosticCardsNotifier>(context, listen: false).id,
@@ -129,16 +108,16 @@ class _CreateCardFormState extends State<CreateCardForm> {
           status:       Provider.of<DiagnosticCardsNotifier>(context, listen: false).status,
           termStatus:   Provider.of<DiagnosticCardsNotifier>(context, listen: false).termStatus,
 
-          description:  _descController.text,
-          area:         _areaController.text,
-          damage:       _damageController.text,
-          effect:       _effectController.text,
-          recommend:    _recommendController.text,
-          manHours:     int.parse(_manHoursController.text),
-          termWeek:     int.parse(_termController.text),
-          term_mh:      int.parse(_term_mh_Controller.text),
-          term_m:       int.parse(_term_m_Controller.text),
-          term_bh:      int.parse(_term_bh_Controller.text),
+          description:  Provider.of<DiagnosticCardsNotifier>(context, listen: false).description,
+          area:         Provider.of<DiagnosticCardsNotifier>(context, listen: false).area,
+          damage:       Provider.of<DiagnosticCardsNotifier>(context, listen: false).damage,
+          effect:       Provider.of<DiagnosticCardsNotifier>(context, listen: false).effect,
+          recommend:    Provider.of<DiagnosticCardsNotifier>(context, listen: false).recommend,
+          manHours:     Provider.of<DiagnosticCardsNotifier>(context, listen: false).manHours,
+          termWeek:     Provider.of<DiagnosticCardsNotifier>(context, listen: false).termWeek,
+          term_mh:      Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_mh,
+          term_m:       Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_m,
+          term_bh:      Provider.of<DiagnosticCardsNotifier>(context, listen: false).term_bh,
       );
       db.upgradeCard(_newCard);
     }
@@ -182,11 +161,6 @@ class _CreateCardFormState extends State<CreateCardForm> {
                                         ? 3
                                         : 0
                                 );
-                                if (newValue == 'УСПЕШНО') {
-                                  context.read<DiagnosticCardsNotifier>().changeDescription('');
-                                  context.read<DiagnosticCardsNotifier>().changeArea('');
-                                  context.read<DiagnosticCardsNotifier>().changeDamage('');
-                                }
                               });
                             },
                           ),
@@ -265,17 +239,25 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                     child: AppTextField(
-                      textEditingController: _descController,
+                      initial: context.watch<DiagnosticCardsNotifier>().description,
+                      onChanged: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeDescription(value);
+                      },
                       validator: _validate,
                       helperText: 'Описание проблемы',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                     child: AppTextField(
-                      textEditingController: _areaController,
+                      initial: context.watch<DiagnosticCardsNotifier>().area,
+                      onChanged: (value) {
+                        context.read<DiagnosticCardsNotifier>().changeArea(value);
+                      },
                       validator: _validate,
                       helperText: 'Зона выявления дефекта',
+                      inputType: TextInputType.text,
                     ),
                   ),
                   ExpansionTile(
@@ -366,13 +348,17 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                         child: AppTextField(
+                            initial: context.watch<DiagnosticCardsNotifier>().damage,
                             validator: (value) {
                               if (value.length > 35) {
                                 return 'Максимальное количество символов - 35';
                               }
                             },
                             helperText: 'Другое',
-                            textEditingController: _damageController,
+                            onChanged: (value) {
+                              context.read<DiagnosticCardsNotifier>().changeDamage(value);
+                            },
+                            inputType: TextInputType.text,
                         ),
                       ),
                     ],
@@ -462,16 +448,36 @@ class _CreateCardFormState extends State<CreateCardForm> {
                         },
                         title: Text('Безопасность оборудования'),
                       ),
+                      CheckboxListTile(
+                        value: currentStatus&status.status16 == status.status16,
+                        onChanged: (value) {
+                          setState(() {
+                            if (currentStatus&status.status16 == status.status16) {
+                              int reverseStatus = ~status.status16;
+                              currentStatus = currentStatus&reverseStatus;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            } else {
+                              currentStatus |= status.status16;
+                              context.read<DiagnosticCardsNotifier>().changeStatus(currentStatus);
+                            }
+                          });
+                        },
+                        title: Text('Повышение производительности'),
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                         child: AppTextField(
+                            initial: context.watch<DiagnosticCardsNotifier>().effect,
                             validator: (value) {
                               if (value.length > 35) {
                                 return 'Максимальное количество символов - 35';
                               }
                             },
                             helperText: 'Другое',
-                            textEditingController: _effectController,
+                            onChanged: (value) {
+                              context.read<DiagnosticCardsNotifier>().changeEffect(value);
+                            },
+                            inputType: TextInputType.text,
                         ),
                       ),
                     ],
@@ -564,13 +570,17 @@ class _CreateCardFormState extends State<CreateCardForm> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                         child: AppTextField(
+                            initial: context.watch<DiagnosticCardsNotifier>().recommend,
                             validator: (value) {
                               if (value.length > 35) {
                                 return 'Максимальное количество символов - 35';
                               }
                             },
                             helperText: 'Другое',
-                            textEditingController: _recommendController
+                            onChanged: (value) {
+                              context.read<DiagnosticCardsNotifier>().changeRecommend(value);
+                            },
+                            inputType: TextInputType.text,
                         ),
                       ),
                     ],
@@ -581,9 +591,21 @@ class _CreateCardFormState extends State<CreateCardForm> {
                     initiallyExpanded: true,
                     children: [
                       Padding(
-                        child: TermTextFormField(
-                            controller: _termController,
-                            validator: (value) {},
+                        child: AppTextFieldSuffix(
+                            initial: context.watch<DiagnosticCardsNotifier>().termWeek != 0
+                                ? context.watch<DiagnosticCardsNotifier>().termWeek.toString()
+                                : '',
+                            onChanged: (value) {
+                              int numb = 0;
+                              try{
+                                numb = int.parse(value);
+                              } on FormatException {
+                                context.read<DiagnosticCardsNotifier>().changeTermWeek(0);
+                              } finally {
+                                context.read<DiagnosticCardsNotifier>().changeTermWeek(numb);
+                              }
+                            },
+                            validator: _validateInt,
                             suffix: GestureDetector(
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -594,7 +616,6 @@ class _CreateCardFormState extends State<CreateCardForm> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  _formKey_1.currentState!.save();
                                   if (_termStatus < 2) {
                                     _termStatus++;
                                   } else {
@@ -605,36 +626,72 @@ class _CreateCardFormState extends State<CreateCardForm> {
                               },
                             ),
                           helperText: '',
-                          label: '',
+                          label: 'Дни/недели/месяцы',
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                       ),
                       Padding(
                         child: AppTextFieldSuffix(
-                          suffixText: 'м/ч',
-                          validator: _validate,
-                          label: '',
-                          controller: _term_mh_Controller,
+                          initial: context.watch<DiagnosticCardsNotifier>().term_mh != 0
+                              ? context.watch<DiagnosticCardsNotifier>().term_mh.toString()
+                              : '',
+                          suffix: Text('м/ч'),
+                          validator: _validateInt,
+                          label: 'м/ч',
+                          onChanged: (value) {
+                            int numb = 0;
+                            try{
+                              numb = int.parse(value);
+                            } on FormatException {
+                              context.read<DiagnosticCardsNotifier>().changeTerm_mh(0);
+                            } finally {
+                              context.read<DiagnosticCardsNotifier>().changeTerm_mh(numb);
+                            }
+                          },
                           helperText: '',
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                       ),
                       Padding(
                         child: AppTextFieldSuffix(
-                          suffixText: 'уд/ч',
-                          validator: _validate,
-                          label: '',
-                          controller: _term_bh_Controller,
+                          initial: context.watch<DiagnosticCardsNotifier>().term_bh != 0
+                              ? context.watch<DiagnosticCardsNotifier>().term_bh.toString()
+                              : '',
+                          suffix: Text('уд/ч'),
+                          validator: _validateInt,
+                          label: 'уд/ч',
+                          onChanged: (value) {
+                            int numb = 0;
+                            try{
+                              numb = int.parse(value);
+                            } on FormatException {
+                              context.read<DiagnosticCardsNotifier>().changeTerm_bh(0);
+                            } finally {
+                              context.read<DiagnosticCardsNotifier>().changeTerm_bh(numb);
+                            }
+                          },
                           helperText: '',
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                       ),
                       Padding(
                         child: AppTextFieldSuffix(
-                          suffixText: 'пог.м',
-                          validator: _validate,
-                          label: '',
-                          controller: _term_m_Controller,
+                          initial: context.watch<DiagnosticCardsNotifier>().term_m != 0
+                              ? context.watch<DiagnosticCardsNotifier>().term_m.toString()
+                              : '',
+                          suffix: Text('пог.м'),
+                          validator: _validateInt,
+                          label: 'пог.м',
+                          onChanged: (value) {
+                            int numb = 0;
+                            try{
+                              numb = int.parse(value);
+                            } on FormatException {
+                              context.read<DiagnosticCardsNotifier>().changeTerm_m(0);
+                            } finally {
+                              context.read<DiagnosticCardsNotifier>().changeTerm_m(numb);
+                            };
+                          },
                           helperText: '',
                         ),
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0)
@@ -644,11 +701,23 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: AppTextFieldSuffix(
+                      initial: context.watch<DiagnosticCardsNotifier>().manHours != 0
+                          ? context.watch<DiagnosticCardsNotifier>().manHours.toString()
+                          : '',
                       validator: _validate,
                       label: 'Трудозатраты',
-                      controller: _manHoursController,
+                      onChanged: (value) {
+                        int numb = 0;
+                        try{
+                          numb = int.parse(value);
+                        } on FormatException {
+                          context.read<DiagnosticCardsNotifier>().changeManHours(0);
+                        } finally {
+                          context.read<DiagnosticCardsNotifier>().changeManHours(numb);
+                        }
+                      },
                       helperText: '',
-                      suffixText: 'человеко-ч.',
+                      suffix: Text('человеко-ч.'),
                     ),
                   ),
                   Padding(
@@ -703,19 +772,81 @@ class _CreateCardFormState extends State<CreateCardForm> {
                     children: [
                       Icon(Icons.arrow_back_ios),
                       Container(width: 5,),
-                      _width > 400
+                      _width > 600
                           ? Text('Назад')
                           : Text(''),
                     ],
                   )
               ),
             ),
+            FutureBuilder(
+                future: db.checkIfCardCanBeDeleted(
+                    Provider.of<DiagnosticCardsNotifier>(context).operationId,
+                    Provider.of<DiagnosticCardsNotifier>(context).reportId
+                ),
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    return Visibility(
+                        visible: snapshot.data ,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                          child: ElevatedButton (
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Удалить карту?', textAlign: TextAlign.center,),
+                                        content: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    db.deleteCard(Provider.of<DiagnosticCardsNotifier>(context, listen: false).id);
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => new AgreedDiagnosticCardsPage()
+                                                        )
+                                                    );
+                                                  });
+                                                },
+                                                child: Text('Да')),
+                                            OutlinedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Отмена'))
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              },
+                              child: Row(
+                                children: [
+                                  _width > 600
+                                      ? Text('Удалить')
+                                      : Text(''),
+                                  Container(width: 5,),
+                                  Icon(Icons.delete)
+                                ],
+                              )
+                          ),
+                        )
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: ElevatedButton (
                   onPressed: () {
                     if (_formKey_1.currentState!.validate()) {
-                      _formKey_1.currentState!.save();
                       _upgradeCard();
                       Navigator.push(
                           context,
@@ -727,7 +858,7 @@ class _CreateCardFormState extends State<CreateCardForm> {
                   },
                   child: Row(
                     children: [
-                      _width > 400
+                      _width > 600
                           ? Text('Сохранить')
                           : Text(''),
                       Container(width: 5,),
@@ -742,3 +873,4 @@ class _CreateCardFormState extends State<CreateCardForm> {
     );
   }
 }
+

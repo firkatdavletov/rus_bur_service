@@ -119,3 +119,4 @@ class DiagnosticCardsNotifier with ChangeNotifier {
     notifyListeners();
   }
 }
+

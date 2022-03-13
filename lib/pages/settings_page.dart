@@ -9,6 +9,7 @@ import 'package:rus_bur_service/widgets/drawers/app_drawer.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../controller/part_notifier.dart';
 import '../controller/user_notifier.dart';
 import 'home_page.dart';
 
@@ -64,6 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           builder: (context) => PartsSettingPage()
                       ),
                     );
+
                   },
                 ),
                 ListTile(

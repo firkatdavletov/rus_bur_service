@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rus_bur_service/controller/operation_notifier.dart';
 import 'package:rus_bur_service/pages/parts_settings_page.dart';
-import 'package:rus_bur_service/widgets/alert_dialog/operation_add_alert_dialog.dart';
+import 'package:rus_bur_service/widgets/alert_dialog/operation_edit_alert_dialog.dart';
 import 'package:rus_bur_service/widgets/list_views/operations_settings_list.dart';
 
 class OperationsSettingPage extends StatefulWidget {
@@ -48,12 +50,13 @@ class _OperationsSettingPageState extends State<OperationsSettingPage> {
         label: Text('Добавить'),
         onPressed: () {
           setState(() {
+            context.read<OperationNotifier>().emptyOperation(widget.partId);
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text('Новая операция', textAlign: TextAlign.center,),
-                    content: OperationAddAlertDialog(partId: widget.partId,),
+                    content: OperationEditAlertDialog(isNew: true),
                   );
                 });
           });

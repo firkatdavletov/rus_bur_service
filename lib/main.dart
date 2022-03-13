@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rus_bur_service/controller/customer_notifier.dart';
 import 'package:rus_bur_service/controller/report_notifier.dart';
 import 'package:rus_bur_service/controller/spare_notifier.dart';
 import 'package:rus_bur_service/controller/user_notifier.dart';
@@ -10,6 +9,8 @@ import 'package:rus_bur_service/pages/registration_page.dart';
 import 'package:sqflite/sqflite.dart';
 import 'controller/diagnostic_cards_notifier.dart';
 import 'controller/email_message_notifier.dart';
+import 'controller/operation_notifier.dart';
+import 'controller/part_notifier.dart';
 import 'controller/picture_notifier.dart';
 import 'helpers/db.dart';
 import 'package:path/path.dart';
@@ -44,14 +45,15 @@ void main() async {
     MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UserNotifier()),
-          ChangeNotifierProvider(create: (_) => CustomerNotifier()),
           ChangeNotifierProvider(create: (_) => ReportNotifier()),
           ChangeNotifierProvider(create: (_) => MachineNotifier()),
           ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
           ChangeNotifierProvider(create: (_) => PictureNotifier()),
           ChangeNotifierProvider(create: (_) => EmailMessageNotifier()),
           ChangeNotifierProvider(create: (_) => DiagnosticCardsNotifier()),
-          ChangeNotifierProvider(create: (_) => SpareNotifier())
+          ChangeNotifierProvider(create: (_) => SpareNotifier()),
+          ChangeNotifierProvider(create: (_) => OperationNotifier()),
+          ChangeNotifierProvider(create: (_) => PartNotifier())
         ],
       child: MyApp(),
     )
@@ -59,10 +61,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // _getKey(String key) async {
-  //   Future<String?> _temp = PasswordProvider().getPassword(key);
-  //   return _temp;
-  // }
 
   _getUser() async {
     List<User> _maps = await db.users();

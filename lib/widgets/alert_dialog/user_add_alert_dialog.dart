@@ -61,8 +61,8 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithoutIcon(
-                      helperText: '',
+                  child: AppTextField(
+                      helperText: 'Имя',
                       onChanged: (String value) {
                         _firstName = value;
                       },
@@ -71,13 +71,14 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      label: 'Имя'
+                      inputType: TextInputType.text,
+                      initial: '',
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithoutIcon(
-                      helperText: '',
+                  child: AppTextField(
+                      helperText: 'Фамилия',
                       onChanged: (String value) {
                         _lastName = value;
                       },
@@ -86,26 +87,28 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'Пожалуйста, заполните поле';
                         }
                       },
-                      label: 'Фамилия'
+                      initial: '',
+                      inputType: TextInputType.text,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithoutIcon(
-                      helperText: '',
+                  child: AppTextField(
+                      helperText: 'Отчество',
                       onChanged: (String value) {
                         _middleName = value;
                       },
                       validator: (String value) {
 
                       },
-                      label: 'Отчество'
+                      inputType: TextInputType.text,
+                      initial: '',
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormFieldWithoutIcon(
-                      helperText: '',
+                  child: AppTextField(
+                      helperText: 'ID',
                       onChanged: (String value) {
                         _id = value;
                         _findIdMatching(_id);
@@ -117,14 +120,14 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'ID уже существует';
                         }
                       },
-                      label: 'ID'
+                      initial: '',
+                      inputType: TextInputType.number,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  child: AppTextFormField(
-                    icon: Icon(Icons.login),
-                      helperText: '',
+                  child: AppTextField(
+                      helperText: 'Логин',
                       onChanged: (String value) {
                         _login = value;
                         _findLoginMatching(_login);
@@ -136,12 +139,14 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                           return 'Логин уже занят';
                         }
                       },
-                      label: 'Логин'
+                      inputType: TextInputType.text,
+                      initial: '',
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                   child: PasswordField(
+                    initial: '',
                     onChanged: (String value) {
                       _password = value;
                     },
@@ -150,7 +155,6 @@ class _UserAddAlertDialogState extends State<UserAddAlertDialog> {
                         return 'Заполните поле';
                       }
                     },
-                    icon: Icon(Icons.password),
                     label: 'Пароль',
                   ),
                 ),
